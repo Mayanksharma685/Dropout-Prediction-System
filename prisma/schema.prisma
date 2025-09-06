@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+model Teacher {
+  teacherId  String   @id
+  name       String
+  email      String   @unique
+  phone      String?
+  department String?
+  password   String?
+  // Google OAuth fields
+  googleId String? @unique
+  picture  String?
+
+  createdAt DateTime @default(now())
+
+  students Student[]
+}
+
+model Student {
+  studentId       String   @id
+  name            String
+  email           String   @unique
+  phone           String?
+  dob             DateTime
+  department      String?
+  currentSemester Int
+
+  teacherId String?
+  teacher   Teacher? @relation(fields: [teacherId], references: [teacherId], onDelete: SetNull)
+
+  attendance    Attendance[]
+  testScores    TestScore[]
+  backlogs      Backlog[]
+  feePayments   FeePayment[]
+  riskFlags     RiskFlag[]
+  notifications Notification[]
+
+  @@index([teacherId])
+}
+
+model Attendance {
+  attendanceId      Int      @id @default(autoincrement())
+  studentId         String
+  month             DateTime
+  attendancePercent Float
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model TestScore {
+  testId   Int      @id @default(autoincrement())
+  studentId String
+  subject  String
+  testDate DateTime
+  score    Float
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model Backlog {
+  backlogId Int    @id @default(autoincrement())
+  studentId String
+  subject   String
+  attempts  Int
+  cleared   Boolean
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model FeePayment {
+  paymentId Int      @id @default(autoincrement())
+  studentId String
+  dueDate   DateTime
+  paidDate  DateTime?
+  status    String
+  dueMonths Int
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model RiskFlag {
+  riskId    Int      @id @default(autoincrement())
+  studentId String
+  riskLevel String
+  reason    String
+  flagDate  DateTime
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model Notification {
+  notificationId Int      @id @default(autoincrement())
+  studentId      String
+  channel        String
+  message        String
+  sentDate       DateTime
+  acknowledged   Boolean  @default(false)
+
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+generator zod {
+  createRelationValuesTypes = true
+  output                    = "../app/generated/zod"
+  provider                  = "zod-prisma-types"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}

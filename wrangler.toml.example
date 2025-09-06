@@ -1,0 +1,17 @@
+name = "$APP_NAME"
+
+pages_build_output_dir = "./dist"
+
+compatibility_flags = ["nodejs_compat"]
+
+compatibility_date = "$CURRENT_DATE"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "$NAME"
+database_id = "$ID"
+
+[vars]
+GOOGLE_CLIENT_ID = ""
+GOOGLE_CLIENT_SECRET = ""
+GOOGLE_REDIRECT_URI = ""
