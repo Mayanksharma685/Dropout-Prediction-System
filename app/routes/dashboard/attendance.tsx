@@ -12,7 +12,8 @@ const AttendanceFormSchema = z.object({
 
 export default createRoute(async (c) => {
   const cookies = c.req.raw.headers.get('Cookie') || ''
-  const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
   if (!uid) return c.redirect('/dashboard/login')
 
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
@@ -139,7 +140,8 @@ setTimeout(() => {
 export const POST = createRoute(zValidator('form', AttendanceFormSchema), async (c) => {
   const data = c.req.valid('form')
   const cookies = c.req.raw.headers.get('Cookie') || ''
-  const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
   if (!uid) return c.redirect('/dashboard/login')
 
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient

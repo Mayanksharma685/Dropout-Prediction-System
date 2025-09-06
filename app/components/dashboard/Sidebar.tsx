@@ -10,6 +10,7 @@ export default function Sidebar() {
         <a href="/dashboard/fees" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Fees</a>
         <a href="/dashboard/risk-flags" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Risk Flags</a>
         <a href="#" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Reports</a>
+        <a href="/dashboard/shortcut" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Shortcut</a>
       </nav>
     </aside>
   )

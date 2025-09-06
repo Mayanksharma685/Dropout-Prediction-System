@@ -9,11 +9,12 @@ export default createRoute(async (c) => {
   const isAuthed = cookies.includes('auth=1')
   let teacher: any = null
   if (isAuthed) {
-    const uid = cookies
+    const uidRaw = cookies
       .split(';')
       .map((s) => s.trim())
       .find((s) => s.startsWith('uid='))
       ?.slice(4)
+    const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
     if (uid) {
       const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
       teacher = await prisma.teacher.findUnique({ where: { teacherId: uid } })

@@ -16,7 +16,8 @@ const StudentSchema = z.object({
 
 export default createRoute(async (c) => {
   const cookies = c.req.raw.headers.get('Cookie') || ''
-  const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
   if (!uid) return c.redirect('/dashboard/login')
 
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
@@ -163,14 +164,18 @@ setTimeout(() => {
 export const POST = createRoute(zValidator('form', StudentSchema), async (c) => {
   const data = c.req.valid('form')
   const cookies = c.req.raw.headers.get('Cookie') || ''
-  const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
   if (!uid) return c.redirect('/dashboard/login')
 
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
 
   try {
-    // Ensure the referenced teacher exists to avoid FK violations
+    // Ensure the referenced teacher exists to avoid orphan students
     const teacher = await prisma.teacher.findUnique({ where: { teacherId: uid } })
+    if (!teacher) {
+      return c.redirect(`/dashboard/student?error=${encodeURIComponent('No teacher account found. Please re-login and try again.')}`)
+    }
     await prisma.student.create({
       data: {
         studentId: data.studentId,
@@ -180,7 +185,7 @@ export const POST = createRoute(zValidator('form', StudentSchema), async (c) => 
         dob: new Date(data.dob),
         department: data.department,
         currentSemester: Number(data.currentSemester),
-        teacherId: teacher ? uid : undefined,
+        teacherId: uid,
       },
     })
     return c.redirect('/dashboard/student?success=1')
