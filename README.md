@@ -3,8 +3,6 @@
 0. Clone the database and install all dependencies:
 
 ```sh
-$ git clone https://github.com/kristianfreeman/cloudflare-d1-prisma-honox-starter starter
-$ cd starter
 $ npm install
 ```
 
