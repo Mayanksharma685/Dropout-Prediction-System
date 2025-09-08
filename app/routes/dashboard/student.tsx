@@ -138,8 +138,10 @@ setTimeout(() => {
                       {students.map((s) => (
                         <tr class="border-t hover:bg-gray-50/60" key={s.studentId}>
                           <td class="px-4 py-3">
-                            <div class="font-medium">{s.name}</div>
-                            <div class="text-xs text-gray-500">{s.studentId}</div>
+                            <a class="font-medium text-slate-800 hover:underline" href={`/dashboard/student/${encodeURIComponent(s.studentId)}`}>{s.name}</a>
+                            <div class="text-xs text-gray-500">
+                              <a class="hover:underline" href={`/dashboard/student/${encodeURIComponent(s.studentId)}`}>{s.studentId}</a>
+                            </div>
                           </td>
                           <td class="px-4 py-3">{s.email}</td>
                           <td class="px-4 py-3">{s.department ?? '-'}</td>
