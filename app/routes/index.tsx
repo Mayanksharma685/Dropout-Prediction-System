@@ -75,6 +75,62 @@ export default createRoute(async (c) => {
           </div>
         </Section>
 
+        <Section id="features" title="Features" subtitle="What makes EduPulse effective">
+          <div class="grid md:grid-cols-3 gap-5">
+            <FeatureCard title="Unified Student View" icon="🧩" description="Attendance, marks, fees in one place" />
+            <FeatureCard title="Explainable Risk Scores" icon="🔍" description="Clear, rule-based flags with reasons" />
+            <FeatureCard title="Mentor-first Workflow" icon="🧭" description="Prioritized list, trends and next actions" />
+          </div>
+          <div class="mt-8 grid md:grid-cols-2 gap-5">
+            <FeatureCard title="Easy Imports" icon="📥">
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Upload CSV/Sheets for attendance, marks, fees</li>
+                <li>Map columns quickly with smart defaults</li>
+                <li>Validate data quality before saving</li>
+              </ul>
+            </FeatureCard>
+            <FeatureCard title="Actionable Alerts" icon="📣">
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Email/SMS/WhatsApp to mentors and parents</li>
+                <li>Color-coded urgency levels</li>
+                <li>One-click notes and follow-ups</li>
+              </ul>
+            </FeatureCard>
+          </div>
+        </Section>
+
+        <Section id="about" title="About the Project" subtitle="Built for PSID 25102 to reduce dropouts">
+          <div class="grid md:grid-cols-2 gap-8 items-start">
+            <div class="space-y-4 text-gray-700">
+              <p>
+                EduPulse focuses on early detection of at-risk students by consolidating academic and administrative signals into a single, mentor-friendly dashboard. The goal is to intervene early, with clear reasons, and improve student outcomes.
+              </p>
+              <p>
+                The system begins with transparent, rule-based thresholds and can optionally incorporate lightweight ML models for improved accuracy. It is designed to be affordable, explainable, and simple to deploy in typical college environments.
+              </p>
+              <p class="text-sm text-gray-500">
+                Deliverable includes: data import flows, risk calculation, mentor dashboard, and notification hooks.
+              </p>
+            </div>
+            <div class="grid gap-4">
+              <FeatureCard title="Objectives" icon="🎯">
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Reduce student dropouts through timely insights</li>
+                  <li>Provide mentors with clear, explainable flags</li>
+                  <li>Lower cost and setup overhead for institutions</li>
+                </ul>
+              </FeatureCard>
+              <FeatureCard title="Outcomes" icon="🏁">
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Unified student risk view</li>
+                  <li>Prioritized interventions and trackable notes</li>
+                  <li>Configurable rules to fit departments</li>
+                </ul>
+              </FeatureCard>
+            </div>
+          </div>
+        </Section>
+
         <Section id="dashboard" title="Counseling Dashboard" subtitle="Designed for quick, preventive action">
           <div class="grid md:grid-cols-3 gap-5">
             <FeatureCard title="Risk colours" icon="🟢🟡🔴" description="Green/Yellow/Red per student" />

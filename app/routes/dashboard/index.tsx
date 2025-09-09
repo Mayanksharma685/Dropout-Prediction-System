@@ -1,6 +1,7 @@
 import { createRoute } from 'honox/factory'
 import Header from '@/components/dashboard/Header'
 import Sidebar from '@/components/dashboard/Sidebar'
+import AIAssistant from '@/components/dashboard/AIAssistant'
 import KPIs from '@/components/dashboard/KPIs'
 import RiskTable from '@/components/dashboard/RiskTable'
 import RecentActivity from '@/components/dashboard/RecentActivity'
@@ -158,6 +159,8 @@ export default createRoute(async (c) => {
                 </div>
               </div>
             </section>
+
+            <AIAssistant />
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script dangerouslySetInnerHTML={{
               __html: `
@@ -196,6 +199,7 @@ if (document.readyState === 'complete') initCharts();
 else window.addEventListener('load', initCharts);
 `
             }} />
+            {/* AI Assistant behavior is encapsulated inside the component */}
           </main>
         </div>
       </div>

@@ -31,6 +31,8 @@ export default function LandingHeader(props: LandingHeaderProps) {
           EduPulse
         </a>
         <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#features" class="hover:text-blue-600">Features</a>
+          <a href="#about" class="hover:text-blue-600">About</a>
           <a href="#problem" class="hover:text-blue-600">Problem</a>
           <a href="#solution" class="hover:text-blue-600">Solution</a>
           <a href="#dashboard" class="hover:text-blue-600">Dashboard</a>
