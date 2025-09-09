@@ -129,7 +129,7 @@ export default createRoute(async (c) => {
             </section>
             <section class="grid md:grid-cols-3 gap-6 items-start">
               <div class="md:col-span-2 space-y-3">
-                <h3 class="text-sm font-semibold text-slate-700">Show Indivisual Student Data</h3>
+                <h3 class="text-sm font-semibold text-slate-700">Students with Active Risk Flags</h3>
                 <RiskTable rows={rows} />
               </div>
               <div class="space-y-3">
