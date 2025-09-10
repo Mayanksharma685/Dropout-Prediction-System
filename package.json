@@ -14,7 +14,7 @@
     "@prisma/client": "^5.12.1",
     "google-auth-library": "9.14.1",
     "hono": "^4.2.2",
-    "honox": "^0.1.12",
+    "honox": "^0.1.46",
     "zod": "^3.22.4"
   },
   "devDependencies": {
