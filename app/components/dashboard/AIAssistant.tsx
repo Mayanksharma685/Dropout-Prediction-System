@@ -31,7 +31,19 @@ export default function AIAssistant() {
             var input = document.getElementById('ai-input');
             var messagesEl = document.getElementById('ai-messages');
             if (!fab || !panel) return;
-            function openPanel(){ panel.classList.remove('hidden'); }
+            async function openPanel(){
+              panel.classList.remove('hidden');
+              try {
+                var res = await fetch('/api/ai', { method: 'GET' });
+                if (res.ok) {
+                  var data = await res.json();
+                  if (Array.isArray(data.messages)) {
+                    messages = data.messages;
+                    renderMessages();
+                  }
+                }
+              } catch (e) {}
+            }
             function closePanel(){ panel.classList.add('hidden'); }
             fab.addEventListener('click', openPanel);
             if (closeBtn) closeBtn.addEventListener('click', closePanel);

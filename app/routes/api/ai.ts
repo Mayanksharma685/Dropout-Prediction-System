@@ -1,6 +1,21 @@
 import { createRoute } from 'honox/factory'
 
 // Simple AI endpoint: accepts { question }, fetches some DB context, calls Gemini, returns answer
+export const GET = createRoute(async (c) => {
+  try {
+    const cookies = c.req.raw.headers.get('Cookie') || ''
+    const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+    const key = `chat:${uid || 'anon'}`
+    const kv = (c.env as any).CHAT_KV as KVNamespace | undefined
+    if (!kv) return c.json({ messages: [] })
+    const raw = await kv.get(key)
+    const messages = raw ? JSON.parse(raw) : []
+    return c.json({ messages })
+  } catch (err: any) {
+    return c.json({ messages: [] })
+  }
+})
+
 export const POST = createRoute(async (c) => {
   try {
     const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
@@ -62,6 +77,21 @@ Be concise and accurate.`
     }
     const data: any = await res.json()
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No answer generated.'
+
+    // Persist chat history to KV if available
+    try {
+      const cookies = c.req.raw.headers.get('Cookie') || ''
+      const uid = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+      const key = `chat:${uid || 'anon'}`
+      const kv = (c.env as any).CHAT_KV as KVNamespace | undefined
+      if (kv) {
+        const raw = await kv.get(key)
+        const history: Array<{ role: 'user' | 'assistant'; content: string }> = raw ? JSON.parse(raw) : []
+        history.push({ role: 'user', content: question })
+        history.push({ role: 'assistant', content: text })
+        await kv.put(key, JSON.stringify(history), { expirationTtl: 60 * 60 * 24 * 7 })
+      }
+    } catch {}
 
     return c.json({ answer: text, context })
   } catch (err: any) {
