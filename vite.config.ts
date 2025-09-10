@@ -1,4 +1,3 @@
-import pages from '@hono/vite-cloudflare-pages'
 import honox from 'honox/vite'
 import adapter from '@hono/vite-dev-server/cloudflare'
 import client from 'honox/vite/client'
@@ -27,11 +26,18 @@ export default defineConfig(({ mode }) => {
   } else {
     return {
       ...baseConfig,
+      build: {
+        rollupOptions: {
+          input: 'app/server.ts',
+        },
+        ssr: true,
+        target: 'esnext',
+        minify: false,
+      },
       plugins: [
         honox({
           devServer: { adapter }
-        }),
-        pages()
+        })
       ],
     }
   }
