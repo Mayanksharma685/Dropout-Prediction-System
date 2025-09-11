@@ -180,6 +180,49 @@ export default createRoute(async (c) => {
                   <div class="font-medium">{student.currentSemester}</div>
                 </div>
               </div>
+              <div class="mt-4 flex items-center justify-end">
+                <form method="post" onsubmit="return confirm('Delete this student and related records?')">
+                  <input type="hidden" name="intent" value="delete" />
+                  <button type="submit" class="px-3 py-2 text-sm rounded-md border border-red-300 bg-red-50 text-red-700 hover:bg-red-100">Delete Student</button>
+                </form>
+              </div>
+              <div class="mt-6 border-t pt-4">
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">Edit Student</h3>
+                <form method="post" class="grid md:grid-cols-3 gap-4">
+                  <input type="hidden" name="intent" value="update" />
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Student ID</label>
+                    <input class="mt-1 w-full border rounded p-2 bg-gray-100 text-gray-600" type="text" name="studentId" value={student.studentId} readonly />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <input class="mt-1 w-full border rounded p-2" type="text" name="name" value={student.name} required />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input class="mt-1 w-full border rounded p-2" type="email" name="email" value={student.email} required />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input class="mt-1 w-full border rounded p-2" type="text" name="phone" value={student.phone ?? ''} />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">DOB</label>
+                    <input class="mt-1 w-full border rounded p-2" type="date" name="dob" value={new Date(student.dob).toISOString().slice(0,10)} required />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Department</label>
+                    <input class="mt-1 w-full border rounded p-2" type="text" name="department" value={student.department ?? ''} />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Current Semester</label>
+                    <input class="mt-1 w-full border rounded p-2" type="number" name="currentSemester" min="1" value={String(student.currentSemester)} required />
+                  </div>
+                  <div class="md:col-span-3">
+                    <button type="submit" class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700">Save Changes</button>
+                  </div>
+                </form>
+              </div>
             </section>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -264,4 +307,84 @@ export default createRoute(async (c) => {
   )
 })
 
+
+
+export const POST = createRoute(async (c) => {
+  const cookies = c.req.raw.headers.get('Cookie') || ''
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
+  if (!uid) return c.redirect('/dashboard/login')
+
+  const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
+
+  // read param from the route
+  let studentId: string | undefined
+  try {
+    // @ts-ignore - types may vary in honox
+    studentId = c.req.param('studentId')
+  } catch {
+    // @ts-ignore - types may vary in honox
+    studentId = c.req.param?.('studentId') ?? (c as any).req?.param?.('studentId')
+  }
+
+  if (!studentId || typeof studentId !== 'string') {
+    return c.redirect('/dashboard/student?error=' + encodeURIComponent('Invalid student id'))
+  }
+
+  const form = await c.req.formData()
+  const intent = (form.get('intent') || '').toString()
+
+  try {
+    // Ensure ownership
+    const existing = await prisma.student.findFirst({ where: { studentId, teacherId: uid } })
+    if (!existing) {
+      return c.redirect('/dashboard/student?error=' + encodeURIComponent('Student not found'))
+    }
+
+    if (intent === 'delete') {
+      await prisma.student.delete({ where: { studentId } })
+      return c.redirect('/dashboard/student?success=' + encodeURIComponent('Deleted'))
+    }
+
+    if (intent === 'update') {
+      const name = (form.get('name') || '').toString().trim()
+      const email = (form.get('email') || '').toString().trim()
+      const phoneRaw = (form.get('phone') || '').toString().trim()
+      const dobRaw = (form.get('dob') || '').toString()
+      const departmentRaw = (form.get('department') || '').toString().trim()
+      const currentSemesterRaw = (form.get('currentSemester') || '').toString()
+
+      if (!name || !email || !dobRaw || !currentSemesterRaw) {
+        return c.redirect(`/dashboard/student/${encodeURIComponent(studentId)}?error=${encodeURIComponent('Please fill all required fields')}`)
+      }
+
+      const dob = new Date(dobRaw)
+      const currentSemester = Number(currentSemesterRaw)
+      if (!Number.isInteger(currentSemester) || currentSemester < 1) {
+        return c.redirect(`/dashboard/student/${encodeURIComponent(studentId)}?error=${encodeURIComponent('Invalid semester')}`)
+      }
+
+      const phone = phoneRaw || undefined
+      const department = departmentRaw || undefined
+
+      await prisma.student.update({
+        where: { studentId },
+        data: {
+          name,
+          email,
+          phone,
+          dob,
+          department,
+          currentSemester,
+        },
+      })
+      return c.redirect(`/dashboard/student/${encodeURIComponent(studentId)}?success=1`)
+    }
+
+    return c.redirect(`/dashboard/student/${encodeURIComponent(studentId)}?error=${encodeURIComponent('Invalid action')}`)
+  } catch (e: any) {
+    const message = e?.code === 'P2002' ? 'Email already exists' : 'Operation failed'
+    return c.redirect(`/dashboard/student/${encodeURIComponent(studentId)}?error=${encodeURIComponent(message)}`)
+  }
+})
 

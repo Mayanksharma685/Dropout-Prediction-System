@@ -127,7 +127,6 @@ setTimeout(() => {
                       <tr>
                         <th class="px-4 py-3">Student</th>
                         <th class="px-4 py-3">Email</th>
-                        <th class="px-4 py-3">Department</th>
                         <th class="px-4 py-3">Semester</th>
                         <th class="px-4 py-3">Risk Flags</th>
                         <th class="px-4 py-3">Backlogs</th>
@@ -144,7 +143,6 @@ setTimeout(() => {
                             </div>
                           </td>
                           <td class="px-4 py-3">{s.email}</td>
-                          <td class="px-4 py-3">{s.department ?? '-'}</td>
                           <td class="px-4 py-3">{s.currentSemester}</td>
                           <td class="px-4 py-3">{s.riskFlags?.length ?? 0}</td>
                           <td class="px-4 py-3">{s.backlogs?.length ?? 0}</td>
