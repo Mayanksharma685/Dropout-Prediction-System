@@ -41,8 +41,8 @@ export default function LandingHeader(props: LandingHeaderProps) {
         <div class="flex items-center gap-2">
           {!isAuthed ? (
             <>
-              <button class="px-3 py-2 text-sm rounded hover:bg-gray-100" onclick="openModal('login-modal')">Login</button>
-              <button class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700" onclick="openModal('signup-modal')">Sign up</button>
+              <a class="px-3 py-2 text-sm rounded hover:bg-gray-100" href="/dashboard/auth/login">Login</a>
+              <a class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700" href="/dashboard/auth/signup">Sign up</a>
             </>
           ) : (
             <details class="relative">

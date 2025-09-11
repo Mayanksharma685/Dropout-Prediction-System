@@ -1,7 +1,6 @@
 import { createRoute } from 'honox/factory'
 import Section from '@/components/landing-page/Section'
 import FeatureCard from '@/components/landing-page/FeatureCard'
-import { AuthModal } from '@/components/landing-page/AuthModal'
 import LandingHeader from '@/components/landing-page/LandingHeader'
 
 export default createRoute(async (c) => {
@@ -37,7 +36,7 @@ export default createRoute(async (c) => {
             </p>
             <div class="mt-8 flex items-center justify-center gap-3">
               {!isAuthed ? (
-                <button class="px-5 py-3 rounded bg-blue-600 text-white hover:bg-blue-700" onclick="openModal('signup-modal')">Signup</button>
+                <a href="/dashboard/auth/signup" class="px-5 py-3 rounded bg-blue-600 text-white hover:bg-blue-700">Signup</a>
               ) : (
                 <a href="/dashboard" class="px-5 py-3 rounded bg-blue-600 text-white hover:bg-blue-700">Dashboard</a>
               )}
@@ -152,8 +151,8 @@ export default createRoute(async (c) => {
             <h3 class="text-2xl font-bold">Reduce dropouts with early, explainable alerts</h3>
             <p class="mt-2 text-gray-700">Create an account and start exploring the dashboard</p>
             <div class="mt-6 flex items-center justify-center gap-3">
-              <button class="px-5 py-3 rounded bg-blue-600 text-white hover:bg-blue-700" onclick="openModal('signup-modal')">Create account</button>
-              <button class="px-5 py-3 rounded border hover:bg-gray-50" onclick="openModal('login-modal')">I already have an account</button>
+              <a href="/dashboard/auth/signup" class="px-5 py-3 rounded bg-blue-600 text-white hover:bg-blue-700">Create account</a>
+              <a href="/dashboard/auth/login" class="px-5 py-3 rounded border hover:bg-gray-50">I already have an account</a>
             </div>
           </div>
         </Section>
@@ -165,81 +164,7 @@ export default createRoute(async (c) => {
         </div>
       </footer>
 
-      <AuthModal id="login-modal" title="Login">
-        <form method="post" action="/dashboard/auth/login" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input class="mt-1 w-full border rounded p-2" type="email" name="email" required />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Password</label>
-            <input class="mt-1 w-full border rounded p-2" type="password" name="password" required />
-          </div>
-          <div class="flex items-center justify-between">
-            <a href="/dashboard/login" class="text-blue-600 hover:underline text-sm">Login with Google</a>
-            <div class="flex gap-2">
-              <button type="button" class="px-4 py-2 rounded border" onclick="closeModal('login-modal')">Cancel</button>
-              <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700" type="submit">Login</button>
-            </div>
-          </div>
-        </form>
-      </AuthModal>
-
-      <AuthModal id="signup-modal" title="Create your account">
-        <form method="post" action="/dashboard/auth/signup" class="space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Name</label>
-              <input class="mt-1 w-full border rounded p-2" type="text" name="name" required />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Department</label>
-              <input class="mt-1 w-full border rounded p-2" type="text" name="department" />
-            </div>
-          </div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Email</label>
-              <input class="mt-1 w-full border rounded p-2" type="email" name="email" required />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Phone</label>
-              <input class="mt-1 w-full border rounded p-2" type="text" name="phone" />
-            </div>
-          </div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Password</label>
-              <input class="mt-1 w-full border rounded p-2" type="password" name="password" required />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
-              <input class="mt-1 w-full border rounded p-2" type="password" name="passwordConfirm" required />
-            </div>
-          </div>
-          <p class="text-xs text-gray-500">By continuing you agree to our terms and privacy policy.</p>
-          <div class="flex items-center justify-between">
-            <a href="/dashboard/login" class="text-blue-600 hover:underline text-sm">Continue with Google</a>
-            <div class="flex gap-2">
-              <button type="button" class="px-4 py-2 rounded border" onclick="closeModal('signup-modal')">Cancel</button>
-              <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700" type="submit">Create account</button>
-            </div>
-          </div>
-        </form>
-      </AuthModal>
-
-      <script dangerouslySetInnerHTML={{
-        __html: `
-function openModal(id){
-  const el = document.getElementById(id); if(!el) return;
-  el.classList.remove('hidden');
-}
-function closeModal(id){
-  const el = document.getElementById(id); if(!el) return;
-  el.classList.add('hidden');
-}
-`
-      }} />
+      
     </div>,
   )
 })
