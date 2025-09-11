@@ -1,16 +1,24 @@
-export default function Sidebar() {
+export default function Sidebar(props: { currentPath?: string }) {
+  const currentPath = props?.currentPath || ''
+  const isActive = (href: string) => {
+    if (href === '/dashboard') return currentPath === '/dashboard'
+    return currentPath.startsWith(href)
+  }
+  const baseLink = 'block px-3 py-2 rounded text-sm font-medium'
+  const activeLink = 'bg-slate-800 text-white'
+  const idleLink = 'hover:bg-slate-800'
   return (
-    <aside class="hidden md:block w-64 shrink-0 border-r bg-white min-h-[calc(100vh-4rem)]">
+    <aside class="hidden md:block w-64 shrink-0 border-r border-slate-800 bg-slate-900 min-h-[calc(100vh-4rem)] text-slate-200">
       <nav class="p-4 space-y-1">
-        <a href="/dashboard" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Overview</a>
-        <a href="/dashboard/student" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Students</a>
-        <a href="/dashboard/attendance" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Attendance</a>
-        <a href="/dashboard/marks" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Marks</a>
-        <a href="/dashboard/backlogs" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Backlogs</a>
-        <a href="/dashboard/fees" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Fees</a>
-        <a href="/dashboard/risk-flags" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Risk Flags</a>
-        <a href="#" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Reports</a>
-        <a href="/dashboard/shortcut" class="block px-3 py-2 rounded hover:bg-gray-50 text-sm font-medium text-slate-700">Shortcut</a>
+        <a href="/dashboard" class={`${baseLink} ${isActive('/dashboard') ? activeLink : idleLink}`}>Overview</a>
+        <a href="/dashboard/student" class={`${baseLink} ${isActive('/dashboard/student') ? activeLink : idleLink}`}>Students</a>
+        <a href="/dashboard/attendance" class={`${baseLink} ${isActive('/dashboard/attendance') ? activeLink : idleLink}`}>Attendance</a>
+        <a href="/dashboard/marks" class={`${baseLink} ${isActive('/dashboard/marks') ? activeLink : idleLink}`}>Marks</a>
+        <a href="/dashboard/backlogs" class={`${baseLink} ${isActive('/dashboard/backlogs') ? activeLink : idleLink}`}>Backlogs</a>
+        <a href="/dashboard/fees" class={`${baseLink} ${isActive('/dashboard/fees') ? activeLink : idleLink}`}>Fees</a>
+        <a href="/dashboard/risk-flags" class={`${baseLink} ${isActive('/dashboard/risk-flags') ? activeLink : idleLink}`}>Risk Flags</a>
+        <a href="#" class={`${baseLink} ${idleLink}`}>Reports</a>
+        <a href="/dashboard/shortcut" class={`${baseLink} ${isActive('/dashboard/shortcut') ? activeLink : idleLink}`}>Shortcut</a>
       </nav>
     </aside>
   )

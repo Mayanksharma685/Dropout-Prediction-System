@@ -44,11 +44,11 @@ export default createRoute(async (c) => {
   
 
   return c.render(
-    <div class="min-h-screen bg-slate-50">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
       <div>
         <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
-          <Sidebar />
+          <Sidebar currentPath={new URL(c.req.url).pathname} />
           <main class="space-y-8 p-4">
             {(success || error) && (
               <div id="toast" class={`fixed right-4 top-4 z-50 rounded-md border px-4 py-3 shadow-sm ${
@@ -75,40 +75,40 @@ setTimeout(() => {
               }} />
             )}
             <section class="space-y-3">
-              <h2 class="text-xl font-semibold text-slate-800">Students</h2>
-              <p class="text-sm text-gray-600">Add new students and view their analysis.</p>
+              <h2 class="text-xl font-semibold text-slate-900">Students</h2>
+              <p class="text-sm text-slate-600">Add new students and view their analysis.</p>
             </section>
 
             <section class="bg-white rounded-xl border shadow-sm p-4">
               <h3 class="text-sm font-semibold text-slate-700 mb-3">Add Student</h3>
               <form method="post" class="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Student ID</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="studentId" required />
+                  <label class="block text-sm font-medium text-slate-700">Student ID</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="text" name="studentId" required />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Name</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="name" required />
+                  <label class="block text-sm font-medium text-slate-700">Name</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="text" name="name" required />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Email</label>
-                  <input class="mt-1 w-full border rounded p-2" type="email" name="email" required />
+                  <label class="block text-sm font-medium text-slate-700">Email</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="email" name="email" required />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Phone</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="phone" />
+                  <label class="block text-sm font-medium text-slate-700">Phone</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="text" name="phone" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">DOB</label>
-                  <input class="mt-1 w-full border rounded p-2" type="date" name="dob" required />
+                  <label class="block text-sm font-medium text-slate-700">DOB</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="date" name="dob" required />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Department</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="department" />
+                  <label class="block text-sm font-medium text-slate-700">Department</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="text" name="department" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Current Semester</label>
-                  <input class="mt-1 w-full border rounded p-2" type="number" name="currentSemester" min="1" required />
+                  <label class="block text-sm font-medium text-slate-700">Current Semester</label>
+                  <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="number" name="currentSemester" min="1" required />
                 </div>
                 <div class="md:col-span-3">
                   <button class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-900" type="submit">Add Student</button>
@@ -119,14 +119,15 @@ setTimeout(() => {
             <section class="bg-white rounded-xl border shadow-sm p-4">
               <h3 class="text-sm font-semibold text-slate-700 mb-3">All Students</h3>
               {students.length === 0 ? (
-                <p class="text-sm text-gray-600">No students yet. Add your first student above.</p>
+                <p class="text-sm text-slate-600">No students yet. Add your first student above.</p>
               ) : (
                 <div class="overflow-x-auto">
                   <table class="min-w-full text-left text-sm">
-                    <thead class="bg-gray-50 text-gray-600">
+                    <thead class="bg-slate-50 text-slate-600">
                       <tr>
                         <th class="px-4 py-3">Student</th>
                         <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Department</th>
                         <th class="px-4 py-3">Semester</th>
                         <th class="px-4 py-3">Risk Flags</th>
                         <th class="px-4 py-3">Backlogs</th>
@@ -135,14 +136,15 @@ setTimeout(() => {
                     </thead>
                     <tbody>
                       {students.map((s) => (
-                        <tr class="border-t hover:bg-gray-50/60" key={s.studentId}>
+                        <tr class="border-t hover:bg-slate-50/60" key={s.studentId}>
                           <td class="px-4 py-3">
                             <a class="font-medium text-slate-800 hover:underline" href={`/dashboard/student/${encodeURIComponent(s.studentId)}`}>{s.name}</a>
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs text-slate-500">
                               <a class="hover:underline" href={`/dashboard/student/${encodeURIComponent(s.studentId)}`}>{s.studentId}</a>
                             </div>
                           </td>
                           <td class="px-4 py-3">{s.email}</td>
+                          <td class="px-4 py-3">{s.department??'-'}</td>
                           <td class="px-4 py-3">{s.currentSemester}</td>
                           <td class="px-4 py-3">{s.riskFlags?.length ?? 0}</td>
                           <td class="px-4 py-3">{s.backlogs?.length ?? 0}</td>

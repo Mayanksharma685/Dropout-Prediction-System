@@ -38,7 +38,7 @@ export default createRoute(async (c) => {
       <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
       <div>
         <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
-          <Sidebar />
+          <Sidebar currentPath={new URL(c.req.url).pathname} />
           <main class="space-y-8 p-4">
             <section class="space-y-3">
               <h2 class="text-xl font-semibold text-slate-800">Shortcut</h2>
