@@ -111,7 +111,7 @@ setTimeout(() => {
                   <input class="mt-1 w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="number" name="currentSemester" min="1" required />
                 </div>
                 <div class="md:col-span-3">
-                  <button class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-900" type="submit">Add Student</button>
+                  <button class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Add Student</button>
                 </div>
               </form>
             </section>

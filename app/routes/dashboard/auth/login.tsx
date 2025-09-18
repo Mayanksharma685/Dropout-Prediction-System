@@ -11,16 +11,12 @@ const LoginSchema = z.object({
 export default createRoute(async (c) => {
   return c.render(
     <div class="min-h-screen grid md:grid-cols-2 bg-gradient-to-br from-slate-50 to-white">
-      <div class="hidden md:flex items-center justify-center p-10 bg-slate-900 text-white">
-        <div class="max-w-md space-y-4">
-          <div class="text-3xl font-bold tracking-tight">Welcome back to EduPulse</div>
-          <p class="text-slate-300">Monitor students, spot risks early, and act with confidence.</p>
-          <ul class="space-y-2 text-slate-300 text-sm list-disc pl-5">
-            <li>Explainable risk insights</li>
-            <li>Attendance, marks, fees in one view</li>
-            <li>Privacy-first, secure by design</li>
-          </ul>
-        </div>
+      <div class="hidden md:flex items-center justify-center p-10" style="background-color: #FC816B">
+        <img 
+          src="/login-left-side.png" 
+          alt="EduPulse Login" 
+          class="max-w-full max-h-full object-contain rounded-2xl"
+        />
       </div>
       <div class="flex items-center justify-center p-6 md:p-10">
         <div class="w-full max-w-md">
@@ -54,7 +50,7 @@ export default createRoute(async (c) => {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4" /></svg>
               </div>
             </div>
-            <button class="w-full bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900">Sign in</button>
+            <button class="w-full text-white px-4 py-2 rounded-md" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'">Sign in</button>
           </form>
 
           <div class="mt-6 text-center text-sm text-gray-600">

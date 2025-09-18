@@ -5,10 +5,10 @@ export default function Sidebar(props: { currentPath?: string }) {
     return currentPath.startsWith(href)
   }
   const baseLink = 'block px-3 py-2 rounded text-sm font-medium'
-  const activeLink = 'bg-slate-800 text-white'
-  const idleLink = 'hover:bg-slate-800'
+  const activeLink = 'bg-white text-[#FC816B]'
+  const idleLink = 'hover:bg-white hover:text-[#FC816B]'
   return (
-    <aside class="hidden md:block w-64 shrink-0 border-r border-slate-800 bg-slate-900 min-h-[calc(100vh-4rem)] text-slate-200">
+    <aside class="hidden md:block w-64 shrink-0 border-r border-white min-h-[calc(100vh-4rem)] text-slate-200 dark-scrollbar overflow-y-auto" style="background-color: #FC816B">
       <nav class="p-4 space-y-1">
         <a href="/dashboard" class={`${baseLink} ${isActive('/dashboard') ? activeLink : idleLink}`}>Overview</a>
         <a href="/dashboard/student" class={`${baseLink} ${isActive('/dashboard/student') ? activeLink : idleLink}`}>Students</a>

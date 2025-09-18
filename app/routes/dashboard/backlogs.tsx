@@ -100,7 +100,7 @@ setTimeout(() => {
                   <label for="cleared" class="text-sm text-gray-700">Cleared</label>
                 </div>
                 <div class="md:col-span-4">
-                  <button class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-900" type="submit">Add</button>
+                  <button class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Add</button>
                 </div>
               </form>
             </section>

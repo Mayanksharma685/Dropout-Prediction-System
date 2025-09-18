@@ -95,7 +95,7 @@ setTimeout(() => {
                   <input class="mt-1 w-full border rounded p-2" type="number" name="attendancePercent" min="0" max="100" step="0.1" required />
                 </div>
                 <div class="md:col-span-3">
-                  <button class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-900" type="submit">Add</button>
+                  <button class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Add</button>
                 </div>
               </form>
             </section>

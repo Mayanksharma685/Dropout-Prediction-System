@@ -13,10 +13,10 @@ export default function Header(props: any) {
   const displayName = userName || userEmail || uid
   const initials = getInitials(userName || userEmail)
   return (
-    <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 text-white">
+    <header class="sticky top-0 z-30 backdrop-blur border-b border-slate-800 text-white" style="background-color: rgba(252, 129, 107, 0.95)">
       <div class="px-4 h-16 flex items-center justify-between">
         <a href="/" class="flex items-center gap-2 font-semibold text-white">
-          <span class="inline-block h-8 w-8 rounded bg-slate-700"></span>
+          <img src="/Logo.png" alt="EduPulse Logo" class="h-16 w-16 object-contain" />
           EduPulse
         </a>
         <div class="flex items-center gap-3">
@@ -36,7 +36,7 @@ export default function Header(props: any) {
                 <span class="hidden md:block text-sm text-slate-200 max-w-[12rem] truncate">{displayName}</span>
               </button>
             </summary>
-            <div class="absolute right-0 mt-2 w-48 rounded-md border border-slate-700 bg-slate-900 text-slate-100 shadow-lg">
+            <div class="absolute right-0 mt-2 w-48 rounded-md border border-slate-700 text-slate-100 shadow-lg dark-scrollbar" style="background-color: #FC816B">
               <div class="px-3 py-2 text-sm text-slate-200 border-b border-slate-700">
                 <div class="font-medium truncate">{displayName}</div>
                 <div class="text-xs text-slate-400 truncate">{userEmail}</div>
