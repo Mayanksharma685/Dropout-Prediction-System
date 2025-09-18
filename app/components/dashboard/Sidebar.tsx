@@ -8,7 +8,16 @@ export default function Sidebar(props: { currentPath?: string }) {
   const activeLink = 'bg-white text-[#FC816B]'
   const idleLink = 'hover:bg-white hover:text-[#FC816B]'
   return (
-    <aside class="hidden md:block w-64 shrink-0 border-r border-white min-h-[calc(100vh-4rem)] text-slate-200 dark-scrollbar overflow-y-auto" style="background-color: #FC816B">
+    <aside class="hidden md:block w-64 shrink-0 border-r border-white min-h-screen text-slate-200 dark-scrollbar overflow-y-auto rounded-r-lg" style="background-color: #FC816B">
+      {/* Logo and Brand Section */}
+      <div class="p-4 border-b border-white/20">
+        <a href="/" class="flex items-center gap-3 font-semibold text-white">
+          <img src="/Logo.png" alt="EduPulse Logo" class="h-12 w-12 object-contain" />
+          <span class="text-lg">EduPulse</span>
+        </a>
+      </div>
+      
+      {/* Navigation Links */}
       <nav class="p-4 space-y-1">
         <a href="/dashboard" class={`${baseLink} ${isActive('/dashboard') ? activeLink : idleLink}`}>Overview</a>
         <a href="/dashboard/student" class={`${baseLink} ${isActive('/dashboard/student') ? activeLink : idleLink}`}>Students</a>

@@ -41,10 +41,12 @@ export default createRoute(async (c) => {
 
   return c.render(
     <div class="min-h-screen bg-slate-50">
-      <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+      
       <div>
-        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
+          <div>
+          <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
           <main class="space-y-8 p-4">
             {(success || error) && (
               <div id="toast" class={`fixed right-4 top-4 z-50 rounded-md border px-4 py-3 shadow-sm ${
@@ -148,6 +150,7 @@ setTimeout(() => {
               )}
             </section>
           </main>
+          </div>
         </div>
       </div>
     </div>

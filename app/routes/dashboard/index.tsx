@@ -112,11 +112,14 @@ export default createRoute(async (c) => {
 
   return c.render(
     <div class="min-h-screen bg-slate-50">
-      <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+      
       <div class="">
-        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
+          <div>
+          <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
           <main class="space-y-8 p-4">
+            
             <section class="space-y-3">
               <h2 class="text-xl font-semibold text-slate-800">Overview</h2>
               <KPIs
@@ -201,6 +204,7 @@ else window.addEventListener('load', initCharts);
             }} />
             {/* AI Assistant behavior is encapsulated inside the component */}
           </main>
+          </div>
         </div>
       </div>
     </div>,

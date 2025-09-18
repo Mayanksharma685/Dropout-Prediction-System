@@ -13,36 +13,32 @@ export default function Header(props: any) {
   const displayName = userName || userEmail || uid
   const initials = getInitials(userName || userEmail)
   return (
-    <header class="sticky top-0 z-30 backdrop-blur border-b border-slate-800 text-white" style="background-color: rgba(252, 129, 107, 0.95)">
-      <div class="px-4 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 font-semibold text-white">
-          <img src="/Logo.png" alt="EduPulse Logo" class="h-16 w-16 object-contain" />
-          EduPulse
-        </a>
+    <header class="sticky top-0 z-30 backdrop-blur border-b border-gray-200 text-gray-800 bg-white">
+      <div class="px-4 h-16 flex items-center justify-end">
         <div class="flex items-center gap-3">
-          <a href="/logout" class="hidden md:inline-flex items-center gap-2 rounded border border-slate-700 px-3 py-2 text-sm text-white hover:bg-slate-800">
+          <a href="/logout" class="hidden md:inline-flex items-center gap-2 rounded border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
             Logout
           </a>
           <details class="relative">
             <summary class="list-none">
-              <button class="inline-flex items-center gap-2 rounded-full border border-slate-700 px-2 py-1 hover:bg-slate-800">
+              <button class="inline-flex items-center gap-2 rounded-full border border-gray-300 px-2 py-1 hover:bg-gray-100">
                 {userPicture ? (
                   <img src={userPicture} alt="avatar" class="h-8 w-8 rounded-full object-cover" />
                 ) : (
-                  <span class="h-8 w-8 rounded-full bg-slate-700 text-white grid place-items-center text-sm font-semibold">
+                  <span class="h-8 w-8 rounded-full bg-[#FC816B] text-white grid place-items-center text-sm font-semibold">
                     {initials}
                   </span>
                 )}
-                <span class="hidden md:block text-sm text-slate-200 max-w-[12rem] truncate">{displayName}</span>
+                <span class="hidden md:block text-sm text-gray-700 max-w-[12rem] truncate">{displayName}</span>
               </button>
             </summary>
-            <div class="absolute right-0 mt-2 w-48 rounded-md border border-slate-700 text-slate-100 shadow-lg dark-scrollbar" style="background-color: #FC816B">
-              <div class="px-3 py-2 text-sm text-slate-200 border-b border-slate-700">
+            <div class="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white text-gray-800 shadow-lg">
+              <div class="px-3 py-2 text-sm border-b border-gray-200">
                 <div class="font-medium truncate">{displayName}</div>
-                <div class="text-xs text-slate-400 truncate">{userEmail}</div>
+                <div class="text-xs text-gray-500 truncate">{userEmail}</div>
               </div>
-              <a href="#" class="block px-3 py-2 text-sm hover:bg-slate-800">Profile</a>
-              <a href="/logout" class="block px-3 py-2 text-sm text-red-300 hover:bg-slate-800">Logout</a>
+              <a href="#" class="block px-3 py-2 text-sm hover:bg-gray-100">Profile</a>
+              <a href="/logout" class="block px-3 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
             </div>
           </details>
         </div>

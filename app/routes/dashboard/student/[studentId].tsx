@@ -136,10 +136,12 @@ export default createRoute(async (c) => {
 
   return c.render(
     <div class="min-h-screen bg-slate-50">
-      <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+      
       <div>
-        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
+          <div>
+          <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
           <main class="space-y-8 p-4">
             <section class="bg-white rounded-xl border shadow-sm p-4">
               <div class="flex items-start justify-between gap-4">
@@ -301,6 +303,7 @@ export default createRoute(async (c) => {
               )}
             </section>
           </main>
+          </div>
         </div>
       </div>
     </div>,

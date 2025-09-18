@@ -46,10 +46,13 @@ export default createRoute(async (c) => {
 
   return c.render(
     <div class="min-h-screen bg-slate-50">
-      <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+      
       <div>
-        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
+          <div>
+          <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+          
           <main class="space-y-8 p-4">
             {(success || error) && (
               <div id="toast" class={`fixed right-4 top-4 z-50 rounded-md border px-4 py-3 shadow-sm ${
@@ -117,7 +120,21 @@ setTimeout(() => {
             </section>
 
             <section class="bg-white rounded-xl border shadow-sm p-4">
-              <h3 class="text-sm font-semibold text-slate-700 mb-3">Recent Entries</h3>
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <h3 class="text-sm font-semibold text-slate-700">Recent Entries</h3>
+                <div class="relative">
+                  <input 
+                    type="text" 
+                    id="studentSearch" 
+                    placeholder="Search by Student ID (e.g., STU011)" 
+                    class="pl-8 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64"
+                    oninput="filterAttendanceByStudentId(this.value)"
+                  />
+                  <svg class="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
               {attendance.length === 0 ? (
                 <p class="text-sm text-gray-600">No entries yet.</p>
               ) : (
@@ -133,7 +150,7 @@ setTimeout(() => {
                     </thead>
                     <tbody>
                       {attendance.map((a) => (
-                        <tr class="border-t hover:bg-gray-50/60">
+                        <tr class="border-t hover:bg-gray-50/60 cursor-pointer" onclick={`window.location.href='/dashboard/attendance/${a.studentId}'`}>
                           <td class="px-4 py-3">
                             <div class="font-medium">{a.student.name}</div>
                             <div class="text-xs text-gray-500">{a.studentId}</div>
@@ -151,7 +168,52 @@ setTimeout(() => {
                 </div>
               )}
             </section>
+
+            {/* Search Filter Script */}
+            <script dangerouslySetInnerHTML={{
+              __html: `
+function filterAttendanceByStudentId(searchValue) {
+  const rows = document.querySelectorAll('tbody tr');
+  const searchTerm = searchValue.toLowerCase().trim();
+  
+  rows.forEach(row => {
+    const studentIdCell = row.querySelector('td:first-child .text-xs');
+    if (studentIdCell) {
+      const studentId = studentIdCell.textContent.toLowerCase();
+      const studentName = row.querySelector('td:first-child .font-medium').textContent.toLowerCase();
+      
+      if (studentId.includes(searchTerm) || studentName.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  });
+  
+  // Show "No results" message if no rows are visible
+  const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+  const table = document.querySelector('table');
+  let noResultsMsg = document.getElementById('no-results-msg');
+  
+  if (visibleRows.length === 0 && searchTerm !== '') {
+    if (!noResultsMsg) {
+      noResultsMsg = document.createElement('div');
+      noResultsMsg.id = 'no-results-msg';
+      noResultsMsg.className = 'text-center py-8 text-gray-500';
+      noResultsMsg.innerHTML = 'No students found matching your search.';
+      table.parentNode.appendChild(noResultsMsg);
+    }
+    noResultsMsg.style.display = 'block';
+  } else {
+    if (noResultsMsg) {
+      noResultsMsg.style.display = 'none';
+    }
+  }
+}
+              `
+            }} />
           </main>
+          </div>
         </div>
       </div>
     </div>
