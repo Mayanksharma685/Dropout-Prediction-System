@@ -6,7 +6,7 @@ import z from 'zod'
 
 const BacklogFormSchema = z.object({
   studentId: z.string().min(1),
-  subject: z.string().min(1),
+  courseId: z.string().min(1),
   attempts: z.coerce.number().int().min(0),
   cleared: z.string().optional(),
 })
@@ -31,9 +31,15 @@ export default createRoute(async (c) => {
     take: 500,
   })
 
+  const courses = await prisma.courseSubject.findMany({
+    where: teacher?.department ? { department: teacher.department } : {},
+    orderBy: [{ semester: 'asc' }, { name: 'asc' }],
+    take: 500,
+  })
+
   const backlogs = await prisma.backlog.findMany({
     where: { student: { teacherId: uid } },
-    include: { student: true },
+    include: { student: true, courseSubject: true },
     orderBy: { backlogId: 'desc' },
     take: 500,
   })
@@ -88,8 +94,13 @@ setTimeout(() => {
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Subject</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="subject" required />
+                  <label class="block text-sm font-medium text-gray-700">Course</label>
+                  <select name="courseId" class="mt-1 w-full border rounded p-2" required>
+                    <option value="">Select course</option>
+                    {courses.map((c) => (
+                      <option value={c.courseId}>{c.name} ({c.code})</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Attempts</label>
@@ -115,7 +126,7 @@ setTimeout(() => {
                     <thead class="bg-gray-50 text-gray-600">
                       <tr>
                         <th class="px-4 py-3">Student</th>
-                        <th class="px-4 py-3">Subject</th>
+                        <th class="px-4 py-3">Course</th>
                         <th class="px-4 py-3">Attempts</th>
                         <th class="px-4 py-3">Cleared</th>
                       </tr>
@@ -127,7 +138,10 @@ setTimeout(() => {
                             <div class="font-medium">{b.student.name}</div>
                             <div class="text-xs text-gray-500">{b.studentId}</div>
                           </td>
-                          <td class="px-4 py-3">{b.subject}</td>
+                          <td class="px-4 py-3">
+                            <div class="font-medium">{b.courseSubject.name}</div>
+                            <div class="text-xs text-gray-500">{b.courseSubject.code}</div>
+                          </td>
                           <td class="px-4 py-3">{b.attempts}</td>
                           <td class="px-4 py-3">{b.cleared ? 'Yes' : 'No'}</td>
                         </tr>
@@ -157,7 +171,7 @@ export const POST = createRoute(zValidator('form', BacklogFormSchema), async (c)
     await prisma.backlog.create({
       data: {
         studentId: data.studentId,
-        subject: data.subject,
+        courseId: data.courseId,
         attempts: Number(data.attempts),
         cleared: data.cleared === 'on',
       },

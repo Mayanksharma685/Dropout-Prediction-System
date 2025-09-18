@@ -25,6 +25,11 @@ export default createRoute(async (c) => {
 
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
   const teacher = await prisma.teacher.findUnique({ where: { teacherId: uid } })
+  
+  // Get available courses for dropdowns
+  const courses = await prisma.courseSubject.findMany({
+    orderBy: [{ department: 'asc' }, { semester: 'asc' }, { name: 'asc' }]
+  })
 
   const kpi = {
     total: DUMMY_STUDENTS.length,
@@ -47,15 +52,38 @@ export default createRoute(async (c) => {
 
             <section class="bg-white rounded-xl border shadow-sm p-4 space-y-3">
               <h3 class="text-sm font-semibold text-slate-700">Bulk Import Students (JSON)</h3>
-              <p class="text-xs text-gray-600">Paste an array of student objects. Required: studentId, name, email, dob (YYYY-MM-DD), currentSemester. Optional: phone, department.</p>
+              <p class="text-xs text-gray-600">Paste an array of student objects. Required: studentId, name, email, dob (YYYY-MM-DD), currentSemester. Optional: phone, department, attendance (with courseId), testScores (with courseId), backlogs (with courseId), feePayments.</p>
               <textarea id="json-input" class="w-full border rounded p-2 font-mono text-xs h-40" placeholder='[
-  { "studentId": "STU1001", "name": "Student Name", "email": "student@example.com", "dob": "2002-01-01", "currentSemester": 3, "department": "CSE", "phone": "9999999999" }
+  { "studentId": "STU1001", "name": "Student Name", "email": "student@example.com", "dob": "2002-01-01", "currentSemester": 3, "department": "CSE", "phone": "9999999999", "attendance": [{"courseId": "CSE101", "month": "2024-01", "attendancePercent": 85.5}], "testScores": [{"courseId": "MATH201", "testDate": "2024-01-15", "score": 92.5}], "backlogs": [{"courseId": "PHY101", "attempts": 2, "cleared": false}] }
 ]'></textarea>
               <div class="flex items-center gap-2">
                 <button id="start-import" class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'">Start Import</button>
                 <button id="clear-log" class="px-4 py-2 rounded border">Clear Log</button>
               </div>
               <div id="import-log" class="mt-2 text-xs space-y-1 max-h-48 overflow-auto bg-gray-50 rounded p-2 border"></div>
+            </section>
+
+            <section class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+              <h3 class="text-sm font-semibold text-slate-700">Course Management</h3>
+              <p class="text-xs text-gray-600">Create new courses if they don't exist. If a courseId is not found during import, it will be automatically created using these default values.</p>
+              <div class="grid md:grid-cols-2 gap-4 p-3 border rounded bg-blue-50">
+                <div>
+                  <label class="block text-gray-700 text-sm font-medium">Default Department</label>
+                  <input id="default-department" class="mt-1 w-full border rounded p-2" type="text" placeholder="e.g., CSE, ECE, ME" />
+                </div>
+                <div>
+                  <label class="block text-gray-700 text-sm font-medium">Default Course Name Pattern</label>
+                  <input id="default-course-name" class="mt-1 w-full border rounded p-2" type="text" placeholder="e.g., Subject {courseId}" />
+                </div>
+                <div>
+                  <label class="block text-gray-700 text-sm font-medium">Default Semester</label>
+                  <input id="default-semester" class="mt-1 w-full border rounded p-2" type="number" min="1" max="8" value="1" />
+                </div>
+                <div class="flex items-center gap-2 mt-6">
+                  <input id="auto-create-courses" type="checkbox" class="border rounded" checked />
+                  <label for="auto-create-courses" class="text-gray-700 text-sm">Auto-create missing courses</label>
+                </div>
+              </div>
             </section>
 
             <section class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
@@ -67,7 +95,18 @@ export default createRoute(async (c) => {
                     <input id="create-attendance" type="checkbox" class="border rounded" />
                     <label for="create-attendance" class="text-sm font-medium text-slate-700">Create Attendance</label>
                   </div>
-                  <div class="grid md:grid-cols-2 gap-3 text-sm">
+                  <div class="grid md:grid-cols-3 gap-3 text-sm">
+                    <div>
+                      <label class="block text-gray-700">Course</label>
+                      <select id="att-course" class="mt-1 w-full border rounded p-2">
+                        <option value="">Select Course</option>
+                        {courses.map(course => (
+                          <option key={course.courseId} value={course.courseId}>
+                            {course.code} - {course.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <div>
                       <label class="block text-gray-700">Month</label>
                       <input id="att-month" class="mt-1 w-full border rounded p-2" type="month" />
@@ -86,8 +125,15 @@ export default createRoute(async (c) => {
                   </div>
                   <div class="grid md:grid-cols-3 gap-3 text-sm">
                     <div>
-                      <label class="block text-gray-700">Subject</label>
-                      <input id="marks-subject" class="mt-1 w-full border rounded p-2" type="text" placeholder="Maths" />
+                      <label class="block text-gray-700">Course</label>
+                      <select id="marks-course" class="mt-1 w-full border rounded p-2">
+                        <option value="">Select Course</option>
+                        {courses.map(course => (
+                          <option key={course.courseId} value={course.courseId}>
+                            {course.code} - {course.name} (Sem {course.semester})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label class="block text-gray-700">Test Date</label>
@@ -135,8 +181,15 @@ export default createRoute(async (c) => {
                   </div>
                   <div class="grid md:grid-cols-3 gap-3 text-sm">
                     <div>
-                      <label class="block text-gray-700">Subject</label>
-                      <input id="backlog-subject" class="mt-1 w-full border rounded p-2" type="text" placeholder="Physics" />
+                      <label class="block text-gray-700">Course</label>
+                      <select id="backlog-course" class="mt-1 w-full border rounded p-2">
+                        <option value="">Select Course</option>
+                        {courses.map(course => (
+                          <option key={course.courseId} value={course.courseId}>
+                            {course.code} - {course.name} (Sem {course.semester})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label class="block text-gray-700">Attempts</label>
@@ -154,10 +207,349 @@ export default createRoute(async (c) => {
         </div>
       </div>
       <script dangerouslySetInnerHTML={{
-        __html: "\n(function(){\n  var startBtn = document.getElementById('start-import');\n  var clearBtn = document.getElementById('clear-log');\n  var inputEl = document.getElementById('json-input');\n  var logEl = document.getElementById('import-log');\n  if (!startBtn || !inputEl || !logEl) return;\n\n  function log(line, cls){\n    var div = document.createElement('div');\n    if (cls) div.className = cls;\n    div.textContent = line;\n    logEl.appendChild(div);\n    logEl.scrollTop = logEl.scrollHeight;\n  }\n\n  function toFormData(obj){\n    var fd = new FormData();\n    if (obj.studentId) fd.set('studentId', String(obj.studentId));\n    if (obj.name) fd.set('name', String(obj.name));\n    if (obj.email) fd.set('email', String(obj.email));\n    if (obj.phone) fd.set('phone', String(obj.phone));\n    if (obj.dob) fd.set('dob', String(obj.dob));\n    if (obj.department) fd.set('department', String(obj.department));\n    if (obj.currentSemester != null) fd.set('currentSemester', String(obj.currentSemester));\n    return fd;\n  }\n\n  function getDefaults(){\n    var defs = { attendance:null, marks:null, fees:null, backlogs:null };\n    var el;\n    el = document.getElementById('create-attendance');\n    if (el && el.checked) {\n      defs.attendance = {\n        month: (document.getElementById('att-month') || {}).value || null,\n        attendancePercent: (document.getElementById('att-percent') || {}).value || null,\n      };\n    }\n    el = document.getElementById('create-marks');\n    if (el && el.checked) {\n      defs.marks = {\n        subject: (document.getElementById('marks-subject') || {}).value || null,\n        testDate: (document.getElementById('marks-date') || {}).value || null,\n        score: (document.getElementById('marks-score') || {}).value || null,\n      };\n    }\n    el = document.getElementById('create-fees');\n    if (el && el.checked) {\n      defs.fees = {\n        dueDate: (document.getElementById('fees-due') || {}).value || null,\n        paidDate: (document.getElementById('fees-paid') || {}).value || null,\n        status: (document.getElementById('fees-status') || {}).value || null,\n        dueMonths: (document.getElementById('fees-months') || {}).value || null,\n      };\n    }\n    el = document.getElementById('create-backlogs');\n    if (el && el.checked) {\n      defs.backlogs = {\n        subject: (document.getElementById('backlog-subject') || {}).value || null,\n        attempts: (document.getElementById('backlog-attempts') || {}).value || null,\n        cleared: (document.getElementById('backlog-cleared') || {}).checked || false,\n      };\n    }\n    return defs;\n  }\n\n  async function postAttendance(studentId, payload){\n    if (!payload) return;\n    var fd = new FormData();\n    fd.set('studentId', studentId);\n    if (payload.month) fd.set('month', payload.month);\n    if (payload.attendancePercent != null) fd.set('attendancePercent', String(payload.attendancePercent));\n    return fetch('/dashboard/attendance', { method: 'POST', body: fd });\n  }\n\n  async function postMarks(studentId, payload){\n    if (!payload) return;\n    var fd = new FormData();\n    fd.set('studentId', studentId);\n    if (payload.subject) fd.set('subject', payload.subject);\n    if (payload.testDate) fd.set('testDate', payload.testDate);\n    if (payload.score != null) fd.set('score', String(payload.score));\n    return fetch('/dashboard/marks', { method: 'POST', body: fd });\n  }\n\n  async function postFees(studentId, payload){\n    if (!payload) return;\n    var fd = new FormData();\n    fd.set('studentId', studentId);\n    if (payload.dueDate) fd.set('dueDate', payload.dueDate);\n    if (payload.paidDate) fd.set('paidDate', payload.paidDate);\n    if (payload.status) fd.set('status', payload.status);\n    if (payload.dueMonths != null) fd.set('dueMonths', String(payload.dueMonths));\n    return fetch('/dashboard/fees', { method: 'POST', body: fd });\n  }\n\n  async function postBacklogs(studentId, payload){\n    if (!payload) return;\n    var fd = new FormData();\n    fd.set('studentId', studentId);\n    if (payload.subject) fd.set('subject', payload.subject);\n    if (payload.attempts != null) fd.set('attempts', String(payload.attempts));\n    if (payload.cleared) fd.set('cleared', 'on');\n    return fetch('/dashboard/backlogs', { method: 'POST', body: fd });\n  }\n\n  async function importSequential(items){\n    var success = 0;\n    var failed = 0;\n    var defs = getDefaults();\n    for (var i = 0; i < items.length; i++) {\n      var s = items[i];\n      var idx = i + 1;\n      log('[' + idx + '/' + items.length + '] Creating ' + (s.name || s.studentId) + ' ...');\n      try {\n        var res = await fetch('/dashboard/student', { method: 'POST', body: toFormData(s) });\n        var ok = res.ok;\n        var url = res.url || '';\n        if (ok && url.indexOf('success=1') !== -1) {\n          success++;\n          log('  ✔ Success', 'text-emerald-700');\n          var studentId = s.studentId;\n          var att = s.attendance || defs.attendance;\n          var marks = s.marks || defs.marks;\n          var fees = s.fees || defs.fees;\n          var backs = s.backlogs || defs.backlogs;\n          if (att && att.month && att.attendancePercent != null) {\n            try { await postAttendance(studentId, att); log('    ↳ Attendance added'); } catch(e) { log('    ↳ Attendance failed', 'text-red-700'); }\n          }\n          if (marks && marks.subject && marks.testDate && marks.score != null) {\n            try { await postMarks(studentId, marks); log('    ↳ Marks added'); } catch(e) { log('    ↳ Marks failed', 'text-red-700'); }\n          }\n          if (fees && fees.dueDate && fees.status && fees.dueMonths != null) {\n            try { await postFees(studentId, fees); log('    ↳ Fees entry added'); } catch(e) { log('    ↳ Fees failed', 'text-red-700'); }\n          }\n          if (backs && backs.subject && backs.attempts != null) {\n            try { await postBacklogs(studentId, backs); log('    ↳ Backlog added'); } catch(e) { log('    ↳ Backlog failed', 'text-red-700'); }\n          }\n        } else {\n          failed++;\n          var text = '';\n          try { text = await res.text(); } catch(e) {}\n          log('  ✖ Failed (' + res.status + ')', 'text-red-700');\n          if (text) log('    ' + text.substring(0, 200));\n        }\n      } catch (e) {\n        failed++;\n        log('  ✖ Error: ' + (e && e.message ? e.message : String(e)), 'text-red-700');\n      }\n      await new Promise(function(r){ return setTimeout(r, 150); });\n    }\n    log('Done. Success: ' + success + ', Failed: ' + failed, failed ? 'text-amber-700' : 'text-emerald-700');\n  }\n\n  startBtn.addEventListener('click', function(){\n    var raw = inputEl.value.trim();\n    if (!raw) { log('Please paste JSON first.', 'text-amber-700'); return; }\n    var data;\n    try { data = JSON.parse(raw); } catch (e) { log('Invalid JSON: ' + e.message, 'text-red-700'); return; }\n    if (!Array.isArray(data)) { log('Top-level JSON must be an array of students.', 'text-amber-700'); return; }\n    var missing = data.filter(function(x){\n      return !(x && x.studentId && x.name && x.email && x.dob && (x.currentSemester != null));\n    });\n    if (missing.length) { log('Some entries are missing required fields. First invalid: ' + JSON.stringify(missing[0]).substring(0,200), 'text-amber-700'); return; }\n    importSequential(data);\n  });\n\n  if (clearBtn) clearBtn.addEventListener('click', function(){ logEl.innerHTML = ''; });\n})();\n"
+        __html: `
+(function(){
+  var startBtn = document.getElementById('start-import');
+  var clearBtn = document.getElementById('clear-log');
+  var inputEl = document.getElementById('json-input');
+  var logEl = document.getElementById('import-log');
+  if (!startBtn || !inputEl || !logEl) return;
+
+  function log(line, cls){
+    var div = document.createElement('div');
+    if (cls) div.className = cls;
+    div.textContent = line;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function toFormData(obj){
+    var fd = new FormData();
+    if (obj.studentId) fd.set('studentId', String(obj.studentId));
+    if (obj.name) fd.set('name', String(obj.name));
+    if (obj.email) fd.set('email', String(obj.email));
+    if (obj.phone) fd.set('phone', String(obj.phone));
+    if (obj.dob) fd.set('dob', String(obj.dob));
+    if (obj.department) fd.set('department', String(obj.department));
+    if (obj.currentSemester != null) fd.set('currentSemester', String(obj.currentSemester));
+    return fd;
+  }
+
+  async function ensureCourseExists(courseId) {
+    if (!courseId) return false;
+    
+    // Check if auto-create is enabled
+    var autoCreate = document.getElementById('auto-create-courses');
+    if (!autoCreate || !autoCreate.checked) return true;
+    
+    try {
+      // First check if course exists
+      var resp = await fetch('/api/courses?courseId=' + encodeURIComponent(courseId));
+      var courses = await resp.json();
+      
+      // If course exists, return true
+      if (courses && courses.length > 0) {
+        return true;
+      }
+      
+      // Course doesn't exist, create it
+      var defaultDept = (document.getElementById('default-department') || {}).value || 'CSE';
+      var defaultName = (document.getElementById('default-course-name') || {}).value || 'Subject {courseId}';
+      var defaultSem = parseInt((document.getElementById('default-semester') || {}).value) || 1;
+      
+      var courseData = {
+        courseId: courseId,
+        name: defaultName.replace('{courseId}', courseId),
+        code: courseId,
+        semester: defaultSem,
+        department: defaultDept
+      };
+      
+      var createResp = await fetch('/api/courses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(courseData)
+      });
+      
+      if (createResp.ok) {
+        log('✓ Created new course: ' + courseId + ' - ' + courseData.name, 'text-blue-600');
+        return true;
+      } else {
+        var errorText = await createResp.text();
+        log('✗ Failed to create course ' + courseId + ': ' + errorText, 'text-red-600');
+        return false;
+      }
+    } catch (e) {
+      log('✗ Error checking/creating course ' + courseId + ': ' + e.message, 'text-red-600');
+      return false;
+    }
+  }
+
+  function getDefaults(){
+    var defs = { attendance:null, testScores:null, fees:null, backlogs:null };
+    var el;
+    
+    el = document.getElementById('create-attendance');
+    if (el && el.checked) {
+      var courseId = (document.getElementById('att-course') || {}).value;
+      var month = (document.getElementById('att-month') || {}).value;
+      var percent = (document.getElementById('att-percent') || {}).value;
+      if (courseId && month && percent) {
+        defs.attendance = {
+          courseId: courseId,
+          month: month + '-01',
+          attendancePercent: parseFloat(percent)
+        };
+      }
+    }
+    
+    el = document.getElementById('create-marks');
+    if (el && el.checked) {
+      var courseId = (document.getElementById('marks-course') || {}).value;
+      var testDate = (document.getElementById('marks-date') || {}).value;
+      var score = (document.getElementById('marks-score') || {}).value;
+      if (courseId && testDate && score) {
+        defs.testScores = {
+          courseId: courseId,
+          testDate: testDate,
+          score: parseFloat(score)
+        };
+      }
+    }
+    
+    el = document.getElementById('create-fees');
+    if (el && el.checked) {
+      var dueDate = (document.getElementById('fees-due') || {}).value;
+      var paidDate = (document.getElementById('fees-paid') || {}).value;
+      var status = (document.getElementById('fees-status') || {}).value;
+      var dueMonths = (document.getElementById('fees-months') || {}).value;
+      if (dueDate && status && dueMonths) {
+        defs.fees = {
+          dueDate: dueDate,
+          paidDate: paidDate || null,
+          status: status,
+          dueMonths: parseInt(dueMonths)
+        };
+      }
+    }
+    
+    el = document.getElementById('create-backlogs');
+    if (el && el.checked) {
+      var courseId = (document.getElementById('backlog-course') || {}).value;
+      var attempts = (document.getElementById('backlog-attempts') || {}).value;
+      var cleared = (document.getElementById('backlog-cleared') || {}).checked;
+      if (courseId && attempts) {
+        defs.backlogs = {
+          courseId: courseId,
+          attempts: parseInt(attempts),
+          cleared: cleared
+        };
+      }
+    }
+    
+    return defs;
+  }
+
+  async function createRelatedEntries(studentId, studentData, defaults) {
+    var results = [];
+    
+    // Create attendance entries
+    var attendanceList = studentData.attendance || (defaults.attendance ? [defaults.attendance] : []);
+    for (var i = 0; i < attendanceList.length; i++) {
+      var att = attendanceList[i];
+      if (att.courseId && att.month && att.attendancePercent != null) {
+        // Ensure course exists before creating attendance
+        var courseExists = await ensureCourseExists(att.courseId);
+        if (!courseExists) {
+          results.push('✗ Attendance skipped: Course ' + att.courseId + ' could not be created');
+          continue;
+        }
+        
+        try {
+          var fd = new FormData();
+          fd.set('studentId', studentId);
+          fd.set('courseId', att.courseId);
+          fd.set('month', att.month);
+          fd.set('attendancePercent', String(att.attendancePercent));
+          
+          var resp = await fetch('/api/attendance', { method: 'POST', body: fd });
+          if (resp.ok) {
+            results.push('✓ Attendance created for course ' + att.courseId);
+          } else {
+            results.push('✗ Attendance failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Attendance error: ' + e.message);
+        }
+      }
+    }
+    
+    // Create test scores
+    var testScoresList = studentData.testScores || (defaults.testScores ? [defaults.testScores] : []);
+    for (var i = 0; i < testScoresList.length; i++) {
+      var test = testScoresList[i];
+      if (test.courseId && test.testDate && test.score != null) {
+        // Ensure course exists before creating test score
+        var courseExists = await ensureCourseExists(test.courseId);
+        if (!courseExists) {
+          results.push('✗ Test score skipped: Course ' + test.courseId + ' could not be created');
+          continue;
+        }
+        
+        try {
+          var fd = new FormData();
+          fd.set('studentId', studentId);
+          fd.set('courseId', test.courseId);
+          fd.set('testDate', test.testDate);
+          fd.set('score', String(test.score));
+          
+          var resp = await fetch('/api/tests', { method: 'POST', body: fd });
+          if (resp.ok) {
+            results.push('✓ Test score created for course ' + test.courseId);
+          } else {
+            results.push('✗ Test score failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Test score error: ' + e.message);
+        }
+      }
+    }
+    
+    // Create fee payments
+    var feesList = studentData.feePayments || (defaults.fees ? [defaults.fees] : []);
+    for (var i = 0; i < feesList.length; i++) {
+      var fee = feesList[i];
+      // Handle both old format (dueDate, status, dueMonths) and new format (semester, amountPaid, paymentDate)
+      if ((fee.dueDate && fee.status && fee.dueMonths != null) || (fee.semester && fee.paymentDate)) {
+        try {
+          var fd = new FormData();
+          fd.set('studentId', studentId);
+          
+          // Handle different JSON formats
+          if (fee.dueDate) {
+            // Old format
+            fd.set('dueDate', fee.dueDate);
+            if (fee.paidDate) fd.set('paidDate', fee.paidDate);
+            fd.set('status', fee.status);
+            fd.set('dueMonths', String(fee.dueMonths));
+          } else {
+            // New format - convert from semester/paymentDate format
+            var dueDate = new Date(fee.paymentDate);
+            dueDate.setMonth(dueDate.getMonth() - 1); // Due date is 1 month before payment
+            fd.set('dueDate', dueDate.toISOString().split('T')[0]);
+            fd.set('paidDate', fee.paymentDate);
+            fd.set('status', fee.amountPaid ? 'Paid' : 'Unpaid');
+            fd.set('dueMonths', String(fee.semester || 1));
+          }
+          
+          var resp = await fetch('/api/fees', { method: 'POST', body: fd });
+          if (resp.ok) {
+            results.push('✓ Fee payment created for semester ' + (fee.semester || 'N/A'));
+          } else {
+            results.push('✗ Fee payment failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Fee payment error: ' + e.message);
+        }
+      }
+    }
+    
+    // Create backlogs
+    var backlogsList = studentData.backlogs || (defaults.backlogs ? [defaults.backlogs] : []);
+    for (var i = 0; i < backlogsList.length; i++) {
+      var backlog = backlogsList[i];
+      if (backlog.courseId && backlog.attempts != null) {
+        // Ensure course exists before creating backlog
+        var courseExists = await ensureCourseExists(backlog.courseId);
+        if (!courseExists) {
+          results.push('✗ Backlog skipped: Course ' + backlog.courseId + ' could not be created');
+          continue;
+        }
+        
+        try {
+          var fd = new FormData();
+          fd.set('studentId', studentId);
+          fd.set('courseId', backlog.courseId);
+          fd.set('attempts', String(backlog.attempts));
+          fd.set('cleared', String(backlog.cleared || false));
+          
+          var resp = await fetch('/api/backlogs', { method: 'POST', body: fd });
+          if (resp.ok) {
+            results.push('✓ Backlog created for course ' + backlog.courseId);
+          } else {
+            results.push('✗ Backlog failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Backlog error: ' + e.message);
+        }
+      }
+    }
+    
+    return results;
+  }
+
+  startBtn.addEventListener('click', async function(){
+    var text = inputEl.value.trim();
+    if (!text) {
+      log('No JSON input provided', 'text-red-600');
+      return;
+    }
+    
+    var students;
+    try {
+      students = JSON.parse(text);
+    } catch (e) {
+      log('Invalid JSON: ' + e.message, 'text-red-600');
+      return;
+    }
+    
+    if (!Array.isArray(students)) {
+      log('Input must be an array of student objects', 'text-red-600');
+      return;
+    }
+    
+    log('Starting import of ' + students.length + ' students...', 'text-blue-600 font-semibold');
+    var defaults = getDefaults();
+    
+    for (var i = 0; i < students.length; i++) {
+      var student = students[i];
+      log('Processing student ' + (i + 1) + ': ' + (student.name || student.studentId || 'Unknown'));
+      
+      if (!student.studentId || !student.name || !student.email || !student.dob || student.currentSemester == null) {
+        log('✗ Missing required fields (studentId, name, email, dob, currentSemester)', 'text-red-600');
+        continue;
+      }
+      
+      try {
+        var fd = toFormData(student);
+        var resp = await fetch('/api/students', { method: 'POST', body: fd });
+        
+        if (resp.ok) {
+          log('✓ Student created: ' + student.name, 'text-green-600');
+          
+          // Create related entries
+          var relatedResults = await createRelatedEntries(student.studentId, student, defaults);
+          relatedResults.forEach(function(result) {
+            log('  ' + result, result.startsWith('✓') ? 'text-green-600' : 'text-red-600');
+          });
+        } else {
+          var errorText = await resp.text();
+          log('✗ Student creation failed: ' + errorText, 'text-red-600');
+        }
+      } catch (e) {
+        log('✗ Error creating student: ' + e.message, 'text-red-600');
+      }
+    }
+    
+    log('Import completed!', 'text-blue-600 font-semibold');
+  });
+
+  clearBtn.addEventListener('click', function(){
+    logEl.innerHTML = '';
+  });
+})();
+`
       }} />
     </div>,
   )
 })
-
-

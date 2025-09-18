@@ -39,39 +39,58 @@ model Student {
   @@index([teacherId])
 }
 
+model CourseSubject {
+  courseId   String @id
+  name       String
+  code       String
+  semester   Int
+  department String
+
+  attendance Attendance[]
+  testScores TestScore[]
+  backlogs   Backlog[]
+}
+
 model Attendance {
   attendanceId      Int      @id @default(autoincrement())
   studentId         String
+  courseId          String
   month             DateTime
   attendancePercent Float
 
-  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  student       Student       @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  courseSubject CourseSubject @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
 
   @@index([studentId])
+  @@index([courseId])
 }
 
 model TestScore {
-  testId   Int      @id @default(autoincrement())
+  testId    Int      @id @default(autoincrement())
   studentId String
-  subject  String
-  testDate DateTime
-  score    Float
+  courseId  String
+  testDate  DateTime
+  score     Float
 
-  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  student       Student       @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  courseSubject CourseSubject @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
 
   @@index([studentId])
+  @@index([courseId])
 }
 
 model Backlog {
-  backlogId Int    @id @default(autoincrement())
+  backlogId Int     @id @default(autoincrement())
   studentId String
-  subject   String
+  courseId  String
   attempts  Int
   cleared   Boolean
 
-  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  student       Student       @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  courseSubject CourseSubject @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
 
   @@index([studentId])
+  @@index([courseId])
 }
 
 model FeePayment {

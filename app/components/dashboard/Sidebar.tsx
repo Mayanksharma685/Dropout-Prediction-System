@@ -12,6 +12,7 @@ export default function Sidebar(props: { currentPath?: string }) {
       <nav class="p-4 space-y-1">
         <a href="/dashboard" class={`${baseLink} ${isActive('/dashboard') ? activeLink : idleLink}`}>Overview</a>
         <a href="/dashboard/student" class={`${baseLink} ${isActive('/dashboard/student') ? activeLink : idleLink}`}>Students</a>
+        <a href="/dashboard/courses" class={`${baseLink} ${isActive('/dashboard/courses') ? activeLink : idleLink}`}>Courses</a>
         <a href="/dashboard/attendance" class={`${baseLink} ${isActive('/dashboard/attendance') ? activeLink : idleLink}`}>Attendance</a>
         <a href="/dashboard/marks" class={`${baseLink} ${isActive('/dashboard/marks') ? activeLink : idleLink}`}>Marks</a>
         <a href="/dashboard/backlogs" class={`${baseLink} ${isActive('/dashboard/backlogs') ? activeLink : idleLink}`}>Backlogs</a>

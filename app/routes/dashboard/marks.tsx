@@ -6,7 +6,7 @@ import z from 'zod'
 
 const MarksFormSchema = z.object({
   studentId: z.string().min(1),
-  subject: z.string().min(1),
+  courseId: z.string().min(1),
   testDate: z.string().min(1),
   score: z.coerce.number().min(0).max(100),
 })
@@ -31,9 +31,15 @@ export default createRoute(async (c) => {
     take: 500,
   })
 
+  const courses = await prisma.courseSubject.findMany({
+    where: teacher?.department ? { department: teacher.department } : {},
+    orderBy: [{ semester: 'asc' }, { name: 'asc' }],
+    take: 500,
+  })
+
   const tests = await prisma.testScore.findMany({
     where: { student: { teacherId: uid } },
-    include: { student: true },
+    include: { student: true, courseSubject: true },
     orderBy: { testDate: 'desc' },
     take: 500,
   })
@@ -88,8 +94,13 @@ setTimeout(() => {
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Subject</label>
-                  <input class="mt-1 w-full border rounded p-2" type="text" name="subject" required />
+                  <label class="block text-sm font-medium text-gray-700">Course</label>
+                  <select name="courseId" class="mt-1 w-full border rounded p-2" required>
+                    <option value="">Select course</option>
+                    {courses.map((c) => (
+                      <option value={c.courseId}>{c.name} ({c.code})</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Test Date</label>
@@ -115,7 +126,7 @@ setTimeout(() => {
                     <thead class="bg-gray-50 text-gray-600">
                       <tr>
                         <th class="px-4 py-3">Student</th>
-                        <th class="px-4 py-3">Subject</th>
+                        <th class="px-4 py-3">Course</th>
                         <th class="px-4 py-3">Date</th>
                         <th class="px-4 py-3">Score</th>
                       </tr>
@@ -127,7 +138,10 @@ setTimeout(() => {
                             <div class="font-medium">{t.student.name}</div>
                             <div class="text-xs text-gray-500">{t.studentId}</div>
                           </td>
-                          <td class="px-4 py-3">{t.subject}</td>
+                          <td class="px-4 py-3">
+                            <div class="font-medium">{t.courseSubject.name}</div>
+                            <div class="text-xs text-gray-500">{t.courseSubject.code}</div>
+                          </td>
                           <td class="px-4 py-3">{new Date(t.testDate).toLocaleDateString()}</td>
                           <td class="px-4 py-3">{t.score}</td>
                         </tr>
@@ -157,7 +171,7 @@ export const POST = createRoute(zValidator('form', MarksFormSchema), async (c) =
     await prisma.testScore.create({
       data: {
         studentId: data.studentId,
-        subject: data.subject,
+        courseId: data.courseId,
         testDate: new Date(data.testDate),
         score: Number(data.score),
       },
