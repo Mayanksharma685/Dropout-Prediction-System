@@ -112,61 +112,65 @@ export default createRoute(async (c) => {
 
   return c.render(
     <div class="min-h-screen bg-slate-50">
-      
+
       <div class="">
         <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
           <div>
-          <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
-          <main class="space-y-8 p-4">
-            
-            <section class="space-y-3">
-              <h2 class="text-xl font-semibold text-slate-800">Overview</h2>
-              <KPIs
-                items={[
-                  { label: 'Students', value: studentCount },
-                  { label: 'Active Risk Flags', value: riskCount },
-                  { label: 'Open Backlogs', value: backlogCount },
-                  { label: 'Unpaid Fees', value: unpaidCount },
-                ]}
-              />
-            </section>
-            <section class="grid md:grid-cols-3 gap-6 items-start">
-              <div class="md:col-span-2 space-y-3">
-                <h3 class="text-sm font-semibold text-slate-700">Students with Active Risk Flags</h3>
-                <RiskTable rows={rows} />
-              </div>
-              <div class="space-y-3">
-                <h3 class="text-sm font-semibold text-slate-700">Latest Updates</h3>
-                <RecentActivity items={activities} />
-              </div>
-            </section>
-            <section class="bg-white rounded-xl border shadow-sm p-4">
-              <h3 class="text-sm font-semibold text-slate-700 mb-3">Statistics</h3>
-              <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 class="text-xs text-gray-600 mb-2">Risk Distribution</h4>
-                  <div class="h-56"><canvas id="riskChart" class="w-full h-full"></canvas></div>
-                </div>
-                <div>
-                  <h4 class="text-xs text-gray-600 mb-2">Attendance Buckets (%)</h4>
-                  <div class="h-56"><canvas id="attendanceChart" class="w-full h-full"></canvas></div>
-                </div>
-                <div>
-                  <h4 class="text-xs text-gray-600 mb-2">Average Marks by Month</h4>
-                  <div class="h-56"><canvas id="marksChart" class="w-full h-full"></canvas></div>
-                </div>
-                <div>
-                  <h4 class="text-xs text-gray-600 mb-2">Fees Status</h4>
-                  <div class="h-56"><canvas id="feesChart" class="w-full h-full"></canvas></div>
-                </div>
-              </div>
-            </section>
+            <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
+            <main class="space-y-8 p-4">
 
-            <AIAssistant />
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script dangerouslySetInnerHTML={{
-              __html: `
+              <section class="space-y-3">
+                <h2 class="text-xl font-semibold text-slate-800">Overview</h2>
+                <KPIs
+                  items={[
+                    { label: 'Students', value: studentCount },
+                    { label: 'Active Risk Flags', value: riskCount },
+                    { label: 'Open Backlogs', value: backlogCount },
+                    { label: 'Unpaid Fees', value: unpaidCount },
+                  ]}
+                />
+              </section>
+              <section class="grid md:grid-cols-3 gap-6 items-start">
+                <div class="md:col-span-2 space-y-3">
+                  <h3 class="text-sm font-semibold text-slate-700">Students with Active Risk Flags</h3>
+                  <RiskTable rows={rows} />
+                </div>
+                <div class="space-y-3">
+                  <h3 class="text-sm font-semibold text-slate-700">Latest Updates</h3>
+                  <RecentActivity items={activities} />
+                </div>
+              </section>
+              <section class="bg-white rounded-xl border shadow-sm p-4">
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">Statistics</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                  {/* Attendance first */}
+                  <div>
+                    <h4 class="text-xs text-gray-600 mb-2">Attendance Buckets (%)</h4>
+                    <div class="h-56"><canvas id="attendanceChart" class="w-full h-full"></canvas></div>
+                  </div>
+                  {/* Risk second */}
+                  <div>
+                    <h4 class="text-xs text-gray-600 mb-2">Risk Distribution</h4>
+                    <div class="h-56"><canvas id="riskChart" class="w-full h-full"></canvas></div>
+                  </div>
+                  {/* Other charts remain same */}
+                  <div>
+                    <h4 class="text-xs text-gray-600 mb-2">Average Marks by Month</h4>
+                    <div class="h-56"><canvas id="marksChart" class="w-full h-full"></canvas></div>
+                  </div>
+                  <div>
+                    <h4 class="text-xs text-gray-600 mb-2">Fees Status</h4>
+                    <div class="h-56"><canvas id="feesChart" class="w-full h-full"></canvas></div>
+                  </div>
+                </div>
+              </section>
+
+
+              <AIAssistant />
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script dangerouslySetInnerHTML={{
+                __html: `
 const riskData = { labels: ['High','Medium','Low'], values: [${riskCounts.High}, ${riskCounts.Medium}, ${riskCounts.Low}] };
 const attData = { labels: ['0-40','40-60','60-80','80-100'], values: [${attBuckets['0-40']}, ${attBuckets['40-60']}, ${attBuckets['60-80']}, ${attBuckets['80-100']}] };
 const marksData = { labels: ${JSON.stringify(marksLabels)}, values: ${JSON.stringify(marksValues)} };
@@ -201,9 +205,9 @@ function initCharts(){
 if (document.readyState === 'complete') initCharts();
 else window.addEventListener('load', initCharts);
 `
-            }} />
-            {/* AI Assistant behavior is encapsulated inside the component */}
-          </main>
+              }} />
+              {/* AI Assistant behavior is encapsulated inside the component */}
+            </main>
           </div>
         </div>
       </div>

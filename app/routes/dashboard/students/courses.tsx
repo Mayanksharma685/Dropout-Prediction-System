@@ -140,11 +140,16 @@ setTimeout(() => {
                   <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                       <h2 id="modal-course-title" class="text-xl font-semibold text-slate-800">Course Summary</h2>
-                      <button onclick="hideCourseSummary()" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                      </button>
+                      <div class="flex items-center space-x-2">
+                        <button id="view-more-details-btn" onclick="viewCourseDetails()" class="hidden bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                          View More Details
+                        </button>
+                        <button onclick="hideCourseSummary()" class="text-gray-500 hover:text-gray-700">
+                          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                     
                     <div id="course-summary-content" class="space-y-6">
@@ -164,7 +169,10 @@ setTimeout(() => {
       
       <script dangerouslySetInnerHTML={{
         __html: `
+let currentCourseId = null;
+
 function showCourseSummary(courseId) {
+  currentCourseId = courseId;
   const modal = document.getElementById('course-summary-modal');
   const content = document.getElementById('course-summary-content');
   const title = document.getElementById('modal-course-title');
@@ -209,11 +217,19 @@ function hideCourseSummary() {
   modal.classList.add('hidden');
 }
 
+function viewCourseDetails() {
+  if (currentCourseId) {
+    window.location.href = '/dashboard/students/courses/' + encodeURIComponent(currentCourseId);
+  }
+}
+
 function renderCourseSummary(data) {
   const content = document.getElementById('course-summary-content');
   const title = document.getElementById('modal-course-title');
+  const viewMoreBtn = document.getElementById('view-more-details-btn');
   
   title.textContent = data.course.name + ' - Summary';
+  viewMoreBtn.classList.remove('hidden');
   
   content.innerHTML = \`
     <!-- Course Info Header -->
