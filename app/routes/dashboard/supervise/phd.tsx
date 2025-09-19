@@ -21,6 +21,7 @@ export default createRoute(async (c) => {
       <head>
         <title>PhD Supervision - EduPulse</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
           {`
             .modal {
@@ -32,6 +33,25 @@ export default createRoute(async (c) => {
             .status-ongoing { @apply bg-green-100 text-green-800; }
             .status-completed { @apply bg-blue-100 text-blue-800; }
             .status-discontinued { @apply bg-red-100 text-red-800; }
+            .loading-spinner {
+              border: 4px solid #f3f4f6;
+              border-top: 4px solid #3b82f6;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            .fade-in {
+              animation: fadeIn 0.5s ease-in;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
           `}
         </style>
       </head>
@@ -47,22 +67,137 @@ export default createRoute(async (c) => {
                     <h1 class="text-2xl font-bold text-gray-900">PhD Supervision</h1>
                     <p class="text-gray-600 mt-1">Manage and track PhD student research</p>
                   </div>
-                  <button 
-                    onclick="openModal('addPhdModal')"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <span>+</span>
-                    Add PhD Student
-                  </button>
+                  <div class="flex gap-3">
+                    <button 
+                      id="refreshBtn"
+                      class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+                    >
+                      <span>🔄</span>
+                      Refresh
+                    </button>
+                    <button 
+                      onclick="openModal('addPhdModal')"
+                      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <span>+</span>
+                      Add PhD Student
+                    </button>
+                  </div>
                 </div>
 
-                {/* PhD Supervisions List */}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                  <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">PhD Students Under Supervision</h2>
+                {/* Loading State */}
+                <div id="loadingState" class="flex justify-center items-center py-12">
+                  <div class="loading-spinner"></div>
+                  <span class="ml-3 text-gray-600">Loading PhD supervision data...</span>
+                </div>
+
+                {/* Main Content */}
+                <div id="mainContent" class="hidden space-y-6">
+                  {/* Summary Cards */}
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Total PhD Students</p>
+                          <p id="totalPhds" class="text-2xl font-bold text-gray-900">-</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                          <span class="text-blue-600 text-xl">🎓</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Ongoing Research</p>
+                          <p id="ongoingPhds" class="text-2xl font-bold text-green-600">-</p>
+                        </div>
+                        <div class="p-3 bg-green-100 rounded-full">
+                          <span class="text-green-600 text-xl">🔬</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Completed PhDs</p>
+                          <p id="completedPhds" class="text-2xl font-bold text-blue-600">-</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                          <span class="text-blue-600 text-xl">✅</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Avg. Duration</p>
+                          <p id="avgDuration" class="text-2xl font-bold text-gray-900">-</p>
+                        </div>
+                        <div class="p-3 bg-purple-100 rounded-full">
+                          <span class="text-purple-600 text-xl">⏱️</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div id="phd-container" class="divide-y divide-gray-200">
-                    {/* PhD supervisions will be loaded here */}
+
+                  {/* Charts Row */}
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Status Distribution */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">PhD Status Distribution</h3>
+                      <div class="relative h-64">
+                        <canvas id="statusChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Research Areas */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Research Areas</h3>
+                      <div class="relative h-64">
+                        <canvas id="researchAreasChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Completion Trends */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Completion Trends</h3>
+                      <div class="relative h-64">
+                        <canvas id="completionTrendsChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Duration Distribution */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Duration Distribution</h3>
+                      <div class="relative h-64">
+                        <canvas id="durationChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PhD Supervisions List */}
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                      <h2 class="text-lg font-semibold text-gray-900">PhD Students Under Supervision</h2>
+                    </div>
+                    <div id="phd-container" class="divide-y divide-gray-200">
+                      {/* PhD supervisions will be loaded here */}
+                    </div>
+                  </div>
+
+                  {/* Upcoming Completions */}
+                  <div id="upcomingSection" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                      <h2 class="text-lg font-semibold text-gray-900">Upcoming Completions</h2>
+                      <p class="text-sm text-gray-600">PhDs expected to complete in the next 6 months</p>
+                    </div>
+                    <div id="upcoming-container" class="divide-y divide-gray-200">
+                      {/* Upcoming completions will be loaded here */}
+                    </div>
                   </div>
                 </div>
 
@@ -248,8 +383,8 @@ export default createRoute(async (c) => {
           </div>
         </div>
 
-        <script>
-          {`
+        <script dangerouslySetInnerHTML={{
+          __html: `
             // Modal functions
             function openModal(modalId) {
               document.getElementById(modalId).classList.add('active');
@@ -259,10 +394,301 @@ export default createRoute(async (c) => {
               document.getElementById(modalId).classList.remove('active');
             }
 
-            // Load PhD supervisions on page load
+            // Load PhD supervisions and analytics on page load
             document.addEventListener('DOMContentLoaded', function() {
+              console.log('PhD page loaded, starting analytics...');
+              loadAnalytics();
               loadPhdSupervisions();
             });
+
+            // Refresh button functionality
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+              console.log('Refresh button clicked');
+              document.getElementById('loadingState').style.display = 'block';
+              document.getElementById('mainContent').classList.add('hidden');
+              loadAnalytics();
+              loadPhdSupervisions();
+            });
+
+            // Load analytics function
+            async function loadAnalytics() {
+              console.log('=== Starting loadAnalytics ===');
+              
+              try {
+                console.log('Fetching /api/phd-analytics...');
+                const response = await fetch('/api/phd-analytics');
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                  throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
+                }
+                
+                const analytics = await response.json();
+                console.log('Analytics data received:', analytics);
+                
+                // Check for API error
+                if (analytics.error) {
+                  throw new Error(analytics.error);
+                }
+                
+                // Update summary cards with fallbacks
+                const summary = analytics.summary || {};
+                document.getElementById('totalPhds').textContent = summary.totalPhds || '0';
+                document.getElementById('ongoingPhds').textContent = summary.ongoingPhds || '0';
+                document.getElementById('completedPhds').textContent = summary.completedPhds || '0';
+                document.getElementById('avgDuration').textContent = summary.averageDuration || 'N/A';
+                
+                // Create charts with error handling
+                const charts = analytics.charts || {};
+                try {
+                  createStatusChart(charts.statusDistribution || {});
+                  createResearchAreasChart(charts.researchAreas || {});
+                  createCompletionTrendsChart(charts.completionTrends || {});
+                  createDurationChart(charts.durationDistribution || { labels: [], values: [] });
+                } catch (chartError) {
+                  console.warn('Chart creation failed:', chartError);
+                }
+                
+                // Load upcoming completions
+                loadUpcomingCompletions(analytics.upcomingCompletions || []);
+                
+                // Show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('mainContent').classList.add('fade-in');
+                
+                console.log('Analytics loaded successfully');
+                
+              } catch (error) {
+                console.error('Analytics loading failed:', error);
+                
+                // Show error with helpful buttons
+                document.getElementById('loadingState').innerHTML = \`
+                  <div class="text-center p-6">
+                    <div class="text-red-500 mb-4">
+                      <h3 class="font-bold text-lg mb-2">Failed to load analytics</h3>
+                      <p class="mb-4">\${error.message}</p>
+                    </div>
+                    <div class="space-x-2">
+                      <button onclick="loadAnalytics()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Try Again
+                      </button>
+                      <button onclick="createTestDataAndReload()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        Create Test Data
+                      </button>
+                      <a href="/dashboard/supervise/phd-simple" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                        Debug Page
+                      </a>
+                    </div>
+                  </div>
+                \`;
+              }
+            }
+            
+            // Helper function to create test data and reload
+            async function createTestDataAndReload() {
+              try {
+                console.log('Creating test data...');
+                const response = await fetch('/api/create-test-data', { method: 'POST' });
+                const result = await response.json();
+                console.log('Test data created:', result);
+                
+                // Reload analytics after creating test data
+                setTimeout(() => {
+                  document.getElementById('loadingState').innerHTML = \`
+                    <div class="flex justify-center items-center py-12">
+                      <div class="loading-spinner"></div>
+                      <span class="ml-3 text-gray-600">Loading analytics with new test data...</span>
+                    </div>
+                  \`;
+                  loadAnalytics();
+                }, 1000);
+                
+              } catch (error) {
+                console.error('Failed to create test data:', error);
+                alert('Failed to create test data: ' + error.message);
+              }
+            }
+
+            // Chart creation functions
+            function createStatusChart(data) {
+              const ctx = document.getElementById('statusChart').getContext('2d');
+              const hasData = Object.values(data).some(val => val > 0);
+              
+              if (!hasData) {
+                ctx.canvas.parentElement.innerHTML = \`
+                  <div class="flex items-center justify-center h-64 text-gray-500">
+                    <div class="text-center">
+                      <div class="text-4xl mb-2">📊</div>
+                      <p>No data available</p>
+                    </div>
+                  </div>
+                \`;
+                return;
+              }
+              
+              new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: ['#10b981', '#3b82f6', '#ef4444']
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { position: 'bottom' }
+                  }
+                }
+              });
+            }
+
+            function createResearchAreasChart(data) {
+              const ctx = document.getElementById('researchAreasChart').getContext('2d');
+              const hasData = Object.keys(data).length > 0 && Object.values(data).some(val => val > 0);
+              
+              if (!hasData) {
+                ctx.canvas.parentElement.innerHTML = \`
+                  <div class="flex items-center justify-center h-64 text-gray-500">
+                    <div class="text-center">
+                      <div class="text-4xl mb-2">🔬</div>
+                      <p>No research areas data</p>
+                    </div>
+                  </div>
+                \`;
+                return;
+              }
+              
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: '#6366f1'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function createCompletionTrendsChart(data) {
+              const ctx = document.getElementById('completionTrendsChart').getContext('2d');
+              const hasData = Object.values(data).some(val => val > 0);
+              
+              if (!hasData) {
+                ctx.canvas.parentElement.innerHTML = \`
+                  <div class="flex items-center justify-center h-64 text-gray-500">
+                    <div class="text-center">
+                      <div class="text-4xl mb-2">📈</div>
+                      <p>No completion trends data</p>
+                    </div>
+                  </div>
+                \`;
+                return;
+              }
+              
+              new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    label: 'Completions',
+                    data: Object.values(data),
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function createDurationChart(data) {
+              const ctx = document.getElementById('durationChart').getContext('2d');
+              const hasData = data.values && data.values.some(val => val > 0);
+              
+              if (!hasData) {
+                ctx.canvas.parentElement.innerHTML = \`
+                  <div class="flex items-center justify-center h-64 text-gray-500">
+                    <div class="text-center">
+                      <div class="text-4xl mb-2">⏱️</div>
+                      <p>No duration data</p>
+                    </div>
+                  </div>
+                \`;
+                return;
+              }
+              
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: data.labels,
+                  datasets: [{
+                    data: data.values,
+                    backgroundColor: '#f59e0b'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function loadUpcomingCompletions(upcomingCompletions) {
+              const container = document.getElementById('upcoming-container');
+              
+              if (upcomingCompletions.length === 0) {
+                container.innerHTML = \`
+                  <div class="p-8 text-center text-gray-500">
+                    <div class="text-4xl mb-4">📅</div>
+                    <p>No PhDs expected to complete in the next 6 months.</p>
+                  </div>
+                \`;
+                return;
+              }
+              
+              container.innerHTML = upcomingCompletions.map(phd => \`
+                <div class="p-4 hover:bg-gray-50">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <h4 class="font-semibold text-gray-900">\${phd.title}</h4>
+                      <p class="text-blue-600 font-medium">\${phd.studentName}</p>
+                      <p class="text-sm text-gray-600 mt-1">Research Area: \${phd.researchArea}</p>
+                      <p class="text-sm text-orange-600 font-medium mt-1">Expected: \${new Date(phd.expectedEnd).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+              \`).join('');
+            }
 
             // Load PhD supervisions function
             async function loadPhdSupervisions() {
@@ -435,8 +861,8 @@ export default createRoute(async (c) => {
                 }
               }
             }
-          `}
-        </script>
+          `
+        }} />
       </body>
     </html>
   )

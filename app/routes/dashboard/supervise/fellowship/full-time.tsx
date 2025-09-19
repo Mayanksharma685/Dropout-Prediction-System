@@ -21,6 +21,7 @@ export default createRoute(async (c) => {
       <head>
         <title>Full Time Fellowship - EduPulse</title>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
           {`
             .modal {
@@ -32,6 +33,25 @@ export default createRoute(async (c) => {
             .status-active { @apply bg-green-100 text-green-800; }
             .status-completed { @apply bg-blue-100 text-blue-800; }
             .status-terminated { @apply bg-red-100 text-red-800; }
+            .loading-spinner {
+              border: 4px solid #f3f4f6;
+              border-top: 4px solid #3b82f6;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            .fade-in {
+              animation: fadeIn 0.5s ease-in;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
           `}
         </style>
       </head>
@@ -55,22 +75,137 @@ export default createRoute(async (c) => {
                       </a>
                     </div>
                   </div>
-                  <button 
-                    onclick="openModal('addFellowshipModal')"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <span>+</span>
-                    Add Full Time Fellowship
-                  </button>
+                  <div class="flex gap-3">
+                    <button 
+                      id="refreshBtn"
+                      class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+                    >
+                      <span>🔄</span>
+                      Refresh
+                    </button>
+                    <button 
+                      onclick="openModal('addFellowshipModal')"
+                      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <span>+</span>
+                      Add Full Time Fellowship
+                    </button>
+                  </div>
                 </div>
 
-                {/* Fellowships List */}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                  <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">Full Time Fellowship Awards</h2>
+                {/* Loading State */}
+                <div id="loadingState" class="flex justify-center items-center py-12">
+                  <div class="loading-spinner"></div>
+                  <span class="ml-3 text-gray-600">Loading fellowship data...</span>
+                </div>
+
+                {/* Main Content */}
+                <div id="mainContent" class="hidden space-y-6">
+                  {/* Summary Cards */}
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Total Fellowships</p>
+                          <p id="totalFellowships" class="text-2xl font-bold text-gray-900">-</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                          <span class="text-blue-600 text-xl">💰</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Active Fellowships</p>
+                          <p id="activeFellowships" class="text-2xl font-bold text-green-600">-</p>
+                        </div>
+                        <div class="p-3 bg-green-100 rounded-full">
+                          <span class="text-green-600 text-xl">✅</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Monthly Disbursement</p>
+                          <p id="monthlyDisbursement" class="text-2xl font-bold text-blue-600">-</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                          <span class="text-blue-600 text-xl">💳</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Avg. Duration</p>
+                          <p id="avgDuration" class="text-2xl font-bold text-gray-900">-</p>
+                        </div>
+                        <div class="p-3 bg-purple-100 rounded-full">
+                          <span class="text-purple-600 text-xl">⏱️</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div id="fellowships-container" class="divide-y divide-gray-200">
-                    {/* Fellowships will be loaded here */}
+
+                  {/* Charts Row */}
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Status Distribution */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Fellowship Status</h3>
+                      <div class="relative h-64">
+                        <canvas id="statusChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Amount Distribution */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Amount Distribution</h3>
+                      <div class="relative h-64">
+                        <canvas id="amountChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Monthly Trends */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Monthly Trends</h3>
+                      <div class="relative h-64">
+                        <canvas id="trendsChart"></canvas>
+                      </div>
+                    </div>
+
+                    {/* Duration Distribution */}
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Duration Distribution</h3>
+                      <div class="relative h-64">
+                        <canvas id="durationChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Fellowships List */}
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                      <h2 class="text-lg font-semibold text-gray-900">Full Time Fellowship Awards</h2>
+                    </div>
+                    <div id="fellowships-container" class="divide-y divide-gray-200">
+                      {/* Fellowships will be loaded here */}
+                    </div>
+                  </div>
+
+                  {/* Upcoming Expirations */}
+                  <div id="upcomingSection" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                      <h2 class="text-lg font-semibold text-gray-900">Upcoming Expirations</h2>
+                      <p class="text-sm text-gray-600">Fellowships ending in the next 3 months</p>
+                    </div>
+                    <div id="upcoming-container" class="divide-y divide-gray-200">
+                      {/* Upcoming expirations will be loaded here */}
+                    </div>
                   </div>
                 </div>
 
@@ -264,8 +399,8 @@ export default createRoute(async (c) => {
           </div>
         </div>
 
-        <script>
-          {`
+        <script dangerouslySetInnerHTML={{
+          __html: `
             // Modal functions
             function openModal(modalId) {
               document.getElementById(modalId).classList.add('active');
@@ -275,10 +410,244 @@ export default createRoute(async (c) => {
               document.getElementById(modalId).classList.remove('active');
             }
 
-            // Load fellowships on page load
+            // Load fellowships and analytics on page load
             document.addEventListener('DOMContentLoaded', function() {
+              console.log('Full-time fellowship page loaded, starting analytics...');
+              loadAnalytics();
               loadFellowships();
             });
+
+            // Refresh button functionality
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+              console.log('Refresh button clicked');
+              document.getElementById('loadingState').style.display = 'block';
+              document.getElementById('mainContent').classList.add('hidden');
+              loadAnalytics();
+              loadFellowships();
+            });
+
+            // Load analytics function
+            async function loadAnalytics() {
+              console.log('Loading full-time fellowship analytics...');
+              
+              try {
+                const response = await fetch('/api/fellowship-analytics?type=Full Time');
+                console.log('Fellowship analytics response status:', response.status);
+                
+                if (!response.ok) {
+                  throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
+                }
+                
+                const analytics = await response.json();
+                console.log('Fellowship analytics data:', analytics);
+                
+                // Check for API error
+                if (analytics.error) {
+                  throw new Error(analytics.error);
+                }
+                
+                // Update summary cards with fallbacks
+                const summary = analytics.summary || {};
+                document.getElementById('totalFellowships').textContent = summary.totalFellowships || '0';
+                document.getElementById('activeFellowships').textContent = summary.activeFellowships || '0';
+                document.getElementById('monthlyDisbursement').textContent = '₹' + (summary.monthlyDisbursement || '0');
+                document.getElementById('avgDuration').textContent = summary.averageDuration || 'N/A';
+                
+                // Create charts with error handling
+                const charts = analytics.charts || {};
+                try {
+                  createStatusChart(charts.statusDistribution || {});
+                  createAmountChart(charts.amountRanges || {});
+                  createTrendsChart(charts.monthlyTrends || {});
+                  createDurationChart(charts.durationDistribution || { labels: [], values: [] });
+                } catch (chartError) {
+                  console.warn('Chart creation failed:', chartError);
+                }
+                
+                // Load upcoming expirations
+                loadUpcomingExpirations(analytics.upcomingExpirations || []);
+                
+                // Show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('mainContent').classList.add('fade-in');
+                
+                console.log('Full-time fellowship analytics loaded successfully');
+                
+              } catch (error) {
+                console.error('Fellowship analytics loading failed:', error);
+                
+                // Show error with helpful buttons
+                document.getElementById('loadingState').innerHTML = \`
+                  <div class="text-center p-6">
+                    <div class="text-red-500 mb-4">
+                      <h3 class="font-bold text-lg mb-2">Failed to load fellowship analytics</h3>
+                      <p class="mb-4">\${error.message}</p>
+                    </div>
+                    <div class="space-x-2">
+                      <button onclick="loadAnalytics()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Try Again
+                      </button>
+                      <button onclick="createTestDataAndReload()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        Create Test Data
+                      </button>
+                      <a href="/dashboard/test-api" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                        Debug APIs
+                      </a>
+                    </div>
+                  </div>
+                \`;
+              }
+            }
+            
+            // Helper function to create test data and reload
+            async function createTestDataAndReload() {
+              try {
+                console.log('Creating test data...');
+                const response = await fetch('/api/create-test-data', { method: 'POST' });
+                const result = await response.json();
+                console.log('Test data created:', result);
+                
+                // Reload analytics after creating test data
+                setTimeout(() => {
+                  document.getElementById('loadingState').innerHTML = \`
+                    <div class="flex justify-center items-center py-12">
+                      <div class="loading-spinner"></div>
+                      <span class="ml-3 text-gray-600">Loading analytics with new test data...</span>
+                    </div>
+                  \`;
+                  loadAnalytics();
+                }, 1000);
+                
+              } catch (error) {
+                console.error('Failed to create test data:', error);
+                alert('Failed to create test data: ' + error.message);
+              }
+            }
+
+            // Chart creation functions
+            function createStatusChart(data) {
+              const ctx = document.getElementById('statusChart').getContext('2d');
+              new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: ['#10b981', '#3b82f6', '#ef4444']
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { position: 'bottom' }
+                  }
+                }
+              });
+            }
+
+            function createAmountChart(data) {
+              const ctx = document.getElementById('amountChart').getContext('2d');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: '#6366f1'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function createTrendsChart(data) {
+              const ctx = document.getElementById('trendsChart').getContext('2d');
+              new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: Object.keys(data),
+                  datasets: [{
+                    label: 'New Fellowships',
+                    data: Object.values(data),
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function createDurationChart(data) {
+              const ctx = document.getElementById('durationChart').getContext('2d');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: data.labels,
+                  datasets: [{
+                    data: data.values,
+                    backgroundColor: '#f59e0b'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                  }
+                }
+              });
+            }
+
+            function loadUpcomingExpirations(upcomingExpirations) {
+              const container = document.getElementById('upcoming-container');
+              
+              if (upcomingExpirations.length === 0) {
+                container.innerHTML = \`
+                  <div class="p-8 text-center text-gray-500">
+                    <div class="text-4xl mb-4">📅</div>
+                    <p>No fellowships expiring in the next 3 months.</p>
+                  </div>
+                \`;
+                return;
+              }
+              
+              container.innerHTML = upcomingExpirations.map(fellowship => \`
+                <div class="p-4 hover:bg-gray-50">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <h4 class="font-semibold text-gray-900">\${fellowship.studentName}</h4>
+                      <p class="text-blue-600 font-medium">₹\${Number(fellowship.amount).toLocaleString('en-IN')} / month</p>
+                      <p class="text-sm text-gray-600 mt-1">Duration: \${fellowship.duration} months</p>
+                      <p class="text-sm text-orange-600 font-medium mt-1">Expires: \${new Date(fellowship.endDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+              \`).join('');
+            }
 
             // Load fellowships function
             async function loadFellowships() {
@@ -464,8 +833,8 @@ export default createRoute(async (c) => {
                 }
               }
             }
-          `}
-        </script>
+          `
+        }} />
       </body>
     </html>
   )

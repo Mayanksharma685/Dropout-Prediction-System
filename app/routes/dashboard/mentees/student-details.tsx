@@ -19,11 +19,14 @@ export default createRoute(async (c) => {
   // Fetch teacher info for header
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
   const teacher = await prisma.teacher.findUnique({ where: { teacherId } })
+
+  // Determine if this is individual student view or overview
+  const isIndividualView = !!studentId
   
   return c.render(
     <html>
       <head>
-        <title>Student Details - EduPulse</title>
+        <title>{isIndividualView ? `Student ${studentId} - EduPulse` : 'Students Overview - EduPulse'}</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>{
           `.loading-spinner {
@@ -44,6 +47,22 @@ export default createRoute(async (c) => {
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+          }
+          .tab-button {
+            border-bottom: 2px solid transparent;
+            color: #6b7280;
+            transition: all 0.2s;
+          }
+          .active-tab {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+          }
+          .inactive-tab {
+            border-bottom-color: transparent;
+            color: #6b7280;
+          }
+          .tab-button:hover {
+            color: #3b82f6;
           }`
         }</style>
       </head>
@@ -56,8 +75,8 @@ export default createRoute(async (c) => {
               <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                   <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Students Overview</h1>
-                    <p class="text-gray-600 mt-1">Comprehensive analytics and performance insights for all your mentees</p>
+                    <h1 class="text-2xl font-bold text-gray-900">{isIndividualView ? `Student Details - ${studentId}` : 'Students Overview'}</h1>
+                    <p class="text-gray-600 mt-1">{isIndividualView ? 'Comprehensive profile and academic performance details' : 'Comprehensive analytics and performance insights for all your mentees'}</p>
                   </div>
                   <div class="flex gap-3">
                     <button 
@@ -213,18 +232,6 @@ export default createRoute(async (c) => {
                     </div>
                   </div>
 
-                  {/* Recent Activity */}
-                  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                    <div class="p-6 border-b border-gray-200">
-                      <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
-                      <p class="text-gray-600 mt-1">Latest attendance records and updates</p>
-                    </div>
-                    <div class="p-6">
-                      <div id="recentActivityContainer" class="space-y-4">
-                        {/* Dynamic activity items will be inserted here */}
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Error State */}
@@ -248,6 +255,8 @@ export default createRoute(async (c) => {
           let analyticsData = null;
           let charts = {};
           const teacherId = '${teacherId}';
+          const studentId = '${studentId || ''}';
+          const isIndividualView = ${isIndividualView};
 
           // Load analytics data
           async function loadStudentData() {
@@ -256,24 +265,38 @@ export default createRoute(async (c) => {
               document.getElementById('mainContent').classList.add('hidden');
               document.getElementById('errorState').classList.add('hidden');
 
-              console.log('Fetching analytics data for teacher:', teacherId);
-              
-              const response = await fetch('/api/attendance-analytics?teacherId=' + teacherId);
-              console.log('Response status:', response.status);
-              
-              if (!response.ok) {
-                const errorText = await response.text();
-                console.error('API Error:', errorText);
-                throw new Error('Failed to fetch analytics data: ' + response.status + ' - ' + errorText);
-              }
+              if (isIndividualView) {
+                console.log('Fetching individual student data for:', studentId);
+                const response = await fetch('/api/student-details?studentId=' + studentId);
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  console.error('API Error:', errorText);
+                  throw new Error('Failed to fetch student details: ' + response.status + ' - ' + errorText);
+                }
 
-              analyticsData = await response.json();
-              renderAnalyticsDashboard();
+                analyticsData = await response.json();
+                renderIndividualStudentView();
+              } else {
+                console.log('Fetching analytics data for teacher:', teacherId);
+                const response = await fetch('/api/attendance-analytics?teacherId=' + teacherId);
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  console.error('API Error:', errorText);
+                  throw new Error('Failed to fetch analytics data: ' + response.status + ' - ' + errorText);
+                }
+
+                analyticsData = await response.json();
+                renderAnalyticsDashboard();
+              }
               
               document.getElementById('loadingState').classList.add('hidden');
               document.getElementById('mainContent').classList.remove('hidden');
             } catch (error) {
-              console.error('Error loading analytics data:', error);
+              console.error('Error loading data:', error);
               document.getElementById('loadingState').classList.add('hidden');
               document.getElementById('errorState').classList.remove('hidden');
               document.getElementById('errorMessage').textContent = error.message;
@@ -302,7 +325,6 @@ export default createRoute(async (c) => {
             // Render tables and lists
             renderStudentTable();
             renderCourseStats();
-            renderRecentActivity();
           }
 
           // Render attendance distribution chart
@@ -567,38 +589,349 @@ export default createRoute(async (c) => {
             });
           }
 
-          // Render recent activity
-          function renderRecentActivity() {
-            const container = document.getElementById('recentActivityContainer');
-            container.innerHTML = '';
+          // Render individual student view
+          function renderIndividualStudentView() {
+            if (!analyticsData) return;
 
-            analyticsData.recentActivity.forEach(activity => {
-              const item = document.createElement('div');
-              item.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200';
-              
-              const statusColor = activity.status === 'good' ? 'text-green-600' :
-                                activity.status === 'average' ? 'text-yellow-600' : 'text-red-600';
-              
-              const statusIcon = activity.status === 'good' ? '✅' :
-                               activity.status === 'average' ? '⚠️' : '❌';
-
-              item.innerHTML = \`
-                <div class="flex items-center space-x-4">
-                  <span class="text-lg">\${statusIcon}</span>
-                  <div>
-                    <div class="font-medium text-gray-900">\${activity.studentName}</div>
-                    <div class="text-sm text-gray-600">\${activity.courseName} (\${activity.courseCode})</div>
+            const student = analyticsData.student;
+            const stats = analyticsData.statistics;
+            
+            // Hide the overview content and show individual student content
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = \`
+              <div class="space-y-6">
+                <!-- Student Header -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="flex items-center space-x-6">
+                    <div class="flex-shrink-0">
+                      <div class="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span class="text-2xl font-bold text-blue-600">\${student.name.charAt(0)}</span>
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <h2 class="text-2xl font-bold text-gray-900">\${student.name}</h2>
+                      <p class="text-gray-600">Student ID: \${student.studentId}</p>
+                      <div class="flex items-center space-x-4 mt-2">
+                        <span class="text-sm text-gray-500">Department: \${student.department || 'N/A'}</span>
+                        <span class="text-sm text-gray-500">Semester: \${student.currentSemester}</span>
+                        <span class="text-sm text-gray-500">Batch: \${student.batch?.batchNo || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm text-gray-500">Risk Level</div>
+                      <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full \${getRiskLevelClass(stats.risk.currentRiskLevel)}">
+                        \${stats.risk.currentRiskLevel}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div class="text-right">
-                  <div class="font-medium \${statusColor}">\${activity.attendance}%</div>
-                  <div class="text-sm text-gray-500">\${new Date(activity.month).toLocaleDateString()}</div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Attendance</p>
+                        <p class="text-2xl font-bold text-gray-900">\${stats.attendance.averageAttendance}%</p>
+                      </div>
+                      <div class="p-3 bg-green-100 rounded-full">
+                        <span class="text-green-600 text-xl">📊</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Test Score</p>
+                        <p class="text-2xl font-bold text-gray-900">\${stats.testScores.averageScore}%</p>
+                      </div>
+                      <div class="p-3 bg-blue-100 rounded-full">
+                        <span class="text-blue-600 text-xl">📝</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm font-medium text-gray-600">Pending Backlogs</p>
+                        <p class="text-2xl font-bold text-red-600">\${stats.backlogs.pendingBacklogs}</p>
+                      </div>
+                      <div class="p-3 bg-red-100 rounded-full">
+                        <span class="text-red-600 text-xl">⚠️</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm font-medium text-gray-600">Active Projects</p>
+                        <p class="text-2xl font-bold text-gray-900">\${stats.research.activeProjects}</p>
+                      </div>
+                      <div class="p-3 bg-purple-100 rounded-full">
+                        <span class="text-purple-600 text-xl">🔬</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              \`;
-              
-              container.appendChild(item);
-            });
+
+                <!-- Tabs -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                  <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6">
+                      <button onclick="showTab('overview')" id="tab-overview" class="tab-button active-tab py-4 px-1 border-b-2 font-medium text-sm">
+                        Overview
+                      </button>
+                      <button onclick="showTab('academic')" id="tab-academic" class="tab-button py-4 px-1 border-b-2 font-medium text-sm">
+                        Academic Records
+                      </button>
+                      <button onclick="showTab('contact')" id="tab-contact" class="tab-button py-4 px-1 border-b-2 font-medium text-sm">
+                        Contact Info
+                      </button>
+                      <button onclick="showTab('research')" id="tab-research" class="tab-button py-4 px-1 border-b-2 font-medium text-sm">
+                        Research & Projects
+                      </button>
+                    </nav>
+                  </div>
+
+                  <!-- Tab Content -->
+                  <div class="p-6">
+                    <!-- Overview Tab -->
+                    <div id="content-overview" class="tab-content">
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Attendance Chart -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Course-wise Attendance</h4>
+                          <div class="space-y-3">
+                            \${renderCourseWiseAttendance(stats.attendance.courseWiseAttendance)}
+                          </div>
+                        </div>
+
+                        <!-- Test Scores Chart -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Course-wise Test Scores</h4>
+                          <div class="space-y-3">
+                            \${renderCourseWiseScores(stats.testScores.courseWiseScores)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Academic Records Tab -->
+                    <div id="content-academic" class="tab-content hidden">
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Backlogs -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Backlogs Status</h4>
+                          <div class="space-y-2">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Total Backlogs:</span>
+                              <span class="font-medium">\${stats.backlogs.totalBacklogs}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Cleared:</span>
+                              <span class="font-medium text-green-600">\${stats.backlogs.clearedBacklogs}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Pending:</span>
+                              <span class="font-medium text-red-600">\${stats.backlogs.pendingBacklogs}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Fee Status -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Fee Status</h4>
+                          <div class="space-y-2">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Total Payments:</span>
+                              <span class="font-medium">\${stats.fees.totalPayments}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Paid:</span>
+                              <span class="font-medium text-green-600">\${stats.fees.paidPayments}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Pending:</span>
+                              <span class="font-medium text-yellow-600">\${stats.fees.pendingPayments}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Overdue:</span>
+                              <span class="font-medium text-red-600">\${stats.fees.overduePayments}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Contact Info Tab -->
+                    <div id="content-contact" class="tab-content hidden">
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Student Contact -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Student Contact</h4>
+                          <div class="space-y-2">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Email:</span>
+                              <span class="font-medium">\${student.email || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Phone:</span>
+                              <span class="font-medium">\${student.phone || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Address:</span>
+                              <span class="font-medium">\${student.address || 'N/A'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Parent/Guardian Contact -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Parent/Guardian Contact</h4>
+                          <div class="space-y-2">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Name:</span>
+                              <span class="font-medium">\${student.parentName || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Phone:</span>
+                              <span class="font-medium">\${student.parentPhone || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Email:</span>
+                              <span class="font-medium">\${student.parentEmail || 'N/A'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Research Tab -->
+                    <div id="content-research" class="tab-content hidden">
+                      <div class="space-y-6">
+                        <!-- Projects -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                          <h4 class="font-medium text-gray-900 mb-4">Projects</h4>
+                          <div class="space-y-2">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Active Projects:</span>
+                              <span class="font-medium text-green-600">\${stats.research.activeProjects}</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600">Completed Projects:</span>
+                              <span class="font-medium text-blue-600">\${stats.research.completedProjects}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- PhD & Fellowship -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 mb-4">PhD Status</h4>
+                            <div class="text-center">
+                              <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full \${stats.research.phdStatus ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+                                \${stats.research.phdStatus || 'Not Enrolled'}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 mb-4">Fellowship</h4>
+                            <div class="space-y-2">
+                              <div class="text-center">
+                                <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full \${stats.research.fellowshipStatus ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+                                  \${stats.research.fellowshipStatus || 'No Fellowship'}
+                                </span>
+                              </div>
+                              \${stats.research.totalFellowshipAmount > 0 ? \`
+                                <div class="text-center text-sm text-gray-600 mt-2">
+                                  Total Amount: ₹\${stats.research.totalFellowshipAmount.toLocaleString()}
+                                </div>
+                              \` : ''}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Back to Overview Button -->
+                <div class="text-center">
+                  <button 
+                    onclick="window.location.href='/dashboard/mentees/student-details'"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    ← Back to Students Overview
+                  </button>
+                </div>
+              </div>
+            \`;
           }
+
+          // Helper functions for individual student view
+          function getRiskLevelClass(riskLevel) {
+            switch(riskLevel) {
+              case 'High': return 'bg-red-100 text-red-800';
+              case 'Medium': return 'bg-yellow-100 text-yellow-800';
+              case 'Low': return 'bg-green-100 text-green-800';
+              default: return 'bg-gray-100 text-gray-800';
+            }
+          }
+
+          function renderCourseWiseAttendance(courseWiseAttendance) {
+            return Object.values(courseWiseAttendance).map(course => \`
+              <div class="flex justify-between items-center">
+                <div>
+                  <div class="font-medium text-sm">\${course.course.name}</div>
+                  <div class="text-xs text-gray-500">\${course.course.code}</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-medium \${course.average >= 75 ? 'text-green-600' : course.average >= 60 ? 'text-yellow-600' : 'text-red-600'}">\${course.average}%</div>
+                  <div class="text-xs text-gray-500">\${course.records.length} records</div>
+                </div>
+              </div>
+            \`).join('');
+          }
+
+          function renderCourseWiseScores(courseWiseScores) {
+            return Object.values(courseWiseScores).map(course => \`
+              <div class="flex justify-between items-center">
+                <div>
+                  <div class="font-medium text-sm">\${course.course.name}</div>
+                  <div class="text-xs text-gray-500">\${course.course.code}</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-medium \${course.average >= 75 ? 'text-green-600' : course.average >= 60 ? 'text-yellow-600' : 'text-red-600'}">\${course.average}%</div>
+                  <div class="text-xs text-gray-500">\${course.scores.length} tests</div>
+                </div>
+              </div>
+            \`).join('');
+          }
+
+          function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+              content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(button => {
+              button.classList.remove('active-tab');
+              button.classList.add('inactive-tab');
+            });
+            
+            // Show selected tab content
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            // Add active class to selected tab
+            document.getElementById('tab-' + tabName).classList.add('active-tab');
+            document.getElementById('tab-' + tabName).classList.remove('inactive-tab');
+          }
+
 
           // View individual student details
           function viewStudentDetails(studentId) {
