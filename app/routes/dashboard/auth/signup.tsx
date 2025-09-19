@@ -104,6 +104,7 @@ export const POST = createRoute(zValidator('form', SignupSchema), async (c) => {
 
   c.header('Set-Cookie', `auth=1; Path=/; HttpOnly; SameSite=Lax`)
   c.header('Set-Cookie', `uid=${encodeURIComponent(teacherId)}; Path=/; HttpOnly; SameSite=Lax`, { append: true } as any)
+  c.header('Set-Cookie', `teacherId=${encodeURIComponent(teacherId)}; Path=/; HttpOnly; SameSite=Lax`, { append: true } as any)
   c.header('Set-Cookie', `role=teacher; Path=/; HttpOnly; SameSite=Lax`, { append: true } as any)
   return c.redirect('/dashboard')
 })

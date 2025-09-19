@@ -14,7 +14,10 @@ model Teacher {
 
   createdAt DateTime @default(now())
 
-  students Student[]
+  students       Student[]
+  projects       Project[]
+  phdSupervision PhdSupervision[]
+  fellowships    Fellowship[]
 }
 
 model Student {
@@ -25,9 +28,18 @@ model Student {
   dob             DateTime
   department      String?
   currentSemester Int
+  batchId         String?
+  
+  // Parent/Guardian Information
+  parentName      String?
+  parentEmail     String?
+  parentPhone     String?
+  address         String?
 
   teacherId String?
   teacher   Teacher? @relation(fields: [teacherId], references: [teacherId], onDelete: SetNull)
+  
+  batch     Batch?   @relation(fields: [batchId], references: [batchId], onDelete: SetNull)
 
   attendance    Attendance[]
   testScores    TestScore[]
@@ -35,8 +47,14 @@ model Student {
   feePayments   FeePayment[]
   riskFlags     RiskFlag[]
   notifications Notification[]
+  
+  // Research supervision relationships
+  projects      Project[]
+  phdSupervision PhdSupervision[]
+  fellowships   Fellowship[]
 
   @@index([teacherId])
+  @@index([batchId])
 }
 
 model CourseSubject {
@@ -49,6 +67,7 @@ model CourseSubject {
   attendance Attendance[]
   testScores TestScore[]
   backlogs   Backlog[]
+  batches    Batch[]
 }
 
 model Attendance {
@@ -129,6 +148,71 @@ model Notification {
   student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
 
   @@index([studentId])
+}
+
+model Batch {
+  batchId    String @id
+  batchNo    String
+  courseId   String
+  year       Int
+  department String
+  
+  course   CourseSubject @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
+  students Student[]
+  
+  @@index([courseId])
+}
+
+model Project {
+  projectId   Int      @id @default(autoincrement())
+  title       String
+  description String?
+  studentId   String
+  supervisorId String
+  startDate   DateTime
+  endDate     DateTime?
+  status      String   @default("Active") // Active, Completed, Suspended
+  
+  student    Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  supervisor Teacher @relation(fields: [supervisorId], references: [teacherId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([supervisorId])
+}
+
+model PhdSupervision {
+  phdId        Int      @id @default(autoincrement())
+  title        String
+  researchArea String
+  studentId    String
+  supervisorId String
+  startDate    DateTime
+  expectedEnd  DateTime?
+  status       String   @default("Ongoing") // Ongoing, Completed, Discontinued
+  
+  student    Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  supervisor Teacher @relation(fields: [supervisorId], references: [teacherId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([supervisorId])
+}
+
+model Fellowship {
+  fellowshipId Int      @id @default(autoincrement())
+  type         String   // Full Time, Part Time
+  amount       Float
+  duration     Int      // in months
+  studentId    String
+  supervisorId String
+  startDate    DateTime
+  endDate      DateTime?
+  status       String   @default("Active") // Active, Completed, Terminated
+  
+  student    Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  supervisor Teacher @relation(fields: [supervisorId], references: [teacherId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([supervisorId])
 }
 
 generator client {

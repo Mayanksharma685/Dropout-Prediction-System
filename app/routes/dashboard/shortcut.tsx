@@ -49,15 +49,35 @@ export default createRoute(async (c) => {
           
           <main class="space-y-8 p-4">
             <section class="space-y-3">
-              <h2 class="text-xl font-semibold text-slate-800">Shortcut</h2>
-              <p class="text-sm text-gray-600">Quick glance with dummy students data.</p>
+              <h2 class="text-xl font-semibold text-slate-800">Bulk Import & Data Management</h2>
+              <p class="text-sm text-gray-600">Comprehensive student data import with support for academic records, parent information, and research supervision activities.</p>
             </section>
 
             <section class="bg-white rounded-xl border shadow-sm p-4 space-y-3">
               <h3 class="text-sm font-semibold text-slate-700">Bulk Import Students (JSON)</h3>
-              <p class="text-xs text-gray-600">Paste an array of student objects. Required: studentId, name, email, dob (YYYY-MM-DD), currentSemester. Optional: phone, department, attendance (with courseId), testScores (with courseId), backlogs (with courseId), feePayments.</p>
-              <textarea id="json-input" class="w-full border rounded p-2 font-mono text-xs h-40" placeholder='[
-  { "studentId": "STU1001", "name": "Student Name", "email": "student@example.com", "dob": "2002-01-01", "currentSemester": 3, "department": "CSE", "phone": "9999999999", "attendance": [{"courseId": "CSE101", "month": "2024-01", "attendancePercent": 85.5}], "testScores": [{"courseId": "MATH201", "testDate": "2024-01-15", "score": 92.5}], "backlogs": [{"courseId": "PHY101", "attempts": 2, "cleared": false}] }
+              <p class="text-xs text-gray-600">Paste an array of student objects. Required: studentId, name, email, dob (YYYY-MM-DD), currentSemester. Optional: phone, department, batchId, parent info, attendance, testScores, backlogs, feePayments, projects, phdSupervision, fellowships.</p>
+              <textarea id="json-input" class="w-full border rounded p-2 font-mono text-xs h-48" placeholder='[
+  {
+    "studentId": "STU1001",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "dob": "2002-01-15",
+    "currentSemester": 3,
+    "department": "CSE",
+    "phone": "9876543210",
+    "batchId": "CSE2022A",
+    "parentName": "Jane Doe",
+    "parentEmail": "jane@example.com",
+    "parentPhone": "9876543211",
+    "address": "123 Main St, City",
+    "attendance": [{"courseId": "CSE101", "month": "2024-01", "attendancePercent": 85.5}],
+    "testScores": [{"courseId": "MATH201", "testDate": "2024-01-15", "score": 92.5}],
+    "backlogs": [{"courseId": "PHY101", "attempts": 2, "cleared": false}],
+    "feePayments": [{"dueDate": "2024-01-01", "paidDate": "2024-01-05", "status": "Paid", "dueMonths": 1}],
+    "projects": [{"title": "AI Project", "description": "ML research", "startDate": "2024-01-01", "status": "Active"}],
+    "phdSupervision": [{"title": "PhD Research", "researchArea": "AI/ML", "startDate": "2024-01-01", "expectedEnd": "2027-01-01"}],
+    "fellowships": [{"type": "Full Time", "amount": 25000, "duration": 12, "startDate": "2024-01-01"}]
+  }
 ]'></textarea>
               <div class="flex items-center gap-2">
                 <button id="start-import" class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'">Start Import</button>
@@ -85,6 +105,55 @@ export default createRoute(async (c) => {
                 <div class="flex items-center gap-2 mt-6">
                   <input id="auto-create-courses" type="checkbox" class="border rounded" checked />
                   <label for="auto-create-courses" class="text-gray-700 text-sm">Auto-create missing courses</label>
+                </div>
+              </div>
+            </section>
+
+            <section class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+              <h3 class="text-sm font-semibold text-slate-700">Student Information Fields</h3>
+              <p class="text-xs text-gray-600">The updated schema supports comprehensive student information including parent/guardian details.</p>
+              <div class="grid md:grid-cols-2 gap-4 p-3 border rounded bg-blue-50">
+                <div class="space-y-2">
+                  <h4 class="font-medium text-blue-800">Required Fields</h4>
+                  <ul class="text-xs text-blue-700 space-y-1">
+                    <li>• <strong>studentId</strong>: Unique identifier</li>
+                    <li>• <strong>name</strong>: Full name</li>
+                    <li>• <strong>email</strong>: Email address</li>
+                    <li>• <strong>dob</strong>: Date of birth (YYYY-MM-DD)</li>
+                    <li>• <strong>currentSemester</strong>: Current semester (1-8)</li>
+                  </ul>
+                </div>
+                <div class="space-y-2">
+                  <h4 class="font-medium text-blue-800">Optional Fields</h4>
+                  <ul class="text-xs text-blue-700 space-y-1">
+                    <li>• <strong>phone, department, batchId</strong></li>
+                    <li>• <strong>parentName, parentEmail, parentPhone</strong></li>
+                    <li>• <strong>address</strong>: Home address</li>
+                    <li>• <strong>attendance, testScores, backlogs</strong></li>
+                    <li>• <strong>feePayments</strong>: Fee payment records</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+              <h3 class="text-sm font-semibold text-slate-700">Supervision Models (Research Activities)</h3>
+              <p class="text-xs text-gray-600">The JSON can include research supervision data. These will be automatically linked to the current teacher as supervisor.</p>
+              <div class="grid md:grid-cols-3 gap-4 p-3 border rounded bg-green-50">
+                <div class="space-y-2">
+                  <h4 class="font-medium text-green-800">Projects</h4>
+                  <p class="text-xs text-green-700">Required: title, startDate<br/>Optional: description, endDate, status</p>
+                  <code class="text-xs bg-green-100 p-1 rounded block">{`"projects": [{"title": "AI Research", "startDate": "2024-01-01"}]`}</code>
+                </div>
+                <div class="space-y-2">
+                  <h4 class="font-medium text-green-800">PhD Supervision</h4>
+                  <p class="text-xs text-green-700">Required: title, researchArea, startDate<br/>Optional: expectedEnd, status</p>
+                  <code class="text-xs bg-green-100 p-1 rounded block">{`"phdSupervision": [{"title": "PhD Title", "researchArea": "AI/ML"}]`}</code>
+                </div>
+                <div class="space-y-2">
+                  <h4 class="font-medium text-green-800">Fellowships</h4>
+                  <p class="text-xs text-green-700">Required: type, amount, duration, startDate<br/>Optional: endDate, status</p>
+                  <code class="text-xs bg-green-100 p-1 rounded block">{`"fellowships": [{"type": "Full Time", "amount": 25000, "duration": 12}]`}</code>
                 </div>
               </div>
             </section>
@@ -213,6 +282,7 @@ export default createRoute(async (c) => {
       <script dangerouslySetInnerHTML={{
         __html: `
 (function(){
+  var TEACHER_ID = '${uid}';
   var startBtn = document.getElementById('start-import');
   var clearBtn = document.getElementById('clear-log');
   var inputEl = document.getElementById('json-input');
@@ -236,6 +306,12 @@ export default createRoute(async (c) => {
     if (obj.dob) fd.set('dob', String(obj.dob));
     if (obj.department) fd.set('department', String(obj.department));
     if (obj.currentSemester != null) fd.set('currentSemester', String(obj.currentSemester));
+    if (obj.batchId) fd.set('batchId', String(obj.batchId));
+    // Parent/Guardian Information
+    if (obj.parentName) fd.set('parentName', String(obj.parentName));
+    if (obj.parentEmail) fd.set('parentEmail', String(obj.parentEmail));
+    if (obj.parentPhone) fd.set('parentPhone', String(obj.parentPhone));
+    if (obj.address) fd.set('address', String(obj.address));
     return fd;
   }
 
@@ -492,6 +568,103 @@ export default createRoute(async (c) => {
     return results;
   }
 
+  async function createSupervisionEntries(studentId, studentData, teacherId) {
+    var results = [];
+    
+    // Create projects
+    var projectsList = studentData.projects || [];
+    for (var i = 0; i < projectsList.length; i++) {
+      var project = projectsList[i];
+      if (project.title && project.startDate) {
+        try {
+          var fd = new FormData();
+          fd.set('title', project.title);
+          if (project.description) fd.set('description', project.description);
+          fd.set('studentId', studentId);
+          fd.set('startDate', project.startDate);
+          if (project.endDate) fd.set('endDate', project.endDate);
+          fd.set('status', project.status || 'Active');
+          
+          var resp = await fetch('/api/projects', {
+            method: 'POST',
+            body: fd
+          });
+          
+          if (resp.ok) {
+            results.push('✓ Project created: ' + project.title);
+          } else {
+            results.push('✗ Project failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Project error: ' + e.message);
+        }
+      }
+    }
+    
+    // Create PhD supervisions
+    var phdList = studentData.phdSupervision || [];
+    for (var i = 0; i < phdList.length; i++) {
+      var phd = phdList[i];
+      if (phd.title && phd.researchArea && phd.startDate) {
+        try {
+          var fd = new FormData();
+          fd.set('title', phd.title);
+          fd.set('researchArea', phd.researchArea);
+          fd.set('studentId', studentId);
+          fd.set('startDate', phd.startDate);
+          if (phd.expectedEnd) fd.set('expectedEnd', phd.expectedEnd);
+          fd.set('status', phd.status || 'Ongoing');
+          
+          var resp = await fetch('/api/phd-supervision', {
+            method: 'POST',
+            body: fd
+          });
+          
+          if (resp.ok) {
+            results.push('✓ PhD supervision created: ' + phd.title);
+          } else {
+            results.push('✗ PhD supervision failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ PhD supervision error: ' + e.message);
+        }
+      }
+    }
+    
+    // Create fellowships
+    var fellowshipsList = studentData.fellowships || [];
+    for (var i = 0; i < fellowshipsList.length; i++) {
+      var fellowship = fellowshipsList[i];
+      if (fellowship.type && fellowship.amount && fellowship.duration && fellowship.startDate) {
+        try {
+          var fd = new FormData();
+          fd.set('type', fellowship.type);
+          fd.set('amount', String(fellowship.amount));
+          fd.set('duration', String(fellowship.duration));
+          fd.set('studentId', studentId);
+          fd.set('startDate', fellowship.startDate);
+          if (fellowship.endDate) fd.set('endDate', fellowship.endDate);
+          fd.set('status', fellowship.status || 'Active');
+          
+          var resp = await fetch('/api/fellowships', {
+            method: 'POST',
+            body: fd
+          });
+          
+          if (resp.ok) {
+            results.push('✓ Fellowship created: ' + fellowship.type + ' - $' + fellowship.amount);
+          } else {
+            results.push('✗ Fellowship failed: ' + await resp.text());
+          }
+        } catch (e) {
+          results.push('✗ Fellowship error: ' + e.message);
+        }
+      }
+    }
+    
+    return results;
+  }
+
   startBtn.addEventListener('click', async function(){
     var text = inputEl.value.trim();
     if (!text) {
@@ -515,6 +688,9 @@ export default createRoute(async (c) => {
     log('Starting import of ' + students.length + ' students...', 'text-blue-600 font-semibold');
     var defaults = getDefaults();
     
+    // Get current teacher ID from the page context
+    var teacherId = TEACHER_ID;
+    
     for (var i = 0; i < students.length; i++) {
       var student = students[i];
       log('Processing student ' + (i + 1) + ': ' + (student.name || student.studentId || 'Unknown'));
@@ -534,6 +710,12 @@ export default createRoute(async (c) => {
           // Create related entries
           var relatedResults = await createRelatedEntries(student.studentId, student, defaults);
           relatedResults.forEach(function(result) {
+            log('  ' + result, result.startsWith('✓') ? 'text-green-600' : 'text-red-600');
+          });
+          
+          // Create supervision entries (projects, PhD, fellowships)
+          var supervisionResults = await createSupervisionEntries(student.studentId, student, teacherId);
+          supervisionResults.forEach(function(result) {
             log('  ' + result, result.startsWith('✓') ? 'text-green-600' : 'text-red-600');
           });
         } else {
