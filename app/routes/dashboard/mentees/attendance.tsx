@@ -178,7 +178,6 @@ export default createRoute(async (c) => {
                           <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Attendance</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courses</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Records</th>
@@ -208,10 +207,6 @@ export default createRoute(async (c) => {
 
                   {/* Recent Activity */}
                   <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                    <div class="p-6 border-b border-gray-200">
-                      <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
-                      <p class="text-gray-600 mt-1">Latest attendance records and updates</p>
-                    </div>
                     <div class="p-6">
                       <div id="recentActivityContainer" class="space-y-4">
                         {/* Dynamic activity items will be inserted here */}
@@ -419,7 +414,6 @@ export default createRoute(async (c) => {
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">\${student.student.department || 'N/A'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">\${student.student.currentSemester}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">

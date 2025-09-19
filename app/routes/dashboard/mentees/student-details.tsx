@@ -205,7 +205,6 @@ export default createRoute(async (c) => {
                           <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Attendance</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courses</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -523,7 +522,6 @@ export default createRoute(async (c) => {
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">\${student.student.department || 'N/A'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">\${student.student.currentSemester}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">
@@ -613,7 +611,6 @@ export default createRoute(async (c) => {
                       <p class="text-gray-600">Student ID: \${student.studentId}</p>
                       <div class="flex items-center space-x-4 mt-2">
                         <span class="text-sm text-gray-500">Department: \${student.department || 'N/A'}</span>
-                        <span class="text-sm text-gray-500">Semester: \${student.currentSemester}</span>
                         <span class="text-sm text-gray-500">Batch: \${student.batch?.batchNo || 'N/A'}</span>
                       </div>
                     </div>
