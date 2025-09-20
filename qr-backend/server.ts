@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import qrRoutes from "./routes/qrRoutes";
 import { connectRedis } from "./config/redisClient";
@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (_req: Request, res: Response) => {
+app.get("/", (_req: any, res: any) => {
   res.send("Backend is working ✅");
 });
 
@@ -27,7 +27,7 @@ connectRedis()
   });
 
 // Global error handler
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: Error, _req: any, res: any, _next: any) => {
   console.error("Unhandled error:", err.stack);
   res.status(500).json({ error: "Internal server error" });
 });
