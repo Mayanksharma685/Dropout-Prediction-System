@@ -3,8 +3,8 @@ import Header from '@/components/dashboard/Header'
 import Sidebar from '@/components/dashboard/Sidebar'
 import AIAssistant from '@/components/dashboard/AIAssistant'
 import KPIs from '@/components/dashboard/KPIs'
-import RiskTable from '@/components/dashboard/RiskTable'
-import RecentActivity from '@/components/dashboard/RecentActivity'
+import RecentStudentActivity from '@/components/dashboard/RecentStudentActivity'
+import CalendarMonths from '@/components/dashboard/CalendarMonths'
 
 export default createRoute(async (c) => {
   const cookies = c.req.raw.headers.get('Cookie') || ''
@@ -96,49 +96,216 @@ export default createRoute(async (c) => {
     else feesCounts.Unpaid++
   }
 
-  const rows = recentRisk.map((r) => ({
-    studentId: r.studentId,
-    name: r.student.name,
-    riskLevel: r.riskLevel === 'high' || r.riskLevel === 'High' ? 'High' : r.riskLevel === 'medium' || r.riskLevel === 'Medium' ? 'Medium' : 'Low',
-  }))
-
-  const activities = recentRisk.map((r) => ({
-    date: new Date(r.flagDate).toLocaleDateString(),
-    message: `${r.student.name} flagged: ${r.riskLevel} — ${r.reason}`,
-  }))
+  // Generate recent student activities from various data sources
+  const recentActivities = []
+  
+  // Add recent test scores as achievements
+  const recentTests = await prisma.testScore.findMany({
+    where: { student: { teacherId: uid } },
+    orderBy: { testDate: 'desc' },
+    take: 5,
+    include: { student: true }
+  })
+  
+  for (const test of recentTests) {
+    const score = Number(test.score || 0)
+    recentActivities.push({
+      id: `test-${test.testId}`,
+      studentName: test.student.name,
+      activity: `Scored ${score}% in test`,
+      type: score >= 85 ? 'achievement' : 'test',
+      value: `${score}%`,
+      timestamp: new Date(test.testDate).toLocaleDateString(),
+      priority: score >= 85 ? 'low' : score >= 60 ? 'medium' : 'high'
+    })
+  }
+  
+  // Add recent attendance updates
+  const recentAttendance = await prisma.attendance.findMany({
+    where: { student: { teacherId: uid } },
+    orderBy: { month: 'desc' },
+    take: 5,
+    include: { student: true }
+  })
+  
+  for (const att of recentAttendance) {
+    const percentage = Number(att.attendancePercent || 0)
+    recentActivities.push({
+      id: `att-${att.attendanceId}`,
+      studentName: att.student.name,
+      activity: `Attendance updated for ${att.month}`,
+      type: 'attendance',
+      value: `${percentage}%`,
+      timestamp: new Date().toLocaleDateString(),
+      priority: percentage >= 75 ? 'low' : percentage >= 60 ? 'medium' : 'high'
+    })
+  }
+  
+  // Add recent fee payments
+  const recentFees = await prisma.feePayment.findMany({
+    where: { student: { teacherId: uid }, status: 'Paid' },
+    orderBy: { dueDate: 'desc' },
+    take: 3,
+    include: { student: true }
+  })
+  
+  for (const fee of recentFees) {
+    recentActivities.push({
+      id: `fee-${fee.feeId}`,
+      studentName: fee.student.name,
+      activity: `Fee payment completed`,
+      type: 'achievement',
+      value: `₹${fee.amount}`,
+      timestamp: new Date(fee.dueDate).toLocaleDateString(),
+      priority: 'low'
+    })
+  }
+  
+  // Add risk flags as high priority items
+  for (const risk of recentRisk.slice(0, 3)) {
+    recentActivities.push({
+      id: `risk-${risk.flagId}`,
+      studentName: risk.student.name,
+      activity: `Risk flag: ${risk.reason}`,
+      type: 'risk',
+      value: risk.riskLevel,
+      timestamp: new Date(risk.flagDate).toLocaleDateString(),
+      priority: 'high'
+    })
+  }
+  
+  // Sort by priority and date, take top 10
+  const sortedActivities = recentActivities
+    .sort((a, b) => {
+      const priorityOrder = { high: 3, medium: 2, low: 1 }
+      const aPriority = priorityOrder[a.priority as keyof typeof priorityOrder]
+      const bPriority = priorityOrder[b.priority as keyof typeof priorityOrder]
+      if (aPriority !== bPriority) return bPriority - aPriority
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    })
+    .slice(0, 10)
 
   // Fetch teacher info for header avatar/profile
   const teacher = await prisma.teacher.findUnique({ where: { teacherId: uid } })
 
   return c.render(
-    <div class="min-h-screen bg-slate-50">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Subtle background pattern */}
+      <div class="absolute inset-0 opacity-[0.02]">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0); background-size: 20px 20px;"></div>
+      </div>
 
-      <div class="">
+      <div class="relative">
         <div class="grid grid-cols-1 md:grid-cols-[16rem_1fr]">
           <Sidebar currentPath={new URL(c.req.url).pathname} />
           <div>
             <Header uid={uid} userName={teacher?.name} userEmail={teacher?.email} userPicture={teacher?.picture} />
             <main class="space-y-8 p-4">
 
-              <section class="space-y-3">
-                <h2 class="text-xl font-semibold text-slate-800">Overview</h2>
+              <section class="space-y-6">
+
+                {/* Enhanced KPI Cards */}
                 <KPIs
                   items={[
-                    { label: 'Students', value: studentCount },
-                    { label: 'Active Risk Flags', value: riskCount },
-                    { label: 'Open Backlogs', value: backlogCount },
-                    { label: 'Unpaid Fees', value: unpaidCount },
+                    { 
+                      label: 'Total Students', 
+                      value: studentCount,
+                      icon: 'students',
+                      color: 'blue',
+                      trend: 'stable',
+                      trendValue: 'This semester'
+                    },
+                    { 
+                      label: 'Active Risk Flags', 
+                      value: riskCount,
+                      icon: 'risk',
+                      color: riskCount > 0 ? 'red' : 'green',
+                      trend: riskCount > 5 ? 'up' : riskCount > 0 ? 'stable' : 'down',
+                      trendValue: riskCount > 5 ? 'High attention needed' : riskCount > 0 ? 'Monitor closely' : 'All clear'
+                    },
+                    { 
+                      label: 'Open Backlogs', 
+                      value: backlogCount,
+                      icon: 'backlog',
+                      color: backlogCount > 10 ? 'red' : backlogCount > 5 ? 'yellow' : 'green',
+                      trend: backlogCount > 10 ? 'up' : 'stable',
+                      trendValue: backlogCount > 10 ? 'Needs attention' : 'Under control'
+                    },
+                    { 
+                      label: 'Unpaid Fees', 
+                      value: unpaidCount,
+                      icon: 'fees',
+                      color: unpaidCount > 5 ? 'red' : unpaidCount > 0 ? 'yellow' : 'green',
+                      trend: unpaidCount > 5 ? 'up' : 'stable',
+                      trendValue: unpaidCount > 5 ? 'Follow up required' : 'On track'
+                    },
                   ]}
                 />
+
+                {/* Quick Stats Section */}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="bg-white rounded-xl p-4 border shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm text-gray-600">Average Attendance</p>
+                        <p class="text-2xl font-bold text-green-600">
+                          {attendanceRows.length > 0 ? 
+                            Math.round(attendanceRows.reduce((sum, a) => sum + Number(a.attendancePercent || 0), 0) / attendanceRows.length) 
+                            : 0}%
+                        </p>
+                      </div>
+                      <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-xl p-4 border shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm text-gray-600">Average Test Score</p>
+                        <p class="text-2xl font-bold text-blue-600">
+                          {testRows.length > 0 ? 
+                            Math.round(testRows.reduce((sum, t) => sum + Number(t.score || 0), 0) / testRows.length) 
+                            : 0}/100
+                        </p>
+                      </div>
+                      <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-xl p-4 border shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-sm text-gray-600">Fee Collection Rate</p>
+                        <p class="text-2xl font-bold text-purple-600">
+                          {feeRows.length > 0 ? 
+                            Math.round((feesCounts.Paid / (feesCounts.Paid + feesCounts.Unpaid)) * 100) 
+                            : 0}%
+                        </p>
+                      </div>
+                      <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </section>
               <section class="grid md:grid-cols-3 gap-6 items-start">
-                <div class="md:col-span-2 space-y-3">
-                  <h3 class="text-sm font-semibold text-slate-700">Students with Active Risk Flags</h3>
-                  <RiskTable rows={rows} />
+                <div class="md:col-span-2">
+                  <RecentStudentActivity activities={sortedActivities} />
                 </div>
                 <div class="space-y-3">
-                  <h3 class="text-sm font-semibold text-slate-700">Latest Updates</h3>
-                  <RecentActivity items={activities} />
+                  <h3 class="text-sm font-semibold text-slate-700">Calendar</h3>
+                  <CalendarMonths />
                 </div>
               </section>
               <section class="bg-white rounded-xl border shadow-sm p-4">
