@@ -33,7 +33,7 @@ export default createRoute(async (c) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>QR Scanner - Student Attendance - EduPulse</title>
+      <title>QR Scanner - Student Attendance - GuideED</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
       <style>
@@ -217,9 +217,9 @@ export default createRoute(async (c) => {
               </div>
 
               <!-- Instructions -->
-              <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-blue-900 mb-3">How to Mark Attendance</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-800">
+              <div class="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">How to Mark Attendance</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-800">
                   <div class="flex items-start gap-3">
                     <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span class="text-xs font-bold text-blue-600">1</span>

@@ -127,17 +127,65 @@ setTimeout(() => {
                       </tr>
                     </thead>
                     <tbody>
-                      {flags.map((f) => (
-                        <tr class="border-t hover:bg-gray-50/60">
-                          <td class="px-4 py-3">
-                            <div class="font-medium">{f.student.name}</div>
-                            <div class="text-xs text-gray-500">{f.studentId}</div>
-                          </td>
-                          <td class="px-4 py-3">{f.riskLevel}</td>
-                          <td class="px-4 py-3">{new Date(f.flagDate).toLocaleDateString()}</td>
-                          <td class="px-4 py-3">{f.reason}</td>
-                        </tr>
-                      ))}
+                      {flags.map((f) => {
+                        // Determine colors based on risk level
+                        const getRiskLevelStyles = (level: string) => {
+                          switch (level.toLowerCase()) {
+                            case 'high':
+                            case 'red':
+                              return {
+                                badge: 'bg-red-100 text-red-800 border border-red-200',
+                                dot: 'bg-red-500'
+                              }
+                            case 'medium':
+                            case 'yellow':
+                              return {
+                                badge: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+                                dot: 'bg-yellow-500'
+                              }
+                            case 'low':
+                            case 'green':
+                              return {
+                                badge: 'bg-green-100 text-green-800 border border-green-200',
+                                dot: 'bg-green-500'
+                              }
+                            default:
+                              return {
+                                badge: 'bg-gray-100 text-gray-800 border border-gray-200',
+                                dot: 'bg-gray-500'
+                              }
+                          }
+                        }
+                        
+                        const styles = getRiskLevelStyles(f.riskLevel)
+                        
+                        return (
+                          <tr class="border-t hover:bg-gray-50/60">
+                            <td class="px-4 py-3">
+                              <div class="font-medium text-slate-900">{f.student.name}</div>
+                              <div class="text-xs text-gray-500">{f.studentId}</div>
+                            </td>
+                            <td class="px-4 py-3">
+                              <div class="flex items-center gap-2">
+                                <div class={`w-2 h-2 rounded-full ${styles.dot}`}></div>
+                                <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles.badge}`}>
+                                  {f.riskLevel}
+                                </span>
+                              </div>
+                            </td>
+                            <td class="px-4 py-3">
+                              <div class="text-sm text-slate-700">
+                                {new Date(f.flagDate).toLocaleDateString()}
+                              </div>
+                            </td>
+                            <td class="px-4 py-3">
+                              <div class="text-sm text-slate-700 max-w-xs truncate" title={f.reason}>
+                                {f.reason}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>

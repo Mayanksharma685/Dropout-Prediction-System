@@ -4,6 +4,8 @@ interface QRGenerateResponse {
   sessionId: string
   qrImage: string
   createdAt: number
+  shuffleIndex: number
+  baseSessionId: string
 }
 
 interface QRVerifyResponse {
@@ -25,10 +27,23 @@ const QR_BACKEND_URL = process.env.QR_BACKEND_URL || 'http://localhost:3000'
 
 export const GET = createRoute(async (c) => {
   try {
-    // Simply proxy the request to the QR backend
-    const response = await fetch(`${QR_BACKEND_URL}/api/qr/generate-qr`)
-    const data = await response.json()
-    return c.json(data)
+    const action = c.req.query('action')
+    
+    if (action === 'current') {
+      // Get current shuffled QR code
+      const response = await fetch(`${QR_BACKEND_URL}/api/qr/current-qr`)
+      if (!response.ok) {
+        return c.json({ error: 'No active QR session' }, 404)
+      }
+      const data = await response.json()
+      return c.json(data)
+    } else {
+      // Generate new QR session
+      const response = await fetch(`${QR_BACKEND_URL}/api/qr/generate-qr`)
+      const data = await response.json()
+      console.log('QR Backend Response:', data) // Debug log
+      return c.json(data)
+    }
   } catch (error) {
     console.error('Error connecting to QR backend:', error)
     return c.json({ error: 'Cannot connect to QR backend at ' + QR_BACKEND_URL }, 500)
@@ -45,6 +60,15 @@ export const POST = createRoute(async (c) => {
         return c.json({ error: 'Missing required fields: sessionId, studentId, courseId' }, 400)
       }
 
+      // Handle shuffled session IDs (extract base session ID if needed)
+      let verifySessionId = sessionId;
+      if (sessionId.includes('_shuffle_')) {
+        // Extract base session ID from shuffled format
+        const parts = sessionId.split('_shuffle_');
+        verifySessionId = parts[0];
+        console.log(`Shuffled session detected: ${sessionId} -> base: ${verifySessionId}`);
+      }
+
       // First verify QR code with backend
       try {
         const qrResponse = await fetch(`${QR_BACKEND_URL}/api/qr/verify-qr`, {
@@ -52,7 +76,7 @@ export const POST = createRoute(async (c) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ sessionId })
+          body: JSON.stringify({ sessionId: verifySessionId })
         })
 
         if (!qrResponse.ok) {

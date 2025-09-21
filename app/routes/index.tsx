@@ -84,7 +84,7 @@ export default createRoute(async (c) => {
         <Section id="solution">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Solution</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">EduPulse consolidates student data into one intelligent platform, enabling proactive intervention through AI-powered risk detection.</p>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">GuideED consolidates student data into one intelligent platform, enabling proactive intervention through AI-powered risk detection.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <FeatureCard title="Smart Data Integration" icon="🔗" description="Seamlessly import and consolidate data from multiple sources including spreadsheets, databases, and existing systems" />
@@ -175,7 +175,7 @@ export default createRoute(async (c) => {
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div className="space-y-4 text-gray-700">
               <p>
-                EduPulse focuses on early detection of at-risk students by consolidating academic and administrative signals into a single, mentor-friendly dashboard. The goal is to intervene early, with clear reasons, and improve student outcomes.
+                GuideED focuses on early detection of at-risk students by consolidating academic and administrative signals into a single, mentor-friendly dashboard. The goal is to intervene early, with clear reasons, and improve student outcomes.
               </p>
               <p>
                 The system begins with transparent, rule-based thresholds and can optionally incorporate lightweight ML models for improved accuracy. It is designed to be affordable, explainable, and simple to deploy in typical college environments.
@@ -233,7 +233,7 @@ export default createRoute(async (c) => {
 
       <footer className="border-t py-8 text-center text-sm text-gray-600">
         <div className="max-w-6xl mx-auto px-4">
-          © {new Date().getFullYear()} EduPulse — Built for PSID 25102
+          © {new Date().getFullYear()} GuideED — Built for PSID 25102
         </div>
       </footer>
 

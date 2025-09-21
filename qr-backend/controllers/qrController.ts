@@ -3,11 +3,25 @@ import * as qrService from "../services/QRCodeService";
 
 export async function generateQR(_req: any, res: any): Promise<void> {
   try {
-    const { sessionId, qrImage } = await qrService.generateQRCode();
-    res.json({ sessionId, qrImage });
+    const result = await qrService.generateQRCode();
+    res.json(result);
   } catch (err) {
     console.error("Error in generateQR:", err);
     res.status(500).json({ error: "Failed to generate QR code" });
+  }
+}
+
+export async function getCurrentQR(_req: any, res: any): Promise<void> {
+  try {
+    const result = await qrService.getCurrentQRCode();
+    if (!result) {
+      res.status(404).json({ error: "No active QR session" });
+      return;
+    }
+    res.json(result);
+  } catch (err) {
+    console.error("Error in getCurrentQR:", err);
+    res.status(500).json({ error: "Failed to get current QR code" });
   }
 }
 

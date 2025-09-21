@@ -29,7 +29,7 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
       <div className="p-4 border-b border-white/20">
         <a href="/" className="flex items-center gap-3 font-semibold text-white">
           <img src="/Logo.png" alt="EduPulse Logo" className="h-12 w-12 object-contain" />
-          <span className="text-lg">EduPulse</span>
+          <span className="text-lg">GuideED</span>
         </a>
       </div>
       
@@ -89,7 +89,7 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
             href="/dashboard/qr-attendance"
             className={`${baseLink} ${isActive('/dashboard/qr-attendance') ? activeLink : idleLink} ml-6`}
           >
-            Live QR Session
+            QR Code
           </a>
           <a
             href="/dashboard/qr-scanner"

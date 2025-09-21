@@ -46,13 +46,8 @@ export default createRoute(async (c) => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-        .fade-in {
-          animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        
+        
         .success-animation {
           animation: successPulse 0.6s ease-out;
         }
@@ -60,6 +55,14 @@ export default createRoute(async (c) => {
           0% { transform: scale(1); }
           50% { transform: scale(1.05); }
           100% { transform: scale(1); }
+        }
+        .shuffle-animation {
+          animation: shuffleRotate 0.5s ease-in-out;
+        }
+        @keyframes shuffleRotate {
+          0% { transform: rotateY(0deg) scale(1); }
+          50% { transform: rotateY(90deg) scale(0.8); }
+          100% { transform: rotateY(0deg) scale(1); }
         }
       </style>
     </head>
@@ -242,8 +245,12 @@ export default createRoute(async (c) => {
 
       <script>
         let currentSessionId = null;
+        let currentBaseSessionId = null;
         let countdownInterval = null;
+        let qrShuffleInterval = null;
         let attendancePollingInterval = null;
+        let sessionStartTime = null;
+        let shuffleCount = 0;
         let sessionStats = {
           sessionsCount: 0,
           presentCount: 0,
@@ -263,6 +270,8 @@ export default createRoute(async (c) => {
         const attendanceLog = document.getElementById('attendance-log');
         const statusIndicator = document.getElementById('status-indicator');
         const refreshBtn = document.getElementById('refresh-btn');
+        const shuffleStatus = document.getElementById('shuffle-status');
+        const nextShuffleSpan = document.getElementById('next-shuffle');
 
         // Enable generate button when course is selected
         courseSelect.addEventListener('change', function() {
@@ -293,8 +302,16 @@ export default createRoute(async (c) => {
 
             const data = await response.json();
             
+            console.log('QR Generation Response:', data); // Debug log
+            
+            // Initialize session data
+            currentBaseSessionId = data.baseSessionId || data.sessionId;
+            sessionStartTime = Math.floor(Date.now() / 1000);
+            shuffleCount = 0;
+            
             displayQRCode(data, courseId);
-            startCountdown(data.createdAt);
+            startCountdown(data.createdAt || sessionStartTime);
+            startQRShuffling();
             startAttendancePolling();
             updateStats();
             updateStatus('active', 'QR Code Active');
@@ -308,28 +325,144 @@ export default createRoute(async (c) => {
           }
         });
 
+        // Function to generate shuffled session ID
+        function generateShuffledSessionId(baseSessionId, shuffleIndex) {
+          return baseSessionId + '_shuffle_' + shuffleIndex + '_' + Math.floor(Date.now() / 1000);
+        }
+
+        // Function to generate QR code image from text
+        async function generateQRImage(text) {
+          try {
+            // Use a simple QR code generation approach
+            const qrText = encodeURIComponent(text);
+            const qrImageUrl = \`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=\${qrText}&bgcolor=ffffff&color=000000&format=png&margin=10\`;
+            return qrImageUrl;
+          } catch (error) {
+            console.error('Error generating QR image:', error);
+            return null;
+          }
+        }
+
         function displayQRCode(data, courseId) {
           currentSessionId = data.sessionId;
+          currentBaseSessionId = data.baseSessionId || data.sessionId;
           
           const selectedCourse = courseSelect.options[courseSelect.selectedIndex];
           const courseName = selectedCourse.text;
 
           qrDisplay.innerHTML = \`
-            <img src="\${data.qrImage}" alt="QR Code" class="w-64 h-64 mx-auto rounded-lg shadow-lg bg-white p-4">
+            <div class="relative">
+              <img src="\${data.qrImage}" alt="QR Code" class="w-64 h-64 mx-auto rounded-lg shadow-lg bg-white p-4">
+              <div class="absolute top-2 right-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                #\${(data.shuffleIndex !== undefined ? data.shuffleIndex : shuffleCount) + 1}
+              </div>
+            </div>
           \`;
 
-          sessionIdSpan.textContent = data.sessionId.substring(0, 8) + '...';
+          // Handle both old and new response formats
+          const displaySessionId = data.baseSessionId || data.sessionId;
+          const shuffleInfo = ' #' + (shuffleCount + 1);
+          sessionIdSpan.textContent = displaySessionId.substring(0, 8) + '...' + shuffleInfo;
           courseInfoSpan.textContent = \`Course: \${courseName}\`;
           
           qrInfo.classList.remove('hidden');
           qrExpired.classList.add('hidden');
+          
+          // Show shuffle status
+          if (shuffleStatus) {
+            shuffleStatus.classList.remove('hidden');
+          }
+        }
+
+        function startQRShuffling() {
+          if (qrShuffleInterval) clearInterval(qrShuffleInterval);
+          
+          console.log('Starting QR shuffling every 5 seconds...');
+          
+          // Shuffle QR code every 5 seconds
+          qrShuffleInterval = setInterval(async () => {
+            if (!currentBaseSessionId) return;
+            
+            // Check if session is still active (30 seconds total)
+            const now = Math.floor(Date.now() / 1000);
+            const elapsed = now - sessionStartTime;
+            
+            if (elapsed >= 30) {
+              console.log('Session expired, stopping shuffle');
+              stopQRShuffling();
+              return;
+            }
+            
+            // Increment shuffle count (0-5 for 6 total shuffles)
+            shuffleCount++;
+            if (shuffleCount >= 6) {
+              console.log('All shuffles completed, stopping');
+              stopQRShuffling();
+              return;
+            }
+            
+            try {
+              // Generate new shuffled session ID
+              const shuffledSessionId = generateShuffledSessionId(currentBaseSessionId, shuffleCount);
+              
+              // Generate new QR code image
+              const qrImageUrl = await generateQRImage(JSON.stringify({
+                sessionId: shuffledSessionId,
+                shuffleIndex: shuffleCount,
+                baseSessionId: currentBaseSessionId,
+                timestamp: now
+              }));
+              
+              if (!qrImageUrl) {
+                console.error('Failed to generate QR image');
+                return;
+              }
+              
+              // Add shuffle animation to existing QR
+              const existingImg = qrDisplay.querySelector('img');
+              if (existingImg) {
+                existingImg.classList.add('shuffle-animation');
+              }
+              
+              console.log(\`Shuffling to #\${shuffleCount + 1}\`);
+              
+              // Update QR display with new shuffled code after animation
+              setTimeout(() => {
+                qrDisplay.innerHTML = \`
+                  <div class="relative">
+                    <img src="\${qrImageUrl}" alt="QR Code" class="w-64 h-64 mx-auto rounded-lg shadow-lg bg-white p-4 fade-in">
+                    <div class="absolute top-2 right-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs px-2 py-1 rounded-full animate-pulse">
+                      #\${shuffleCount + 1}
+                    </div>
+                    <div class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-bounce">
+                      SHUFFLED
+                    </div>
+                  </div>
+                \`;
+                
+                // Update session info
+                sessionIdSpan.textContent = currentBaseSessionId.substring(0, 8) + '... #' + (shuffleCount + 1);
+                currentSessionId = shuffledSessionId;
+              }, 250);
+              
+            } catch (error) {
+              console.error('Error shuffling QR:', error);
+            }
+          }, 5000);
+        }
+
+        function stopQRShuffling() {
+          if (qrShuffleInterval) {
+            clearInterval(qrShuffleInterval);
+            qrShuffleInterval = null;
+          }
         }
 
         function startCountdown(createdAt) {
           if (countdownInterval) clearInterval(countdownInterval);
 
-          // Use current time instead of backend createdAt to avoid timing issues
-          const startTime = Math.floor(Date.now() / 1000);
+          // Use session start time for consistency
+          const startTime = sessionStartTime || Math.floor(Date.now() / 1000);
 
           countdownInterval = setInterval(() => {
             const now = Math.floor(Date.now() / 1000);
@@ -339,12 +472,25 @@ export default createRoute(async (c) => {
             if (remaining > 0) {
               countdownSpan.textContent = remaining + 's';
               countdownSpan.className = remaining <= 10 ? 'font-bold text-red-300 pulse-animation' : 'font-bold text-yellow-300';
+              
+              // Show shuffle progress
+              const shuffleProgress = Math.floor(elapsed / 5) + 1;
+              if (shuffleProgress <= 6) {
+                const nextShuffleIn = 5 - (elapsed % 5);
+                if (nextShuffleIn <= 5 && shuffleProgress < 6 && nextShuffleSpan) {
+                  nextShuffleSpan.textContent = nextShuffleIn;
+                }
+              }
             } else {
               // QR Expired
               clearInterval(countdownInterval);
+              stopQRShuffling();
               showExpiredQR();
               stopAttendancePolling();
               updateStatus('expired', 'QR Code Expired');
+              
+              // Reset shuffle count for next session
+              shuffleCount = 0;
             }
           }, 1000);
         }
@@ -363,6 +509,9 @@ export default createRoute(async (c) => {
             </div>
           \`;
           currentSessionId = null;
+          currentBaseSessionId = null;
+          sessionStartTime = null;
+          shuffleCount = 0;
         }
 
         function startAttendancePolling() {
@@ -473,6 +622,7 @@ export default createRoute(async (c) => {
         // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
           if (countdownInterval) clearInterval(countdownInterval);
+          if (qrShuffleInterval) clearInterval(qrShuffleInterval);
           if (attendancePollingInterval) clearInterval(attendancePollingInterval);
         });
 
