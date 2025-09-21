@@ -19,7 +19,7 @@ export default createRoute(async (c) => {
     prisma.student.count({ where: { teacherId: uid } }),
     prisma.riskFlag.count({ where: { student: { teacherId: uid } } }),
     prisma.backlog.count({ where: { cleared: false, student: { teacherId: uid } } }),
-    prisma.feePayment.count({ where: { status: 'Unpaid', student: { teacherId: uid } } }),
+    prisma.feePayment.count({ where: { status: 'Pending', student: { teacherId: uid } } }),
   ])
 
   const recentRisk = await prisma.riskFlag.findMany({
@@ -90,10 +90,10 @@ export default createRoute(async (c) => {
     return v.count ? Number((v.sum / v.count).toFixed(1)) : 0
   })
 
-  const feesCounts = { Paid: 0, Unpaid: 0 }
+  const feesCounts = { Paid: 0, Pending: 0 }
   for (const f of feeRows) {
     if ((f.status as any) === 'Paid') feesCounts.Paid++
-    else feesCounts.Unpaid++
+    else if ((f.status as any) === 'Pending') feesCounts.Pending++
   }
 
   // Generate recent student activities from various data sources
@@ -232,12 +232,12 @@ export default createRoute(async (c) => {
                       trendValue: backlogCount > 10 ? 'Needs attention' : 'Under control'
                     },
                     { 
-                      label: 'Unpaid Fees', 
+                      label: 'Pending Fees', 
                       value: unpaidCount,
                       icon: 'fees',
-                      color: unpaidCount > 5 ? 'red' : unpaidCount > 0 ? 'yellow' : 'green',
-                      trend: unpaidCount > 5 ? 'up' : 'stable',
-                      trendValue: unpaidCount > 5 ? 'Follow up required' : 'On track'
+                      color: unpaidCount > 10 ? 'red' : unpaidCount > 3 ? 'yellow' : 'green',
+                      trend: unpaidCount > 10 ? 'up' : unpaidCount > 3 ? 'stable' : 'down',
+                      trendValue: unpaidCount > 10 ? 'Urgent follow up needed' : unpaidCount > 3 ? 'Monitor closely' : unpaidCount === 0 ? 'All payments current' : 'Good status'
                     },
                   ]}
                 />
@@ -286,7 +286,7 @@ export default createRoute(async (c) => {
                         <p class="text-sm text-gray-600">Fee Collection Rate</p>
                         <p class="text-2xl font-bold text-purple-600">
                           {feeRows.length > 0 ? 
-                            Math.round((feesCounts.Paid / (feesCounts.Paid + feesCounts.Unpaid)) * 100) 
+                            Math.round((feesCounts.Paid / (feesCounts.Paid + feesCounts.Pending)) * 100) 
                             : 0}%
                         </p>
                       </div>
@@ -341,7 +341,7 @@ export default createRoute(async (c) => {
 const riskData = { labels: ['High','Medium','Low'], values: [${riskCounts.High}, ${riskCounts.Medium}, ${riskCounts.Low}] };
 const attData = { labels: ['0-40','40-60','60-80','80-100'], values: [${attBuckets['0-40']}, ${attBuckets['40-60']}, ${attBuckets['60-80']}, ${attBuckets['80-100']}] };
 const marksData = { labels: ${JSON.stringify(marksLabels)}, values: ${JSON.stringify(marksValues)} };
-const feesData = { labels: ['Paid','Unpaid'], values: [${feesCounts.Paid}, ${feesCounts.Unpaid}] };
+const feesData = { labels: ['Paid','Pending'], values: [${feesCounts.Paid}, ${feesCounts.Pending}] };
 
 function makeBarChart(id, labels, data, color){
   const el = document.getElementById(id);

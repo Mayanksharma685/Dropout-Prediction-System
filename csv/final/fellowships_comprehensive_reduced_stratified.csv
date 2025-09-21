@@ -1,0 +1,35 @@
+studentId,type,amount,duration,startDate,status
+E0028,Part Time,16470,12,2024-10-24,Active
+E0113,Research,15292,24,2025-03-03,Terminated
+E0359,Teaching Assistant,24557,24,2025-05-30,Terminated
+E0397,Teaching Assistant,22548,6,2025-06-06,Terminated
+E0420,Research,19466,24,2025-01-24,Active
+E0546,Teaching Assistant,21472,6,2025-08-15,Terminated
+E0585,Part Time,15587,18,2025-05-04,Completed
+E0592,Part Time,12541,12,2024-09-30,Terminated
+E0634,Full Time,34718,24,2025-06-11,Terminated
+E0640,Teaching Assistant,17918,6,2024-12-31,Completed
+E0846,Teaching Assistant,17638,12,2024-11-23,Completed
+E1027,Full Time,33862,24,2024-10-10,Active
+E1258,Research,22617,18,2025-06-03,Terminated
+E1724,Teaching Assistant,15258,12,2024-10-23,Active
+E1758,Teaching Assistant,24082,24,2024-12-14,Terminated
+E1781,Research,18968,12,2025-04-24,Active
+E1905,Full Time,25095,12,2025-02-21,Active
+E1980,Teaching Assistant,23253,24,2025-06-01,Active
+E2113,Research,24083,12,2025-08-30,Completed
+E2166,Full Time,34464,12,2025-06-22,Terminated
+E2184,Part Time,12732,24,2025-01-11,Active
+E2186,Research,18810,24,2025-04-01,Terminated
+E2303,Research,16467,24,2025-06-13,Completed
+E2504,Full Time,28023,12,2025-08-28,Active
+E2689,Full Time,26492,6,2025-04-05,Terminated
+E2794,Part Time,17743,24,2025-03-24,Active
+E2854,Teaching Assistant,23628,6,2025-01-23,Active
+E3014,Part Time,17965,6,2024-10-31,Completed
+E3302,Full Time,26409,6,2025-05-20,Active
+E3460,Teaching Assistant,15274,12,2025-08-06,Terminated
+E4233,Research,22386,6,2024-11-29,Active
+E4426,Teaching Assistant,22015,12,2025-01-29,Active
+E4630,Part Time,17024,24,2025-09-08,Completed
+E4864,Research,24119,24,2025-06-19,Completed

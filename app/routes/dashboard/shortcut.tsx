@@ -80,7 +80,7 @@ export default createRoute(async (c) => {
   }
 ]'></textarea>
               <div class="flex items-center gap-2">
-                <button id="start-import" class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'">Start Import</button>
+                <button id="start-import" class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#3399FF'" onmouseout="this.style.backgroundColor='#E8734A'">Start Import</button>
                 <button id="clear-log" class="px-4 py-2 rounded border">Clear Log</button>
               </div>
               <div id="import-log" class="mt-2 text-xs space-y-1 max-h-48 overflow-auto bg-gray-50 rounded p-2 border"></div>

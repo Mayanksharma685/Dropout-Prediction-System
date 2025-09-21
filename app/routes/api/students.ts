@@ -2,7 +2,22 @@ import { createRoute } from 'honox/factory'
 
 export const GET = createRoute(async (c) => {
   const prisma = (c as any).get('prisma') as import('@prisma/client').PrismaClient
-  const students = await prisma.student.findMany({ take: 100 })
+  
+  // Get authenticated teacher ID from cookies
+  const cookies = c.req.raw.headers.get('Cookie') || ''
+  const uidRaw = cookies.split(';').map((s) => s.trim()).find((s) => s.startsWith('uid='))?.slice(4)
+  const uid = uidRaw ? decodeURIComponent(uidRaw) : undefined
+  
+  if (!uid) {
+    return c.json({ error: 'Authentication required' }, 401)
+  }
+  
+  // Only return students associated with the authenticated teacher
+  const students = await prisma.student.findMany({ 
+    where: { teacherId: uid },
+    take: 100,
+    orderBy: { name: 'asc' }
+  })
   return c.json(students)
 })
 

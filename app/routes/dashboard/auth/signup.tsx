@@ -14,7 +14,7 @@ const SignupSchema = z.object({
 export default createRoute(async (c) => {
   return c.render(
     <div class="min-h-screen grid md:grid-cols-2 bg-gradient-to-br from-slate-50 to-white">
-      <div class="hidden md:flex items-center justify-center p-10" style="background-color: #FC816B">
+      <div class="hidden md:flex items-center justify-center p-10" style="background-color: #3399FF">
         <img 
           src="/signup-image.png" 
           alt="EduPulse Signup" 
@@ -61,7 +61,7 @@ export default createRoute(async (c) => {
               <label class="block text-sm font-medium text-gray-700">Password</label>
               <input class="mt-1 w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400" type="password" name="password" placeholder="At least 8 characters" required />
             </div>
-            <button class="w-full text-white px-4 py-2 rounded-md" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Create account</button>
+            <button class="w-full text-white px-4 py-2 rounded-md" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#3399FF'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Create account</button>
           </form>
 
           <div class="mt-6 text-center text-sm text-gray-600">

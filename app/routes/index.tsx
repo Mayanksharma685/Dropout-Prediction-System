@@ -27,11 +27,11 @@ export default createRoute(async (c) => {
       <main>
         <Section id="hero" className="pt-32 pb-24">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 text-sm font-medium text-[#FC816B] border border-orange-200">
-              <span className="w-2 h-2 bg-[#FC816B] rounded-full animate-pulse"></span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 text-sm font-medium text-[#3399FF] border border-orange-200">
+              <span className="w-2 h-2 bg-[#3399FF] rounded-full animate-pulse"></span>
               PSID 25102 • Smart Intervention System
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-[#FC816B] to-gray-700 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-[#3399FF] to-gray-700 bg-clip-text text-transparent leading-tight">
               Early Detection
               <span className="text-4xl md:text-5xl lg:text-6xl"> Smart Intervention.</span>
             </h1>
@@ -40,29 +40,29 @@ export default createRoute(async (c) => {
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               {!isAuthed ? (
-                <a href="/dashboard/auth/signup" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl bg-[#FC816B] text-white hover:bg-[#e8735f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <a href="/dashboard/auth/signup" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl bg-[#3399FF] text-white hover:bg-[#e8735f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                   Start Free Trial
                 </a>
               ) : (
-                <a href="/dashboard" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl bg-[#FC816B] text-white hover:bg-[#e8735f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <a href="/dashboard" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl bg-[#3399FF] text-white hover:bg-[#e8735f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                   Go to Dashboard
                 </a>
               )}
-              <a href="#solution" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl border-2 border-gray-300 text-gray-700 hover:border-[#FC816B] hover:text-[#FC816B] transition-all duration-200">
+              <a href="#solution" className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-xl border-2 border-gray-300 text-gray-700 hover:border-[#3399FF] hover:text-[#3399FF] transition-all duration-200">
                 See How It Works
               </a>
             </div>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl font-bold text-[#FC816B]">85%</div>
+                <div className="text-3xl font-bold text-[#3399FF]">85%</div>
                 <div className="text-sm text-gray-600 mt-1">Dropout Reduction</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-[#FC816B]">24/7</div>
+                <div className="text-3xl font-bold text-[#3399FF]">24/7</div>
                 <div className="text-sm text-gray-600 mt-1">Monitoring</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-[#FC816B]">{'< 5min'}</div>
+                <div className="text-3xl font-bold text-[#3399FF]">{'< 5min'}</div>
                 <div className="text-sm text-gray-600 mt-1">Setup Time</div>
               </div>
             </div>
@@ -104,9 +104,9 @@ export default createRoute(async (c) => {
               <FeatureCard title="Machine Learning Enhancement" icon="🤖" className="border-0 shadow-none bg-white/70">
                 <p className="mb-3">Advanced ML models enhance prediction accuracy:</p>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span>Logistic Regression</span><span className="text-[#FC816B] font-semibold">92% accuracy</span></div>
-                  <div className="flex justify-between"><span>Random Forest</span><span className="text-[#FC816B] font-semibold">94% accuracy</span></div>
-                  <div className="flex justify-between"><span>Neural Networks</span><span className="text-[#FC816B] font-semibold">96% accuracy</span></div>
+                  <div className="flex justify-between"><span>Logistic Regression</span><span className="text-[#3399FF] font-semibold">92% accuracy</span></div>
+                  <div className="flex justify-between"><span>Random Forest</span><span className="text-[#3399FF] font-semibold">94% accuracy</span></div>
+                  <div className="flex justify-between"><span>Neural Networks</span><span className="text-[#3399FF] font-semibold">96% accuracy</span></div>
                 </div>
               </FeatureCard>
             </div>

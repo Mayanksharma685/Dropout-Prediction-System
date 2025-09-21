@@ -1,0 +1,262 @@
+studentId,title,description,startDate,status,supervisorId
+E0008,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-09-19,Active,T1046
+E0008,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-09-20,Active,T1009
+E0025,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-06-04,Completed,T1041
+E0028,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-09-08,On Hold,T1046
+E0034,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-06-08,Active,T1002
+E0034,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-10-03,Completed,T1005
+E0034,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-12-11,Completed,T1022
+E0098,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-03-26,Completed,T1004
+E0113,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-10-11,Active,T1031
+E0113,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-03-28,Completed,T1016
+E0113,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-08-18,Active,T1005
+E0261,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-01-05,Active,T1035
+E0294,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-08-06,On Hold,T1006
+E0294,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-10-26,On Hold,T1039
+E0359,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-07-11,On Hold,T1032
+E0359,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-06-07,Completed,T1049
+E0359,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-11-12,Active,T1033
+E0397,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-02-08,On Hold,T1001
+E0397,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-01-23,Completed,T1038
+E0420,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-10-25,Completed,T1007
+E0420,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-02-06,On Hold,T1043
+E0422,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-02-18,On Hold,T1039
+E0426,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-10-10,Completed,T1005
+E0426,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-11-08,Active,T1020
+E0426,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-01-29,On Hold,T1034
+E0444,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-06-10,Completed,T1018
+E0469,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-10-15,Completed,T1027
+E0469,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-08-08,Completed,T1042
+E0477,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-03-08,On Hold,T1011
+E0546,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-02-23,Active,T1048
+E0546,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-07-02,Completed,T1048
+E0555,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-06-12,On Hold,T1046
+E0585,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-08-16,Completed,T1040
+E0585,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-09-20,Completed,T1034
+E0585,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-09-27,Completed,T1014
+E0592,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-03-23,Active,T1010
+E0592,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-11-25,Active,T1044
+E0592,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-02-12,Active,T1001
+E0607,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-02-10,Completed,T1003
+E0613,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-06-13,Completed,T1030
+E0614,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-11-29,Active,T1006
+E0614,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-08-06,Active,T1037
+E0614,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-08-15,Active,T1044
+E0632,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-12-29,Active,T1020
+E0632,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-02-03,Active,T1014
+E0632,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-08-23,Completed,T1030
+E0634,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-07-24,Active,T1038
+E0634,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-12-28,On Hold,T1033
+E0634,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-04-16,On Hold,T1050
+E0640,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-09-05,Active,T1024
+E0640,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-03-24,On Hold,T1013
+E0648,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-03-27,On Hold,T1050
+E0648,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-04-24,Active,T1027
+E0648,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-07-25,Completed,T1032
+E0674,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-01-18,On Hold,T1012
+E0709,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-07-31,Active,T1007
+E0709,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-08-09,Active,T1032
+E0722,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-06-30,Completed,T1035
+E0770,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-04-14,On Hold,T1003
+E0770,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-12-31,Active,T1038
+E0777,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-01-26,On Hold,T1018
+E0777,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-05-20,On Hold,T1049
+E0846,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-02-05,Active,T1017
+E0846,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-07-25,Active,T1025
+E0887,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-01-08,Active,T1023
+E0887,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-04-03,On Hold,T1035
+E1027,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-02-20,Completed,T1015
+E1041,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-05-08,Active,T1014
+E1041,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-08-22,Active,T1047
+E1085,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-06-22,On Hold,T1039
+E1085,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-06-15,Completed,T1037
+E1085,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-03-02,Active,T1022
+E1099,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-06-01,On Hold,T1045
+E1107,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-02-07,Completed,T1045
+E1121,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-01-06,Active,T1018
+E1204,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-06-29,Completed,T1016
+E1204,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-02-27,Active,T1045
+E1225,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-06-17,On Hold,T1036
+E1225,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-12-22,Completed,T1003
+E1230,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-09-09,Active,T1043
+E1230,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2024-10-25,Completed,T1028
+E1230,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-08-03,On Hold,T1042
+E1245,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-02-10,On Hold,T1009
+E1258,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-07-20,Completed,T1048
+E1258,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-01-04,On Hold,T1034
+E1270,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-07-01,Active,T1024
+E1322,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-05-28,Active,T1021
+E1322,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-07-17,On Hold,T1016
+E1491,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-05-29,Completed,T1014
+E1491,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-10-28,Active,T1047
+E1491,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-10-10,Completed,T1047
+E1541,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-11-06,Completed,T1045
+E1541,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-11-06,Active,T1001
+E1562,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-12-17,On Hold,T1002
+E1562,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-09-27,On Hold,T1010
+E1622,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-03-23,Active,T1032
+E1622,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2024-12-24,On Hold,T1008
+E1650,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-05-04,Completed,T1047
+E1650,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-09-09,Active,T1020
+E1724,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-05-25,Active,T1037
+E1724,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-09-18,Active,T1034
+E1752,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-06-01,Active,T1034
+E1758,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-09-18,On Hold,T1034
+E1758,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-07-23,On Hold,T1025
+E1773,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-10-13,Active,T1048
+E1773,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-05-20,Completed,T1017
+E1781,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-02-25,On Hold,T1041
+E1781,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-07-05,Active,T1011
+E1827,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-09-19,On Hold,T1020
+E1827,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-12-22,Active,T1002
+E1827,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-12-03,On Hold,T1025
+E1837,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-01-26,On Hold,T1019
+E1905,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-02-15,Active,T1001
+E1905,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-07-26,Active,T1029
+E1905,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-09-14,On Hold,T1005
+E1906,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-11-12,Active,T1019
+E1923,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-10-31,Completed,T1034
+E1923,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-09-28,On Hold,T1002
+E1923,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-02-22,On Hold,T1049
+E1950,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-09-29,Completed,T1028
+E1967,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-06-17,Completed,T1016
+E1977,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-04-28,On Hold,T1031
+E1977,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-08-25,Active,T1017
+E1977,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-10-28,On Hold,T1049
+E1980,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-03-20,On Hold,T1028
+E1980,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-04-16,Active,T1027
+E2113,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-07-29,On Hold,T1045
+E2113,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2024-10-05,Completed,T1049
+E2166,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-03-04,On Hold,T1011
+E2184,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-07-07,Completed,T1006
+E2186,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-03-09,Active,T1025
+E2186,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-07-01,Completed,T1040
+E2186,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-01-13,Active,T1032
+E2286,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-10-22,Completed,T1022
+E2303,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-02-08,Completed,T1020
+E2303,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-08-24,Active,T1044
+E2349,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-10-27,On Hold,T1013
+E2349,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-12-05,On Hold,T1004
+E2384,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-08-24,Active,T1045
+E2405,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-01-10,Active,T1034
+E2405,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-01-31,Active,T1049
+E2435,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-04-18,On Hold,T1024
+E2504,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-03-11,On Hold,T1012
+E2577,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-08-17,On Hold,T1013
+E2577,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-06-10,Active,T1040
+E2579,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-09-15,Completed,T1042
+E2579,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-04-07,On Hold,T1018
+E2579,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-07-20,Active,T1042
+E2607,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-10-18,Active,T1032
+E2607,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-12-17,Completed,T1007
+E2607,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-04-19,Active,T1023
+E2638,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-11-24,Completed,T1004
+E2638,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-03-11,On Hold,T1003
+E2638,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-11-30,Completed,T1003
+E2662,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-03-13,Completed,T1032
+E2689,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-03-29,Active,T1039
+E2794,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-11-15,Completed,T1014
+E2824,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-07-07,Active,T1002
+E2824,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-04-06,On Hold,T1031
+E2824,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-08-18,On Hold,T1012
+E2854,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-02-19,On Hold,T1050
+E2854,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-12-29,Completed,T1034
+E2854,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-11-16,Active,T1030
+E2889,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-12-19,On Hold,T1008
+E2889,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-02-05,Completed,T1043
+E2889,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-05-26,Active,T1044
+E3003,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-06-23,On Hold,T1018
+E3003,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-08-22,Active,T1049
+E3003,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-10-08,Active,T1023
+E3014,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-05-21,On Hold,T1008
+E3014,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-05-08,On Hold,T1026
+E3014,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-03-18,Active,T1024
+E3048,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-07-16,Active,T1036
+E3131,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-08-15,Active,T1002
+E3131,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-06-23,Active,T1048
+E3131,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-09-25,On Hold,T1011
+E3191,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-05-06,Active,T1007
+E3191,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-11-28,Completed,T1029
+E3222,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-06-09,Completed,T1006
+E3222,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-01-24,Active,T1008
+E3263,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-11-02,On Hold,T1030
+E3302,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-09-29,On Hold,T1042
+E3460,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-02-21,Active,T1037
+E3460,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2024-12-08,Completed,T1047
+E3500,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2024-11-22,Completed,T1049
+E3500,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-09-04,Completed,T1040
+E3500,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-03-18,Active,T1010
+E3547,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-03-01,Completed,T1031
+E3547,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-06-27,Completed,T1049
+E3549,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-02-21,Active,T1007
+E3549,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-11-12,Completed,T1038
+E3549,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-07-27,Completed,T1009
+E3629,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-08-12,Active,T1030
+E3629,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-10-25,On Hold,T1036
+E3768,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-01-12,On Hold,T1037
+E3768,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-08-30,On Hold,T1008
+E3776,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-01-24,Completed,T1036
+E3776,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-07-07,On Hold,T1034
+E3843,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-12-30,Active,T1012
+E3843,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-03-04,Active,T1018
+E3863,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-12-26,On Hold,T1039
+E3863,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-08-23,Active,T1048
+E3863,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-02-07,On Hold,T1021
+E3885,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-04-25,Active,T1003
+E3885,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-09-30,Active,T1001
+E3886,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-10-05,Completed,T1006
+E3971,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-01-09,Completed,T1048
+E3971,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2025-01-23,Active,T1027
+E3984,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-11-14,On Hold,T1035
+E4000,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-02-16,On Hold,T1016
+E4000,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-12-11,On Hold,T1043
+E4035,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-10-05,Completed,T1001
+E4091,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-05-27,Active,T1046
+E4091,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-08-03,Completed,T1050
+E4100,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-01-22,Active,T1039
+E4100,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-11-02,Completed,T1017
+E4189,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-03-09,On Hold,T1036
+E4189,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-04-25,Completed,T1003
+E4189,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2024-12-19,Completed,T1048
+E4204,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2025-06-05,Active,T1023
+E4204,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-05-20,Completed,T1010
+E4218,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2024-12-29,Completed,T1010
+E4218,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-12-09,Active,T1047
+E4218,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-04-28,Active,T1029
+E4233,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-03-12,On Hold,T1007
+E4233,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-03-20,Active,T1032
+E4311,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2024-09-29,On Hold,T1009
+E4311,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-12-19,Completed,T1045
+E4311,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-08-27,Active,T1004
+E4321,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-09-23,Active,T1042
+E4321,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-07-22,Active,T1044
+E4398,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-04-08,Active,T1047
+E4398,Cloud Computing Solution,Comprehensive cloud computing solution implementation with modern technologies,2025-07-23,Active,T1041
+E4421,Blockchain Voting System,Comprehensive blockchain voting system implementation with modern technologies,2025-05-06,Active,T1004
+E4426,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2025-01-01,Active,T1014
+E4426,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-04-09,Completed,T1048
+E4430,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-06-25,On Hold,T1020
+E4430,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-11-18,Active,T1039
+E4430,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-03-02,Active,T1041
+E4485,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-03-22,Active,T1040
+E4485,Machine Learning Price Predictor,Comprehensive machine learning price predictor implementation with modern technologies,2024-09-29,Active,T1001
+E4531,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-11-10,Active,T1007
+E4531,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-12-11,Completed,T1027
+E4531,AI-Based Recommendation System,Comprehensive ai-based recommendation system implementation with modern technologies,2024-12-06,Completed,T1004
+E4534,Web Application Development,Comprehensive web application development implementation with modern technologies,2025-06-17,Active,T1034
+E4534,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-11-14,On Hold,T1036
+E4534,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2024-10-14,Active,T1043
+E4605,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2025-02-18,Completed,T1041
+E4630,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-05-19,On Hold,T1027
+E4658,Data Analytics Dashboard,Comprehensive data analytics dashboard implementation with modern technologies,2024-10-02,Active,T1037
+E4658,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-12-05,Completed,T1046
+E4746,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2024-12-02,Active,T1014
+E4746,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2024-11-18,Active,T1005
+E4828,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2024-10-20,Active,T1018
+E4828,Web Application Development,Comprehensive web application development implementation with modern technologies,2024-10-14,Completed,T1021
+E4864,Natural Language Processing,Comprehensive natural language processing implementation with modern technologies,2025-05-10,Completed,T1022
+E4864,Big Data Analysis,Comprehensive big data analysis implementation with modern technologies,2025-07-20,On Hold,T1027
+E4876,IoT Smart Home Automation,Comprehensive iot smart home automation implementation with modern technologies,2024-10-19,Active,T1025
+E4876,Mobile App Development,Comprehensive mobile app development implementation with modern technologies,2025-08-26,On Hold,T1043
+E4876,Computer Vision Project,Comprehensive computer vision project implementation with modern technologies,2025-02-28,Active,T1044
+E4962,Cybersecurity Framework,Comprehensive cybersecurity framework implementation with modern technologies,2025-05-16,On Hold,T1012

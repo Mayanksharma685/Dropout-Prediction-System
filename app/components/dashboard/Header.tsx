@@ -56,7 +56,7 @@ export default function Header(props: any) {
                 {userPicture ? (
                   <img src={userPicture} alt="avatar" className="h-8 w-8 rounded-full object-cover" />
                 ) : (
-                  <span className="h-8 w-8 rounded-full bg-[#FC816B] text-white grid place-items-center text-sm font-semibold">
+                  <span className="h-8 w-8 rounded-full bg-[#3399FF] text-white grid place-items-center text-sm font-semibold">
                     {initials}
                   </span>
                 )}

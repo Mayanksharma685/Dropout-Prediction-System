@@ -17,13 +17,13 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
   }
 
   const baseLink = 'block px-3 py-2 rounded text-sm font-medium'
-  const activeLink = 'bg-white text-[#FC816B]'
-  const idleLink = 'hover:bg-white hover:text-[#FC816B]'
+  const activeLink = 'bg-white text-[#3399FF]'
+  const idleLink = 'hover:bg-white hover:text-[#3399FF]'
 
   return (
     <aside
       className="hidden md:block w-64 shrink-0 border-r border-white min-h-screen text-slate-200 dark-scrollbar overflow-y-auto rounded-r-lg"
-      style={{ backgroundColor: '#FC816B' }}
+      style={{ backgroundColor: '#3399FF' }}
     >
       {/* Logo and Brand Section */}
       <div className="p-4 border-b border-white/20">
@@ -133,6 +133,21 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
               Part Time
             </a>
           </div>
+        </div>
+
+        <hr className="border-white/30 my-4" />
+        
+        {/* Data Management Section */}
+        <div>
+          <div className="text-xs font-semibold text-white/70 uppercase tracking-wide mb-2 px-3">
+            Data Management
+          </div>
+          <a
+            href="/dashboard/csv-shortcut"
+            className={`${baseLink} ${isActive('/dashboard/csv-shortcut') ? activeLink : idleLink} ml-6`}
+          >
+            CSV Upload
+          </a>
         </div>
 
         <hr className="border-white/30 my-4" />

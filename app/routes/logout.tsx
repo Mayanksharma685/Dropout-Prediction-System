@@ -21,7 +21,7 @@ export default createRoute((c) => {
           <div class="space-y-3">
             <a 
               href="/dashboard/auth/login" 
-              class="w-full text-white px-4 py-2 rounded-md transition-colors duration-200 inline-block" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'"
+              class="w-full text-white px-4 py-2 rounded-md transition-colors duration-200 inline-block" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#3399FF'" onmouseout="this.style.backgroundColor='#E8734A'"
             >
               Sign in again
             </a>

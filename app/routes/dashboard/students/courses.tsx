@@ -100,7 +100,7 @@ setTimeout(() => {
                   <input class="mt-1 w-full border rounded p-2" type="text" name="department" value={teacher?.department || ''} required />
                 </div>
                 <div class="md:col-span-5">
-                  <button class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#FC816B'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Add Course</button>
+                  <button class="text-white px-4 py-2 rounded" style="background-color: #E8734A" onmouseover="this.style.backgroundColor='#3399FF'" onmouseout="this.style.backgroundColor='#E8734A'" type="submit">Add Course</button>
                 </div>
               </form>
             </section>

@@ -1,0 +1,112 @@
+{
+  "studentId": "E0001",
+  "name": "Ekalinga Magar",
+  "email": "e0001@university.edu",
+  "dob": "2005-01-30",
+  "currentSemester": 3,
+  "department": "ME",
+  "phone": "9325436351",
+  "batchId": "ME2024B",
+  "parentName": "Pranav Issac",
+  "parentEmail": "zayyankrish@example.com",
+  "parentPhone": "0793778731",
+  "address": "92/46, Minhas Nagar, Rampur-128010",
+  "attendance": [
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "month": "2024-08",
+      "attendancePercent": 84.3
+    },
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "month": "2024-12",
+      "attendancePercent": 90.7
+    },
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "month": "2024-07",
+      "attendancePercent": 87.8
+    }
+  ],
+  "testScores": [
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "testType": "Quiz_1",
+      "testDate": "2025-02-15",
+      "score": 59.6
+    },
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "testType": "Quiz_2",
+      "testDate": "2025-05-10",
+      "score": 56.0
+    },
+    {
+      "studentId": "E0001",
+      "courseId": "CSET240",
+      "testType": "Quiz_3",
+      "testDate": "2025-04-08",
+      "score": 72.1
+    }
+  ],
+  "backlogs": [
+    {
+      "studentId": "E0001",
+      "courseId": "MATH201",
+      "attempts": 1,
+      "cleared": false
+    }
+  ],
+  "feePayments": [
+    {
+      "studentId": "E0001",
+      "dueDate": "2025-04-10",
+      "paidDate": "2025-04-09",
+      "status": "Paid",
+      "dueMonths": 0,
+      "amount": 100000
+    },
+    {
+      "studentId": "E0001",
+      "dueDate": "2025-08-15",
+      "paidDate": "2025-09-07",
+      "status": "Paid",
+      "dueMonths": 0,
+      "amount": 125000
+    },
+    {
+      "studentId": "E0001",
+      "dueDate": "2025-08-04",
+      "paidDate": "2025-08-12",
+      "status": "Paid",
+      "dueMonths": 0,
+      "amount": 50000
+    }
+  ],
+  "projects": [
+    {
+      "studentId": "E0001",
+      "title": "Web Application Development",
+      "description": "Comprehensive web application development implementation with modern technologies",
+      "startDate": "2025-02-10",
+      "status": "Active",
+      "supervisorId": "T1032"
+    }
+  ],
+  "phdSupervision": [],
+  "fellowships": [
+    {
+      "studentId": "E0001",
+      "type": "Full Time",
+      "amount": 29179,
+      "duration": 6,
+      "startDate": "2024-10-18",
+      "status": "Completed"
+    }
+  ]
+}

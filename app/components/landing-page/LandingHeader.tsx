@@ -26,23 +26,23 @@ export default function LandingHeader(props: LandingHeaderProps) {
   return (
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
       <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#FC816B] transition-colors">
+        <a href="/" class="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#3399FF] transition-colors">
           <img src="/Logo.png" alt="EduPulse Logo" class="h-16 w-20 object-contain" />
           GuideED
         </a>
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#features" class="text-gray-700 hover:text-[#FC816B] transition-colors">Features</a>
-          <a href="#about" class="text-gray-700 hover:text-[#FC816B] transition-colors">About</a>
-          <a href="#problem" class="text-gray-700 hover:text-[#FC816B] transition-colors">Problem</a>
-          <a href="#solution" class="text-gray-700 hover:text-[#FC816B] transition-colors">Solution</a>
-          <a href="#dashboard" class="text-gray-700 hover:text-[#FC816B] transition-colors">Dashboard</a>
-          <a href="#tech" class="text-gray-700 hover:text-[#FC816B] transition-colors">Tech</a>
+          <a href="#features" class="text-gray-700 hover:text-[#3399FF] transition-colors">Features</a>
+          <a href="#about" class="text-gray-700 hover:text-[#3399FF] transition-colors">About</a>
+          <a href="#problem" class="text-gray-700 hover:text-[#3399FF] transition-colors">Problem</a>
+          <a href="#solution" class="text-gray-700 hover:text-[#3399FF] transition-colors">Solution</a>
+          <a href="#dashboard" class="text-gray-700 hover:text-[#3399FF] transition-colors">Dashboard</a>
+          <a href="#tech" class="text-gray-700 hover:text-[#3399FF] transition-colors">Tech</a>
         </nav>
         <div class="flex items-center gap-3">
           {!isAuthed ? (
             <>
               <a class="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-100 transition-colors" href="/dashboard/auth/login">Login</a>
-              <a class="px-4 py-2 text-sm font-medium rounded-lg bg-[#FC816B] text-white hover:bg-[#e8735f] transition-colors shadow-sm" href="/dashboard/auth/signup">Sign up</a>
+              <a class="px-4 py-2 text-sm font-medium rounded-lg bg-[#3399FF] text-white hover:bg-[#e8735f] transition-colors shadow-sm" href="/dashboard/auth/signup">Sign up</a>
             </>
           ) : (
             <details class="relative">
@@ -51,7 +51,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
                   {userPicture ? (
                     <img src={userPicture} alt="avatar" class="h-8 w-8 rounded-full object-cover" />
                   ) : (
-                    <span class="h-8 w-8 rounded-full bg-[#FC816B] text-white grid place-items-center text-sm font-semibold">
+                    <span class="h-8 w-8 rounded-full bg-[#3399FF] text-white grid place-items-center text-sm font-semibold">
                       {initials}
                     </span>
                   )}

@@ -1,0 +1,14 @@
+studentId,title,researchArea,startDate,expectedEnd,supervisorId,status
+E0113,Research in Artificial Intelligence,Blockchain,2023-10-16,2027-07-23,T1018,Completed
+E0420,Research in Natural Language Processing,IoT,2024-03-04,2028-03-11,T1004,Discontinued
+E0546,Research in IoT,Artificial Intelligence,2023-06-17,2027-07-27,T1012,Completed
+E0640,Research in Data Science,Artificial Intelligence,2023-04-23,2027-08-01,T1012,Ongoing
+E1027,Research in Cloud Computing,Blockchain,2024-09-03,2027-11-26,T1008,Ongoing
+E1980,Research in Cloud Computing,Database Systems,2022-11-12,2026-12-04,T1014,Ongoing
+E2113,Research in Network Security,Cloud Computing,2024-05-30,2028-02-22,T1006,Completed
+E2184,Research in Machine Learning,Blockchain,2023-11-14,2027-05-31,T1003,Discontinued
+E2689,Research in Machine Learning,Artificial Intelligence,2023-08-06,2026-11-22,T1020,Discontinued
+E2794,Research in Network Security,Blockchain,2023-04-02,2026-08-10,T1007,Discontinued
+E3460,Research in Artificial Intelligence,Data Science,2023-09-11,2027-12-28,T1019,Completed
+E4426,Research in IoT,Computer Vision,2024-05-30,2028-09-30,T1007,Discontinued
+E4864,Research in Cloud Computing,Blockchain,2024-07-03,2028-04-12,T1011,Discontinued
