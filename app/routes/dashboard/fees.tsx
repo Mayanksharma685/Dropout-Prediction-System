@@ -116,7 +116,21 @@ setTimeout(() => {
             </section>
 
             <section class="bg-white rounded-xl border shadow-sm p-4">
-              <h3 class="text-sm font-semibold text-slate-700 mb-3">Recent Fee Entries</h3>
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <h3 class="text-sm font-semibold text-slate-700">Recent Fee Entries</h3>
+                <div class="relative">
+                  <input 
+                    type="text" 
+                    id="studentSearch" 
+                    placeholder="Search by Student ID or Name (e.g., STU011)" 
+                    class="pl-8 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-72"
+                    oninput="filterFeesBySearch(this.value)"
+                  />
+                  <svg class="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
               {fees.length === 0 ? (
                 <p class="text-sm text-gray-600">No entries yet.</p>
               ) : (
@@ -149,6 +163,56 @@ setTimeout(() => {
                 </div>
               )}
             </section>
+
+            {/* Search Filter Script */}
+            <script dangerouslySetInnerHTML={{
+              __html: `
+function filterFeesBySearch(searchValue) {
+  const rows = document.querySelectorAll('tbody tr');
+  const searchTerm = searchValue.toLowerCase().trim();
+  
+  rows.forEach(row => {
+    const studentNameCell = row.querySelector('td:first-child .font-medium');
+    const studentIdCell = row.querySelector('td:first-child .text-xs');
+    const statusCell = row.querySelector('td:nth-child(4)');
+    
+    if (studentNameCell && studentIdCell) {
+      const studentName = studentNameCell.textContent.toLowerCase();
+      const studentId = studentIdCell.textContent.toLowerCase();
+      const status = statusCell ? statusCell.textContent.toLowerCase() : '';
+      
+      if (studentName.includes(searchTerm) || 
+          studentId.includes(searchTerm) || 
+          status.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  });
+  
+  // Show "No results" message if no rows are visible
+  const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+  const table = document.querySelector('table');
+  let noResultsMsg = document.getElementById('no-results-msg');
+  
+  if (visibleRows.length === 0 && searchTerm !== '') {
+    if (!noResultsMsg) {
+      noResultsMsg = document.createElement('div');
+      noResultsMsg.id = 'no-results-msg';
+      noResultsMsg.className = 'text-center py-8 text-gray-500';
+      noResultsMsg.innerHTML = 'No fee entries found matching your search.';
+      table.parentNode.appendChild(noResultsMsg);
+    }
+    noResultsMsg.style.display = 'block';
+  } else {
+    if (noResultsMsg) {
+      noResultsMsg.style.display = 'none';
+    }
+  }
+}
+              `
+            }} />
           </main>
           </div>
         </div>

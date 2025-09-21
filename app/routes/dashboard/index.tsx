@@ -3,7 +3,6 @@ import Header from '@/components/dashboard/Header'
 import Sidebar from '@/components/dashboard/Sidebar'
 import AIAssistant from '@/components/dashboard/AIAssistant'
 import KPIs from '@/components/dashboard/KPIs'
-import RecentStudentActivity from '@/components/dashboard/RecentStudentActivity'
 import CalendarMonths from '@/components/dashboard/CalendarMonths'
 
 export default createRoute(async (c) => {
@@ -60,9 +59,11 @@ export default createRoute(async (c) => {
   const riskCounts = { High: 0, Medium: 0, Low: 0 }
   for (const r of riskRows) {
     const lvl = (r.riskLevel as string)?.toLowerCase()
-    if (lvl === 'high') riskCounts.High++
-    else if (lvl === 'medium') riskCounts.Medium++
-    else riskCounts.Low++
+    // Map Python API risk levels (Red/Yellow/Green) to dashboard categories
+    if (lvl === 'red' || lvl === 'high') riskCounts.High++
+    else if (lvl === 'yellow' || lvl === 'medium') riskCounts.Medium++
+    else if (lvl === 'green' || lvl === 'low') riskCounts.Low++
+    else riskCounts.Low++ // Default to Low for any unknown values
   }
 
   const attBuckets = { '0-40': 0, '40-60': 0, '60-80': 0, '80-100': 0 }
@@ -299,15 +300,6 @@ export default createRoute(async (c) => {
                   </div>
                 </div>
               </section>
-              <section class="grid md:grid-cols-3 gap-6 items-start">
-                <div class="md:col-span-2">
-                  <RecentStudentActivity activities={sortedActivities} />
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-sm font-semibold text-slate-700">Calendar</h3>
-                  <CalendarMonths />
-                </div>
-              </section>
               <section class="bg-white rounded-xl border shadow-sm p-4">
                 <h3 class="text-sm font-semibold text-slate-700 mb-3">Statistics</h3>
                 <div class="grid md:grid-cols-2 gap-6">
@@ -362,7 +354,7 @@ function initCharts(){
   try {
     // @ts-ignore
     if (typeof Chart === 'undefined') { setTimeout(initCharts, 50); return; }
-    makePieChart('riskChart', riskData.labels, riskData.values, ['#ef4444','#f59e0b','#10b981']);
+    makePieChart('riskChart', riskData.labels, riskData.values, ['#ef4444','#f59e0b','#10b981']); // Red for High, Yellow for Medium, Green for Low
     makeBarChart('attendanceChart', attData.labels, attData.values, '#6366f1');
     makeBarChart('marksChart', marksData.labels, marksData.values, '#22c55e');
     makePieChart('feesChart', feesData.labels, feesData.values, ['#10b981','#ef4444']);
