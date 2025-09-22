@@ -1,0 +1,27 @@
+{
+  "generation_timestamp": "2025-09-22T10:06:37.881475",
+  "num_new_students": 10,
+  "new_student_ids": [
+    "E6204",
+    "E8724",
+    "E5663",
+    "E6048",
+    "E5799",
+    "E8033",
+    "E6455",
+    "E9949",
+    "E5297",
+    "E8315"
+  ],
+  "output_directory": "/home/aditya/SIH/edu-pulse/csv/complement_data",
+  "files_generated": [
+    "students_comprehensive_reduced_stratified.csv",
+    "attendance_comprehensive_reduced_stratified.csv",
+    "test_scores_comprehensive_reduced_stratified.csv",
+    "fee_payments_comprehensive_reduced_stratified.csv",
+    "backlogs_comprehensive_reduced_stratified.csv",
+    "projects_comprehensive_reduced_stratified.csv",
+    "phd_supervision_comprehensive_reduced_stratified.csv",
+    "fellowships_comprehensive_reduced_stratified.csv"
+  ]
+}

@@ -1,0 +1,41 @@
+studentId,title,description,startDate,status,supervisorId
+E10021,Machine Learning Stock Predictor,Scalable cloud storage solution with encryption,2025-07-21,On Hold,T2046
+E10021,Machine Learning Stock Predictor,Advanced healthcare management system using artificial intelligence,2023-10-10,On Hold,T2039
+E10021,Natural Language Processing Chatbot,Scalable cloud storage solution with encryption,2025-07-07,Active,T2006
+E10014,Mobile Banking Application,Advanced healthcare management system using artificial intelligence,2025-09-07,Cancelled,T2017
+E10014,Cloud-based File Storage,Personalized product recommendation system,2025-04-10,Completed,T2000
+E10000,Natural Language Processing Chatbot,Interactive data visualization and analytics dashboard,2023-10-29,Cancelled,T2023
+E10000,Augmented Reality Education Tool,Advanced cybersecurity system for threat detection,2024-12-23,Completed,T2039
+E10017,Computer Vision Traffic Monitor,Real-time traffic monitoring using computer vision,2024-04-24,Active,T2039
+E10002,AI-Based Healthcare System,Secure supply chain tracking using blockchain technology,2024-07-08,On Hold,T2031
+E10041,Cybersecurity Threat Detection,Automated home control system with IoT sensors,2025-06-08,Cancelled,T2027
+E10041,Blockchain Supply Chain Management,Predictive stock market analysis using machine learning,2024-02-02,Active,T2044
+E10019,Cloud-based File Storage,Educational tool using augmented reality technology,2024-02-28,Cancelled,T2026
+E10009,Web-based Learning Management System,Scalable cloud storage solution with encryption,2025-06-15,Active,T2008
+E10025,E-commerce Recommendation Engine,Comprehensive online learning platform with interactive features,2024-09-21,Active,T2030
+E10015,Machine Learning Stock Predictor,Real-time traffic monitoring using computer vision,2025-03-18,On Hold,T2044
+E10040,Cloud-based File Storage,Predictive stock market analysis using machine learning,2024-12-02,Active,T2020
+E10036,Computer Vision Traffic Monitor,Secure supply chain tracking using blockchain technology,2024-03-15,Cancelled,T2034
+E10020,Blockchain Supply Chain Management,Automated home control system with IoT sensors,2024-09-14,Completed,T2026
+E10020,Blockchain Supply Chain Management,Secure supply chain tracking using blockchain technology,2024-11-25,On Hold,T2041
+E10030,Web-based Learning Management System,Advanced cybersecurity system for threat detection,2025-06-19,On Hold,T2035
+E10022,Web-based Learning Management System,Interactive data visualization and analytics dashboard,2024-06-28,Cancelled,T2030
+E10011,IoT Smart Home Automation,Social media data analysis and insights platform,2023-12-13,On Hold,T2022
+E10034,Machine Learning Stock Predictor,Secure mobile banking application with biometric authentication,2025-01-28,Cancelled,T2002
+E10045,Cybersecurity Threat Detection,Educational tool using augmented reality technology,2024-09-11,Active,T2029
+E10038,Mobile Banking Application,Scalable cloud storage solution with encryption,2025-03-30,Completed,T2032
+E10038,Natural Language Processing Chatbot,Social media data analysis and insights platform,2024-09-20,Cancelled,T2017
+E10043,Cloud-based File Storage,Advanced healthcare management system using artificial intelligence,2023-10-24,Completed,T2035
+E10013,Cybersecurity Threat Detection,Comprehensive online learning platform with interactive features,2024-12-12,Completed,T2043
+E10013,Web-based Learning Management System,Advanced healthcare management system using artificial intelligence,2025-06-08,On Hold,T2005
+E10039,Natural Language Processing Chatbot,Secure mobile banking application with biometric authentication,2025-05-12,On Hold,T2037
+E10039,E-commerce Recommendation Engine,Personalized product recommendation system,2025-06-26,On Hold,T2048
+E10049,AI-Based Healthcare System,Real-time traffic monitoring using computer vision,2024-09-16,Cancelled,T2007
+E10042,Natural Language Processing Chatbot,Intelligent chatbot using natural language processing,2024-03-05,Completed,T2017
+E10042,Computer Vision Traffic Monitor,Advanced cybersecurity system for threat detection,2023-12-09,On Hold,T2000
+E10012,Augmented Reality Education Tool,Real-time traffic monitoring using computer vision,2024-10-24,Completed,T2034
+E10010,Data Analytics Dashboard,Social media data analysis and insights platform,2025-07-15,On Hold,T2039
+E10001,Social Media Analytics Platform,Personalized product recommendation system,2025-02-11,On Hold,T2006
+E10023,Natural Language Processing Chatbot,Smart farming system with sensor monitoring,2024-09-23,Completed,T2038
+E10006,Natural Language Processing Chatbot,Secure supply chain tracking using blockchain technology,2024-11-12,Completed,T2015
+E10044,Web-based Learning Management System,Social media data analysis and insights platform,2024-12-07,On Hold,T2024
