@@ -118,7 +118,7 @@ setTimeout(() => {
                   <input 
                     type="text" 
                     id="studentSearch" 
-                    placeholder="Search by Student ID, Name, or Risk Level (e.g., STU011)" 
+                    placeholder="Search by Student ID, Name, Risk Level, Alert Status, or Reason" 
                     class="pl-8 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-80"
                     oninput="filterRiskFlagsBySearch(this.value)"
                   />
@@ -136,6 +136,7 @@ setTimeout(() => {
                       <tr>
                         <th class="px-4 py-3">Student</th>
                         <th class="px-4 py-3">Level</th>
+                        <th class="px-4 py-3">Alert</th>
                         <th class="px-4 py-3">Date</th>
                         <th class="px-4 py-3">Reason</th>
                       </tr>
@@ -173,6 +174,9 @@ setTimeout(() => {
                         
                         const styles = getRiskLevelStyles(f.riskLevel)
                         
+                        // Check if this is a high risk flag for alert
+                        const isHighRisk = f.riskLevel.toLowerCase() === 'high' || f.riskLevel.toLowerCase() === 'red'
+                        
                         return (
                           <tr class="border-t hover:bg-gray-50/60">
                             <td class="px-4 py-3">
@@ -186,6 +190,32 @@ setTimeout(() => {
                                   {f.riskLevel}
                                 </span>
                               </div>
+                            </td>
+                            <td class="px-4 py-3">
+                              {isHighRisk ? (
+                                <div class="flex items-center gap-2">
+                                  <div class="relative">
+                                    <svg class="w-5 h-5 text-red-500 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                  </div>
+                                  <button 
+                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 hover:bg-red-200 transition-colors cursor-pointer"
+                                    onclick={`openAlertModal('${f.studentId}', '${f.student.name}', '${f.riskLevel}', '${f.reason}', '${new Date(f.flagDate).toLocaleDateString()}', '${f.student.parentName || 'N/A'}', '${f.student.parentPhone || 'N/A'}', '${f.student.parentEmail || 'N/A'}')`}
+                                  >
+                                    HIGH ALERT
+                                  </button>
+                                </div>
+                              ) : (
+                                <div class="flex items-center gap-2">
+                                  <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                  </svg>
+                                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                    NORMAL
+                                  </span>
+                                </div>
+                              )}
                             </td>
                             <td class="px-4 py-3">
                               <div class="text-sm text-slate-700">
@@ -206,6 +236,100 @@ setTimeout(() => {
               )}
             </section>
 
+            {/* High Alert Modal */}
+            <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+              <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                  {/* Modal Header */}
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                      <div class="p-2 bg-red-100 rounded-full">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-semibold text-red-800">High Risk Alert</h3>
+                        <p class="text-sm text-gray-600">Immediate attention required</p>
+                      </div>
+                    </div>
+                    <button onclick="closeAlertModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Student Information */}
+                  <div class="space-y-4">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <h4 class="font-semibold text-red-800 mb-2">Student Details</h4>
+                      <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Name:</span>
+                          <span id="modalStudentName" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Student ID:</span>
+                          <span id="modalStudentId" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Risk Level:</span>
+                          <span id="modalRiskLevel" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200"></span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Flag Date:</span>
+                          <span id="modalFlagDate" class="font-medium text-gray-900"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <h4 class="font-semibold text-gray-800 mb-2">Risk Details</h4>
+                      <p id="modalReason" class="text-sm text-gray-700"></p>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <h4 class="font-semibold text-blue-800 mb-2">Parent/Guardian Information</h4>
+                      <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Name:</span>
+                          <span id="modalParentName" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Phone:</span>
+                          <span id="modalParentPhone" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-gray-600">Email:</span>
+                          <span id="modalParentEmail" class="font-medium text-gray-900"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div class="flex flex-col gap-3 pt-4">
+                      <button 
+                        onclick="notifyParent()" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Notify Parent/Guardian
+                      </button>
+                      <button 
+                        onclick="closeAlertModal()" 
+                        class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Search Filter Script */}
             <script dangerouslySetInnerHTML={{
               __html: `
@@ -217,17 +341,20 @@ function filterRiskFlagsBySearch(searchValue) {
     const studentNameCell = row.querySelector('td:first-child .font-medium');
     const studentIdCell = row.querySelector('td:first-child .text-xs');
     const riskLevelCell = row.querySelector('td:nth-child(2) span');
-    const reasonCell = row.querySelector('td:nth-child(4) div');
+    const alertCell = row.querySelector('td:nth-child(3) span');
+    const reasonCell = row.querySelector('td:nth-child(5) div');
     
     if (studentNameCell && studentIdCell) {
       const studentName = studentNameCell.textContent.toLowerCase();
       const studentId = studentIdCell.textContent.toLowerCase();
       const riskLevel = riskLevelCell ? riskLevelCell.textContent.toLowerCase() : '';
+      const alertStatus = alertCell ? alertCell.textContent.toLowerCase() : '';
       const reason = reasonCell ? reasonCell.textContent.toLowerCase() : '';
       
       if (studentName.includes(searchTerm) || 
           studentId.includes(searchTerm) || 
           riskLevel.includes(searchTerm) || 
+          alertStatus.includes(searchTerm) ||
           reason.includes(searchTerm)) {
         row.style.display = '';
       } else {
@@ -256,6 +383,90 @@ function filterRiskFlagsBySearch(searchValue) {
     }
   }
 }
+
+// Modal Functions
+function openAlertModal(studentId, studentName, riskLevel, reason, flagDate, parentName, parentPhone, parentEmail) {
+  // Populate modal with student data
+  document.getElementById('modalStudentName').textContent = studentName;
+  document.getElementById('modalStudentId').textContent = studentId;
+  document.getElementById('modalRiskLevel').textContent = riskLevel;
+  document.getElementById('modalFlagDate').textContent = flagDate;
+  document.getElementById('modalReason').textContent = reason;
+  document.getElementById('modalParentName').textContent = parentName;
+  document.getElementById('modalParentPhone').textContent = parentPhone;
+  document.getElementById('modalParentEmail').textContent = parentEmail;
+  
+  // Store current student data for notification
+  window.currentAlertStudent = {
+    studentId, studentName, riskLevel, reason, flagDate, parentName, parentPhone, parentEmail
+  };
+  
+  // Show modal
+  document.getElementById('alertModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeAlertModal() {
+  document.getElementById('alertModal').classList.add('hidden');
+  document.body.style.overflow = 'auto'; // Restore scrolling
+  window.currentAlertStudent = null;
+}
+
+function notifyParent() {
+  const student = window.currentAlertStudent;
+  if (!student) return;
+  
+  // Show loading state
+  const notifyBtn = event.target;
+  const originalText = notifyBtn.innerHTML;
+  notifyBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Sending...';
+  notifyBtn.disabled = true;
+  
+  // Simulate notification (you can replace this with actual API call)
+  setTimeout(() => {
+    // Create notification message
+    const message = \`Dear \${student.parentName},
+
+We hope this message finds you well. We are writing to inform you about an important matter regarding your child, \${student.studentName} (Student ID: \${student.studentId}).
+
+ALERT DETAILS:
+- Risk Level: \${student.riskLevel}
+- Date Flagged: \${student.flagDate}
+- Reason: \${student.reason}
+
+We recommend scheduling a meeting to discuss this matter and develop an action plan to support \${student.studentName}'s academic progress.
+
+Please contact us at your earliest convenience.
+
+Best regards,
+Academic Team\`;
+
+    // Show success message
+    alert('Parent notification sent successfully!\\n\\nNotification Details:\\n' + message);
+    
+    // Reset button
+    notifyBtn.innerHTML = originalText;
+    notifyBtn.disabled = false;
+    
+    // Close modal
+    closeAlertModal();
+  }, 2000);
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+  const modal = document.getElementById('alertModal');
+  if (event.target === modal) {
+    closeAlertModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeAlertModal();
+  }
+});
               `
             }} />
           </main>
