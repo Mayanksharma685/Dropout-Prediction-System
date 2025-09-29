@@ -1,0 +1,66 @@
+studentId,counselorName,appointmentDate,duration,type,status,notes,followUpNeeded
+E10000,Dr. Suresh Reddy,2024-12-11 00:00:00,30,Group,No-Show,,False
+E10000,Dr. Rajesh Kumar,2025-08-01 00:00:00,90,Individual,Scheduled,,False
+E10000,Dr. Suresh Reddy,2025-05-25 00:00:00,45,Group,Completed,Hic fugit provident non ut.,False
+E10000,Dr. Anita Patel,2025-04-09 00:00:00,30,Crisis,No-Show,,False
+E10023,Dr. Anita Patel,2024-11-02 00:00:00,30,Crisis,Cancelled,,False
+E10020,Dr. Rajesh Kumar,2025-04-03 00:00:00,60,Individual,No-Show,In porro optio ipsam ratione voluptas.,False
+E10046,Dr. Priya Sharma,2024-12-29 00:00:00,60,Crisis,Completed,,True
+E10046,Dr. Suresh Reddy,2024-11-05 00:00:00,30,Group,Scheduled,,False
+E10010,Dr. Rajesh Kumar,2025-02-03 00:00:00,90,Group,Completed,,True
+E10010,Dr. Suresh Reddy,2025-08-19 00:00:00,60,Crisis,No-Show,Ipsum commodi suscipit sed sunt pariatur est laudantium.,False
+E10010,Dr. Suresh Reddy,2024-10-11 00:00:00,45,Group,Cancelled,Eligendi dolores eveniet itaque cumque laudantium.,False
+E10010,Dr. Priya Sharma,2025-08-09 00:00:00,30,Individual,Cancelled,Fugiat harum quidem.,False
+E10010,Dr. Suresh Reddy,2025-04-11 00:00:00,45,Individual,Cancelled,,False
+E10010,Dr. Meera Singh,2024-10-27 00:00:00,30,Crisis,Completed,,True
+E10038,Dr. Rajesh Kumar,2024-11-10 00:00:00,45,Crisis,Completed,,True
+E10027,Dr. Meera Singh,2025-06-07 00:00:00,45,Crisis,Scheduled,Quisquam laborum debitis reiciendis eius illo.,False
+E10043,Dr. Suresh Reddy,2025-04-11 00:00:00,30,Crisis,Cancelled,,False
+E10043,Dr. Rajesh Kumar,2025-04-08 00:00:00,30,Individual,Completed,,True
+E10043,Dr. Anita Patel,2024-11-27 00:00:00,90,Individual,Scheduled,Recusandae id odio voluptate voluptatibus.,False
+E10024,Dr. Suresh Reddy,2024-09-28 00:00:00,30,Group,Scheduled,,False
+E10024,Dr. Priya Sharma,2024-12-20 00:00:00,45,Crisis,No-Show,,False
+E10024,Dr. Priya Sharma,2024-10-08 00:00:00,90,Crisis,Scheduled,,False
+E10006,Dr. Suresh Reddy,2025-08-02 00:00:00,30,Group,Completed,,True
+E10025,Dr. Anita Patel,2024-09-30 00:00:00,90,Group,Cancelled,,False
+E10025,Dr. Suresh Reddy,2025-07-09 00:00:00,45,Individual,Scheduled,,False
+E10025,Dr. Suresh Reddy,2025-08-11 00:00:00,30,Group,Scheduled,Quisquam consequuntur error sequi accusamus numquam tempore.,False
+E10025,Dr. Priya Sharma,2024-09-30 00:00:00,60,Individual,No-Show,Dignissimos reprehenderit excepturi corrupti commodi inventore dolores.,False
+E10025,Dr. Suresh Reddy,2025-02-23 00:00:00,60,Crisis,Cancelled,,False
+E10025,Dr. Anita Patel,2025-05-12 00:00:00,90,Individual,Scheduled,Culpa nobis excepturi nulla veritatis nulla repellendus.,False
+E10028,Dr. Meera Singh,2025-04-01 00:00:00,45,Crisis,Completed,Placeat officiis suscipit nisi praesentium facere natus.,False
+E10035,Dr. Anita Patel,2025-02-24 00:00:00,90,Individual,No-Show,,False
+E10035,Dr. Priya Sharma,2025-08-02 00:00:00,45,Individual,Completed,Earum cum veniam quas veniam earum.,True
+E10007,Dr. Rajesh Kumar,2025-07-13 00:00:00,45,Group,No-Show,,False
+E10007,Dr. Rajesh Kumar,2025-06-16 00:00:00,60,Group,Cancelled,Fugiat ducimus cumque officia alias illo laboriosam.,False
+E10007,Dr. Anita Patel,2024-12-28 00:00:00,90,Crisis,Scheduled,,False
+E10007,Dr. Suresh Reddy,2025-06-22 00:00:00,45,Group,Cancelled,,False
+E10007,Dr. Suresh Reddy,2025-08-08 00:00:00,60,Individual,Scheduled,Illum ipsam dolore rem praesentium nobis.,False
+E10007,Dr. Suresh Reddy,2024-12-28 00:00:00,60,Group,Completed,,False
+E10007,Dr. Rajesh Kumar,2024-11-18 00:00:00,30,Group,Cancelled,,False
+E10007,Dr. Priya Sharma,2024-09-24 00:00:00,30,Group,Scheduled,,False
+E10033,Dr. Suresh Reddy,2025-02-25 00:00:00,60,Crisis,No-Show,Placeat blanditiis autem fugiat.,False
+E10033,Dr. Meera Singh,2025-03-14 00:00:00,90,Crisis,Cancelled,,False
+E10033,Dr. Meera Singh,2024-12-12 00:00:00,60,Individual,Scheduled,,False
+E10001,Dr. Priya Sharma,2024-11-03 00:00:00,60,Group,Scheduled,,False
+E10001,Dr. Priya Sharma,2025-04-27 00:00:00,60,Individual,Completed,Dolor autem repellat voluptatibus est perferendis.,True
+E10026,Dr. Priya Sharma,2025-03-01 00:00:00,90,Group,Cancelled,,False
+E10026,Dr. Priya Sharma,2024-09-26 00:00:00,90,Group,Completed,Rem sequi illum magni veritatis esse.,True
+E10026,Dr. Priya Sharma,2025-07-20 00:00:00,60,Individual,Scheduled,,False
+E10026,Dr. Rajesh Kumar,2025-09-22 00:00:00,60,Group,Completed,,False
+E10026,Dr. Rajesh Kumar,2025-06-29 00:00:00,45,Individual,Scheduled,Eligendi eius doloribus aliquid.,False
+E10026,Dr. Anita Patel,2025-08-24 00:00:00,30,Crisis,Scheduled,,False
+E10026,Dr. Priya Sharma,2025-03-01 00:00:00,30,Crisis,Scheduled,Error molestias inventore ullam laboriosam iure.,False
+E10026,Dr. Meera Singh,2024-10-18 00:00:00,45,Individual,Completed,Aperiam molestiae quaerat modi minima.,True
+E10014,Dr. Rajesh Kumar,2025-05-23 00:00:00,90,Individual,Completed,Ipsum repellendus et cumque suscipit.,True
+E10014,Dr. Suresh Reddy,2025-01-07 00:00:00,60,Group,No-Show,Vitae velit neque iusto assumenda quos quam.,False
+E10014,Dr. Anita Patel,2025-07-02 00:00:00,90,Individual,No-Show,Ex sed sunt animi.,False
+E10014,Dr. Suresh Reddy,2025-01-31 00:00:00,60,Individual,No-Show,Optio neque tempora maxime in.,False
+E10014,Dr. Suresh Reddy,2025-02-24 00:00:00,30,Individual,No-Show,,False
+E10017,Dr. Priya Sharma,2025-02-09 00:00:00,60,Crisis,Scheduled,Eveniet aliquam velit doloribus voluptatum.,False
+E10017,Dr. Suresh Reddy,2025-09-09 00:00:00,60,Group,Cancelled,Suscipit tenetur tenetur sunt sapiente officia.,False
+E10017,Dr. Anita Patel,2025-02-09 00:00:00,90,Crisis,No-Show,,False
+E10017,Dr. Suresh Reddy,2025-04-11 00:00:00,90,Group,No-Show,Soluta natus magni exercitationem officiis earum iusto tenetur.,False
+E10017,Dr. Anita Patel,2025-06-02 00:00:00,60,Group,Scheduled,,False
+E10017,Dr. Priya Sharma,2025-01-29 00:00:00,45,Crisis,Cancelled,Eligendi commodi eligendi necessitatibus ad.,False
+E10016,Dr. Rajesh Kumar,2025-08-16 00:00:00,90,Individual,No-Show,Enim numquam mollitia ipsam.,False

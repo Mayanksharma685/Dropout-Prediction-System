@@ -33,7 +33,7 @@ export default createRoute(async (c) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>QR Scanner - Student Attendance - GuideED</title>
+      <title>QR Scanner - Student Attendance - MARGDARSHAN</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
       <style>

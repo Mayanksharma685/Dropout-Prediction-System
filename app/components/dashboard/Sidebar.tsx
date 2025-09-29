@@ -29,7 +29,7 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
       <div className="p-4 border-b border-white/20">
         <a href="/" className="flex items-center gap-3 font-semibold text-white">
           <img src="/Logo.png" alt="EduPulse Logo" className="h-12 w-12 object-contain" />
-          <span className="text-lg">GuideED</span>
+          <span className="text-lg">MARGDARSHAN</span>
         </a>
       </div>
       
@@ -133,6 +133,21 @@ export default function Sidebar({ currentPath = '' }: SidebarProps) {
               Part Time
             </a>
           </div>
+        </div>
+
+        <hr className="border-white/30 my-4" />
+        
+        {/* Mental Health & Wellness Section */}
+        <div>
+          <div className="text-xs font-semibold text-white/70 uppercase tracking-wide mb-2 px-3">
+            Mental Health &amp; Wellness
+          </div>
+          <a
+            href="/dashboard/mental-health"
+            className={`${baseLink} ${isActive('/dashboard/mental-health') ? activeLink : idleLink} ml-6`}
+          >
+            Dashboard
+          </a>
         </div>
 
         <hr className="border-white/30 my-4" />

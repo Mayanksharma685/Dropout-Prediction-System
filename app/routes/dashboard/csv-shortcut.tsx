@@ -255,6 +255,114 @@ export default createRoute(async (c) => {
                 </div>
               </div>
 
+              {/* Mental Health Assessments CSV */}
+              <div class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-slate-700">Mental Health Assessments</h3>
+                    <p class="text-xs text-gray-500">Student wellness evaluations</p>
+                  </div>
+                </div>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-pink-400 transition-colors cursor-pointer" 
+                     onclick="document.getElementById('mental-assessments-file').click()">
+                  <input type="file" id="mental-assessments-file" accept=".csv" class="hidden" data-type="mental-assessments" />
+                  <div class="text-gray-500 text-sm">
+                    <div class="mb-2">🧠</div>
+                    <div>Click to upload mental_health_assessments.csv</div>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-600">
+                  <strong>Required fields:</strong> studentId, assessmentDate, stressLevel, anxietyLevel, depressionLevel, sleepQuality, academicPressure, socialSupport, overallWellness<br/>
+                  <strong>Optional:</strong> notes, riskScore
+                </div>
+              </div>
+
+              {/* Counseling Appointments CSV */}
+              <div class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-slate-700">Counseling Appointments</h3>
+                    <p class="text-xs text-gray-500">Student counseling sessions</p>
+                  </div>
+                </div>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-cyan-400 transition-colors cursor-pointer" 
+                     onclick="document.getElementById('counseling-file').click()">
+                  <input type="file" id="counseling-file" accept=".csv" class="hidden" data-type="counseling" />
+                  <div class="text-gray-500 text-sm">
+                    <div class="mb-2">🗓️</div>
+                    <div>Click to upload counseling_appointments.csv</div>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-600">
+                  <strong>Required fields:</strong> studentId, counselorName, appointmentDate, duration, type, status<br/>
+                  <strong>Optional:</strong> notes, followUpNeeded
+                </div>
+              </div>
+
+              {/* Wellness Challenges CSV */}
+              <div class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-slate-700">Wellness Challenges</h3>
+                    <p class="text-xs text-gray-500">Student wellness activities</p>
+                  </div>
+                </div>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-emerald-400 transition-colors cursor-pointer" 
+                     onclick="document.getElementById('wellness-file').click()">
+                  <input type="file" id="wellness-file" accept=".csv" class="hidden" data-type="wellness" />
+                  <div class="text-gray-500 text-sm">
+                    <div class="mb-2">🏃</div>
+                    <div>Click to upload wellness_challenges.csv</div>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-600">
+                  <strong>Required fields:</strong> studentId, challengeType, title, description, targetValue, currentProgress, startDate, endDate, status<br/>
+                  <strong>Optional:</strong> points
+                </div>
+              </div>
+
+              {/* Support Tickets CSV */}
+              <div class="bg-white rounded-xl border shadow-sm p-4 space-y-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-slate-700">Support Tickets</h3>
+                    <p class="text-xs text-gray-500">Student support requests</p>
+                  </div>
+                </div>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-rose-400 transition-colors cursor-pointer" 
+                     onclick="document.getElementById('support-file').click()">
+                  <input type="file" id="support-file" accept=".csv" class="hidden" data-type="support" />
+                  <div class="text-gray-500 text-sm">
+                    <div class="mb-2">🎫</div>
+                    <div>Click to upload support_tickets.csv</div>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-600">
+                  <strong>Required fields:</strong> studentId, category, priority, subject, description, status, isAnonymous, createdAt<br/>
+                  <strong>Optional:</strong> resolvedAt, assignedTo, response
+                </div>
+              </div>
+
             </div>
 
             {/* Upload Controls */}
@@ -276,7 +384,7 @@ export default createRoute(async (c) => {
                 </div>
               </div>
               <div class="text-xs text-gray-500">
-                <p><strong>Note:</strong> Files will be processed in order: Students → Attendance → Test Scores → Backlogs → Fee Payments → Projects → PhD Supervision → Fellowships</p>
+                <p><strong>Note:</strong> Files will be processed in order: Students → Attendance → Test Scores → Backlogs → Fee Payments → Projects → PhD Supervision → Fellowships → Mental Health Assessments → Counseling Appointments → Wellness Challenges → Support Tickets</p>
                 <p>Make sure students exist before uploading related data (attendance, test scores, etc.)</p>
               </div>
             </section>
@@ -290,7 +398,7 @@ export default createRoute(async (c) => {
 (function(){
   var TEACHER_ID = '${uid}';
   var selectedFiles = {};
-  var uploadOrder = ['students', 'attendance', 'testscores', 'backlogs', 'fees', 'projects', 'phd', 'fellowships'];
+  var uploadOrder = ['students', 'attendance', 'testscores', 'backlogs', 'fees', 'projects', 'phd', 'fellowships', 'mental-assessments', 'counseling', 'wellness', 'support'];
   
   // File input handlers
   var fileInputs = document.querySelectorAll('input[type="file"]');
@@ -359,7 +467,11 @@ export default createRoute(async (c) => {
           'fees': 'Click to upload fee_payments_comprehensive.csv',
           'projects': 'Click to upload projects_comprehensive.csv',
           'phd': 'Click to upload phd_supervision_comprehensive.csv',
-          'fellowships': 'Click to upload fellowships_comprehensive.csv'
+          'fellowships': 'Click to upload fellowships_comprehensive.csv',
+          'mental-assessments': 'Click to upload mental_health_assessments.csv',
+          'counseling': 'Click to upload counseling_appointments.csv',
+          'wellness': 'Click to upload wellness_challenges.csv',
+          'support': 'Click to upload support_tickets.csv'
         };
         var icons = {
           'students': '📄',
@@ -369,7 +481,11 @@ export default createRoute(async (c) => {
           'fees': '💰',
           'projects': '🚀',
           'phd': '🎓',
-          'fellowships': '🏆'
+          'fellowships': '🏆',
+          'mental-assessments': '🧠',
+          'counseling': '🗓️',
+          'wellness': '🏃',
+          'support': '🎫'
         };
         dropZone.innerHTML = '<div class="text-gray-500 text-sm"><div class="mb-2">' + icons[type] + '</div><div>' + originalText[type] + '</div></div>';
         dropZone.classList.remove('border-green-400', 'bg-green-50');

@@ -121,6 +121,54 @@ function validateFellowshipRow(row: any): string | null {
   return null
 }
 
+function validateMentalHealthAssessmentRow(row: any): string | null {
+  if (!row.studentId) return 'Missing studentId'
+  if (!row.assessmentDate) return 'Missing assessmentDate'
+  if (!row.stressLevel) return 'Missing stressLevel'
+  if (!row.anxietyLevel) return 'Missing anxietyLevel'
+  if (!row.depressionLevel) return 'Missing depressionLevel'
+  if (!row.sleepQuality) return 'Missing sleepQuality'
+  if (!row.academicPressure) return 'Missing academicPressure'
+  if (!row.socialSupport) return 'Missing socialSupport'
+  if (!row.overallWellness) return 'Missing overallWellness'
+  return null
+}
+
+function validateCounselingAppointmentRow(row: any): string | null {
+  if (!row.studentId) return 'Missing studentId'
+  if (!row.counselorName) return 'Missing counselorName'
+  if (!row.appointmentDate) return 'Missing appointmentDate'
+  if (!row.duration) return 'Missing duration'
+  if (!row.type) return 'Missing type'
+  if (!row.status) return 'Missing status'
+  return null
+}
+
+function validateWellnessChallengeRow(row: any): string | null {
+  if (!row.studentId) return 'Missing studentId'
+  if (!row.challengeType) return 'Missing challengeType'
+  if (!row.title) return 'Missing title'
+  if (!row.description) return 'Missing description'
+  if (!row.targetValue) return 'Missing targetValue'
+  if (!row.currentProgress) return 'Missing currentProgress'
+  if (!row.startDate) return 'Missing startDate'
+  if (!row.endDate) return 'Missing endDate'
+  if (!row.status) return 'Missing status'
+  return null
+}
+
+function validateSupportTicketRow(row: any): string | null {
+  if (!row.studentId) return 'Missing studentId'
+  if (!row.category) return 'Missing category'
+  if (!row.priority) return 'Missing priority'
+  if (!row.subject) return 'Missing subject'
+  if (!row.description) return 'Missing description'
+  if (!row.status) return 'Missing status'
+  if (row.isAnonymous === undefined || row.isAnonymous === null) return 'Missing isAnonymous field'
+  if (!row.createdAt) return 'Missing createdAt'
+  return null
+}
+
 export const POST = createRoute(async (c) => {
   try {
     // Get teacher ID from cookies
@@ -601,7 +649,8 @@ export const POST = createRoute(async (c) => {
                 dueDate: dueDate,
                 paidDate: paidDate,
                 status: row.status,
-                dueMonths: dueMonths
+                dueMonths: dueMonths,
+                amount: row.amount ? parseFloat(row.amount) : 50000 // Default amount if not provided
               }
             })
             processed++
@@ -711,6 +760,242 @@ export const POST = createRoute(async (c) => {
                 startDate: new Date(row.startDate),
                 endDate: row.endDate ? new Date(row.endDate) : null,
                 status: row.status || 'Active'
+              }
+            })
+            processed++
+          } catch (error: any) {
+            errors.push(`Row ${processed + 1}: Database error - ${error.message}`)
+          }
+        }
+        break
+
+      case 'mental-assessments':
+        for (const row of rows) {
+          const validationError = validateMentalHealthAssessmentRow(row)
+          if (validationError) {
+            errors.push(`Row ${processed + 1}: ${validationError}`)
+            continue
+          }
+
+          try {
+            // Check if student exists
+            const student = await prisma.student.findUnique({
+              where: { studentId: row.studentId }
+            })
+            if (!student) {
+              errors.push(`Row ${processed + 1}: Student ${row.studentId} not found`)
+              continue
+            }
+
+            // Validate assessment date
+            const assessmentDate = new Date(row.assessmentDate)
+            if (isNaN(assessmentDate.getTime())) {
+              errors.push(`Row ${processed + 1}: Invalid assessment date: ${row.assessmentDate}`)
+              continue
+            }
+
+            // Validate mental health scores (1-10 scale)
+            const stressLevel = parseInt(row.stressLevel)
+            const anxietyLevel = parseInt(row.anxietyLevel)
+            const depressionLevel = parseInt(row.depressionLevel)
+            const sleepQuality = parseInt(row.sleepQuality)
+            const academicPressure = parseInt(row.academicPressure)
+            const socialSupport = parseInt(row.socialSupport)
+            const overallWellness = parseInt(row.overallWellness)
+
+            if ([stressLevel, anxietyLevel, depressionLevel, sleepQuality, academicPressure, socialSupport, overallWellness].some(val => isNaN(val) || val < 1 || val > 10)) {
+              errors.push(`Row ${processed + 1}: All mental health scores must be between 1-10`)
+              continue
+            }
+
+            // Calculate risk score if not provided
+            let riskScore = row.riskScore ? parseFloat(row.riskScore) : (stressLevel + anxietyLevel + depressionLevel) / 3
+
+            await prisma.mentalHealthAssessment.create({
+              data: {
+                studentId: row.studentId,
+                assessmentDate: assessmentDate,
+                stressLevel: stressLevel,
+                anxietyLevel: anxietyLevel,
+                depressionLevel: depressionLevel,
+                sleepQuality: sleepQuality,
+                academicPressure: academicPressure,
+                socialSupport: socialSupport,
+                overallWellness: overallWellness,
+                notes: row.notes || null,
+                riskScore: riskScore
+              }
+            })
+            processed++
+          } catch (error: any) {
+            errors.push(`Row ${processed + 1}: Database error - ${error.message}`)
+          }
+        }
+        break
+
+      case 'counseling':
+        for (const row of rows) {
+          const validationError = validateCounselingAppointmentRow(row)
+          if (validationError) {
+            errors.push(`Row ${processed + 1}: ${validationError}`)
+            continue
+          }
+
+          try {
+            // Check if student exists
+            const student = await prisma.student.findUnique({
+              where: { studentId: row.studentId }
+            })
+            if (!student) {
+              errors.push(`Row ${processed + 1}: Student ${row.studentId} not found`)
+              continue
+            }
+
+            // Validate appointment date
+            const appointmentDate = new Date(row.appointmentDate)
+            if (isNaN(appointmentDate.getTime())) {
+              errors.push(`Row ${processed + 1}: Invalid appointment date: ${row.appointmentDate}`)
+              continue
+            }
+
+            // Validate duration
+            const duration = parseInt(row.duration)
+            if (isNaN(duration) || duration < 15 || duration > 180) {
+              errors.push(`Row ${processed + 1}: Duration must be between 15-180 minutes: ${row.duration}`)
+              continue
+            }
+
+            // Parse follow-up needed
+            const followUpNeeded = row.followUpNeeded === 'true' || row.followUpNeeded === '1' || row.followUpNeeded === 'TRUE' || row.followUpNeeded === 'True'
+
+            await prisma.counselingAppointment.create({
+              data: {
+                studentId: row.studentId,
+                counselorName: row.counselorName,
+                appointmentDate: appointmentDate,
+                duration: duration,
+                type: row.type,
+                status: row.status,
+                notes: row.notes || null,
+                followUpNeeded: followUpNeeded
+              }
+            })
+            processed++
+          } catch (error: any) {
+            errors.push(`Row ${processed + 1}: Database error - ${error.message}`)
+          }
+        }
+        break
+
+      case 'wellness':
+        for (const row of rows) {
+          const validationError = validateWellnessChallengeRow(row)
+          if (validationError) {
+            errors.push(`Row ${processed + 1}: ${validationError}`)
+            continue
+          }
+
+          try {
+            // Check if student exists
+            const student = await prisma.student.findUnique({
+              where: { studentId: row.studentId }
+            })
+            if (!student) {
+              errors.push(`Row ${processed + 1}: Student ${row.studentId} not found`)
+              continue
+            }
+
+            // Validate dates
+            const startDate = new Date(row.startDate)
+            const endDate = new Date(row.endDate)
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+              errors.push(`Row ${processed + 1}: Invalid start or end date`)
+              continue
+            }
+
+            // Validate target value and progress
+            const targetValue = parseInt(row.targetValue)
+            const currentProgress = parseInt(row.currentProgress)
+            if (isNaN(targetValue) || isNaN(currentProgress) || targetValue < 1 || currentProgress < 0) {
+              errors.push(`Row ${processed + 1}: Invalid target value or progress`)
+              continue
+            }
+
+            // Calculate points if not provided
+            const points = row.points ? parseInt(row.points) : currentProgress * 10
+
+            await prisma.wellnessChallenge.create({
+              data: {
+                studentId: row.studentId,
+                challengeType: row.challengeType,
+                title: row.title,
+                description: row.description,
+                targetValue: targetValue,
+                currentProgress: currentProgress,
+                startDate: startDate,
+                endDate: endDate,
+                status: row.status,
+                points: points
+              }
+            })
+            processed++
+          } catch (error: any) {
+            errors.push(`Row ${processed + 1}: Database error - ${error.message}`)
+          }
+        }
+        break
+
+      case 'support':
+        for (const row of rows) {
+          const validationError = validateSupportTicketRow(row)
+          if (validationError) {
+            errors.push(`Row ${processed + 1}: ${validationError}`)
+            continue
+          }
+
+          try {
+            // Check if student exists
+            const student = await prisma.student.findUnique({
+              where: { studentId: row.studentId }
+            })
+            if (!student) {
+              errors.push(`Row ${processed + 1}: Student ${row.studentId} not found`)
+              continue
+            }
+
+            // Validate created date
+            const createdAt = new Date(row.createdAt)
+            if (isNaN(createdAt.getTime())) {
+              errors.push(`Row ${processed + 1}: Invalid created date: ${row.createdAt}`)
+              continue
+            }
+
+            // Validate resolved date if provided
+            let resolvedAt = null
+            if (row.resolvedAt) {
+              resolvedAt = new Date(row.resolvedAt)
+              if (isNaN(resolvedAt.getTime())) {
+                errors.push(`Row ${processed + 1}: Invalid resolved date: ${row.resolvedAt}`)
+                continue
+              }
+            }
+
+            // Parse anonymous flag
+            const isAnonymous = row.isAnonymous === 'true' || row.isAnonymous === '1' || row.isAnonymous === 'TRUE' || row.isAnonymous === 'True'
+
+            await prisma.supportTicket.create({
+              data: {
+                studentId: row.studentId,
+                category: row.category,
+                priority: row.priority,
+                subject: row.subject,
+                description: row.description,
+                status: row.status,
+                isAnonymous: isAnonymous,
+                createdAt: createdAt,
+                resolvedAt: resolvedAt,
+                assignedTo: row.assignedTo || null,
+                response: row.response || null
               }
             })
             processed++

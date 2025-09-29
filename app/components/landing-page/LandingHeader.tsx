@@ -28,7 +28,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
       <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <a href="/" class="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#3399FF] transition-colors">
           <img src="/Logo.png" alt="EduPulse Logo" class="h-16 w-20 object-contain" />
-          GuideED
+          MARGDARSHAN
         </a>
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
           <a href="#features" class="text-gray-700 hover:text-[#3399FF] transition-colors">Features</a>

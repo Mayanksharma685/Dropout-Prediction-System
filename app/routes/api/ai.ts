@@ -31,7 +31,7 @@ export const POST = createRoute(async (c) => {
       prisma.feePayment.findMany({ orderBy: { dueDate: 'desc' }, take: 5 }),
     ])
 
-    const systemPrompt = `You are GuideED, an assistant for a student analytics dashboard.
+    const systemPrompt = `You are MARGDARSHAN, an assistant for a student analytics dashboard.
 You answer questions using the provided database context. If the answer isn't in context, say so and suggest where to look in the dashboard.
 Be concise and accurate.`
 

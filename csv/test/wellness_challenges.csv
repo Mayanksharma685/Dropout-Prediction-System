@@ -1,0 +1,47 @@
+studentId,challengeType,title,description,targetValue,currentProgress,startDate,endDate,status,points
+E10026,Exercise,Daily Walk Challenge,Exercise challenge: Daily Walk Challenge,21,13,2025-09-24,2025-10-15,Active,130
+E10026,Academic,Goal Setting,Academic challenge: Goal Setting,7,4,2025-09-24,2025-10-01,Active,40
+E10026,Academic,Skill Development,Academic challenge: Skill Development,30,1,2025-09-24,2025-10-24,Active,10
+E10005,Sleep,8-Hour Sleep Challenge,Sleep challenge: 8-Hour Sleep Challenge,30,28,2025-09-24,2025-10-24,Active,280
+E10046,Sleep,Sleep Schedule,Sleep challenge: Sleep Schedule,14,1,2025-09-24,2025-10-08,Active,10
+E10049,Mindfulness,Gratitude Journal,Mindfulness challenge: Gratitude Journal,7,5,2025-09-24,2025-10-01,Active,50
+E10049,Mindfulness,Breathing Exercises,Mindfulness challenge: Breathing Exercises,30,27,2025-09-24,2025-10-24,Active,270
+E10022,Sleep,Digital Detox Before Bed,Sleep challenge: Digital Detox Before Bed,14,13,2025-09-24,2025-10-08,Active,130
+E10013,Sleep,Digital Detox Before Bed,Sleep challenge: Digital Detox Before Bed,14,3,2025-09-24,2025-10-08,Active,30
+E10013,Academic,Goal Setting,Academic challenge: Goal Setting,30,12,2025-09-24,2025-10-24,Active,120
+E10013,Social,Connect with Friends,Social challenge: Connect with Friends,14,7,2025-09-24,2025-10-08,Active,70
+E10012,Sleep,Sleep Schedule,Sleep challenge: Sleep Schedule,21,8,2025-09-24,2025-10-15,Active,80
+E10012,Sleep,Relaxation Routine,Sleep challenge: Relaxation Routine,30,5,2025-09-24,2025-10-24,Active,50
+E10012,Social,Join Study Groups,Social challenge: Join Study Groups,30,24,2025-09-24,2025-10-24,Active,240
+E10012,Mindfulness,Gratitude Journal,Mindfulness challenge: Gratitude Journal,14,14,2025-09-24,2025-10-08,Completed,140
+E10006,Mindfulness,Daily Meditation,Mindfulness challenge: Daily Meditation,7,7,2025-09-24,2025-10-01,Completed,70
+E10006,Exercise,Yoga Practice,Exercise challenge: Yoga Practice,14,8,2025-09-24,2025-10-08,Active,80
+E10006,Academic,Study Schedule,Academic challenge: Study Schedule,14,7,2025-09-24,2025-10-08,Active,70
+E10029,Mindfulness,Daily Meditation,Mindfulness challenge: Daily Meditation,21,5,2025-09-24,2025-10-15,Active,50
+E10015,Academic,Study Schedule,Academic challenge: Study Schedule,21,13,2025-09-24,2025-10-15,Active,130
+E10016,Exercise,30-Day Fitness,Exercise challenge: 30-Day Fitness,7,5,2025-09-24,2025-10-01,Active,50
+E10047,Mindfulness,Daily Meditation,Mindfulness challenge: Daily Meditation,21,6,2025-09-24,2025-10-15,Active,60
+E10047,Mindfulness,10-Minute Mindfulness,Mindfulness challenge: 10-Minute Mindfulness,30,9,2025-09-24,2025-10-24,Active,90
+E10047,Sleep,8-Hour Sleep Challenge,Sleep challenge: 8-Hour Sleep Challenge,14,3,2025-09-24,2025-10-08,Active,30
+E10043,Exercise,Yoga Practice,Exercise challenge: Yoga Practice,14,13,2025-09-24,2025-10-08,Active,130
+E10020,Exercise,30-Day Fitness,Exercise challenge: 30-Day Fitness,30,1,2025-09-24,2025-10-24,Active,10
+E10008,Exercise,Yoga Practice,Exercise challenge: Yoga Practice,30,30,2025-09-24,2025-10-24,Completed,300
+E10040,Mindfulness,10-Minute Mindfulness,Mindfulness challenge: 10-Minute Mindfulness,7,4,2025-09-24,2025-10-01,Active,40
+E10019,Mindfulness,Gratitude Journal,Mindfulness challenge: Gratitude Journal,14,13,2025-09-24,2025-10-08,Active,130
+E10019,Mindfulness,Gratitude Journal,Mindfulness challenge: Gratitude Journal,7,2,2025-09-24,2025-10-01,Active,20
+E10019,Exercise,Yoga Practice,Exercise challenge: Yoga Practice,30,1,2025-09-24,2025-10-24,Active,10
+E10025,Exercise,Sports Activity,Exercise challenge: Sports Activity,7,4,2025-09-24,2025-10-01,Active,40
+E10035,Sleep,Relaxation Routine,Sleep challenge: Relaxation Routine,21,6,2025-09-24,2025-10-15,Active,60
+E10027,Exercise,Daily Walk Challenge,Exercise challenge: Daily Walk Challenge,21,0,2025-09-24,2025-10-15,Active,0
+E10027,Mindfulness,Gratitude Journal,Mindfulness challenge: Gratitude Journal,14,8,2025-09-24,2025-10-08,Active,80
+E10027,Exercise,Daily Walk Challenge,Exercise challenge: Daily Walk Challenge,21,21,2025-09-24,2025-10-15,Completed,210
+E10027,Mindfulness,10-Minute Mindfulness,Mindfulness challenge: 10-Minute Mindfulness,14,0,2025-09-24,2025-10-08,Active,0
+E10003,Mindfulness,10-Minute Mindfulness,Mindfulness challenge: 10-Minute Mindfulness,30,4,2025-09-24,2025-10-24,Active,40
+E10042,Mindfulness,10-Minute Mindfulness,Mindfulness challenge: 10-Minute Mindfulness,30,17,2025-09-24,2025-10-24,Active,170
+E10021,Academic,Study Schedule,Academic challenge: Study Schedule,7,6,2025-09-24,2025-10-01,Active,60
+E10014,Sleep,Sleep Schedule,Sleep challenge: Sleep Schedule,14,3,2025-09-24,2025-10-08,Active,30
+E10014,Social,Community Service,Social challenge: Community Service,30,29,2025-09-24,2025-10-24,Active,290
+E10014,Sleep,Relaxation Routine,Sleep challenge: Relaxation Routine,21,1,2025-09-24,2025-10-15,Active,10
+E10002,Academic,Time Management,Academic challenge: Time Management,14,6,2025-09-24,2025-10-08,Active,60
+E10002,Exercise,Daily Walk Challenge,Exercise challenge: Daily Walk Challenge,21,7,2025-09-24,2025-10-15,Active,70
+E10002,Academic,Skill Development,Academic challenge: Skill Development,21,1,2025-09-24,2025-10-15,Active,10

@@ -106,6 +106,16 @@ PHD_STATUS = ['Ongoing', 'Completed', 'Discontinued']
 FELLOWSHIP_STATUS = ['Active', 'Completed', 'Terminated', 'Suspended']
 FEE_STATUS = ['Paid', 'Pending', 'Overdue']
 
+# Mental Health configurations
+MENTAL_HEALTH_CATEGORIES = ['Academic', 'Personal', 'Financial', 'Health', 'Other']
+PRIORITY_LEVELS = ['Low', 'Medium', 'High', 'Critical']
+SUPPORT_STATUS = ['Open', 'In Progress', 'Resolved', 'Closed']
+APPOINTMENT_TYPES = ['Individual', 'Group', 'Crisis']
+APPOINTMENT_STATUS = ['Scheduled', 'Completed', 'Cancelled', 'No-Show']
+CHALLENGE_TYPES = ['Mindfulness', 'Exercise', 'Sleep', 'Social', 'Academic']
+CHALLENGE_STATUS = ['Active', 'Completed', 'Abandoned']
+COUNSELOR_NAMES = ['Dr. Priya Sharma', 'Dr. Rajesh Kumar', 'Dr. Anita Patel', 'Dr. Suresh Reddy', 'Dr. Meera Singh']
+
 def generate_student_id(index):
     """Generate student ID starting from 10000"""
     return f"E{STUDENT_ID_START + index}"
@@ -393,6 +403,226 @@ def generate_fellowships_csv(students):
         writer.writeheader()
         writer.writerows(fellowship_records)
 
+def generate_mental_health_assessments_csv(students):
+    """Generate mental health assessments CSV file"""
+    print("Generating mental health assessments CSV...")
+    
+    assessment_records = []
+    
+    # About 70% of students have at least one assessment
+    students_with_assessments = random.sample(students, int(NUM_STUDENTS * 0.7))
+    
+    for student in students_with_assessments:
+        # Generate 1-5 assessments per student over time
+        num_assessments = random.choices([1, 2, 3, 4, 5], weights=[30, 25, 20, 15, 10])[0]
+        
+        for i in range(num_assessments):
+            assessment_date = fake.date_between(start_date='-1y', end_date='today')
+            
+            # Generate realistic mental health scores (1-10 scale)
+            # Some correlation between stress/anxiety/depression
+            base_stress = random.randint(1, 10)
+            stress_level = base_stress
+            anxiety_level = max(1, min(10, base_stress + random.randint(-2, 2)))
+            depression_level = max(1, min(10, base_stress + random.randint(-3, 1)))
+            
+            # Sleep and wellness often inversely related to stress
+            sleep_quality = max(1, min(10, 11 - base_stress + random.randint(-2, 3)))
+            overall_wellness = max(1, min(10, 11 - base_stress + random.randint(-1, 2)))
+            
+            # Academic pressure and social support
+            academic_pressure = random.randint(3, 10)
+            social_support = random.randint(2, 9)
+            
+            # Calculate risk score
+            risk_score = (stress_level + anxiety_level + depression_level) / 3
+            
+            assessment = {
+                'studentId': student['studentId'],
+                'assessmentDate': assessment_date.strftime('%Y-%m-%d'),
+                'stressLevel': stress_level,
+                'anxietyLevel': anxiety_level,
+                'depressionLevel': depression_level,
+                'sleepQuality': sleep_quality,
+                'academicPressure': academic_pressure,
+                'socialSupport': social_support,
+                'overallWellness': overall_wellness,
+                'notes': fake.sentence() if random.random() < 0.3 else '',
+                'riskScore': round(risk_score, 2)
+            }
+            assessment_records.append(assessment)
+    
+    # Write to CSV
+    with open(f'{TEST_DIR}/mental_health_assessments.csv', 'w', newline='', encoding='utf-8') as file:
+        fieldnames = ['studentId', 'assessmentDate', 'stressLevel', 'anxietyLevel', 'depressionLevel', 
+                     'sleepQuality', 'academicPressure', 'socialSupport', 'overallWellness', 'notes', 'riskScore']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(assessment_records)
+
+def generate_counseling_appointments_csv(students):
+    """Generate counseling appointments CSV file"""
+    print("Generating counseling appointments CSV...")
+    
+    appointment_records = []
+    
+    # About 40% of students have counseling appointments
+    students_with_appointments = random.sample(students, int(NUM_STUDENTS * 0.4))
+    
+    for student in students_with_appointments:
+        # Generate 1-8 appointments per student
+        num_appointments = random.choices([1, 2, 3, 4, 5, 6, 7, 8], weights=[25, 20, 15, 15, 10, 8, 4, 3])[0]
+        
+        for i in range(num_appointments):
+            appointment_date = fake.date_between(start_date='-1y', end_date='+3m')
+            counselor = random.choice(COUNSELOR_NAMES)
+            appointment_type = random.choice(APPOINTMENT_TYPES)
+            duration = random.choice([30, 45, 60, 90])  # minutes
+            status = random.choice(APPOINTMENT_STATUS)
+            follow_up = random.choice([True, False]) if status == 'Completed' else False
+            
+            appointment = {
+                'studentId': student['studentId'],
+                'counselorName': counselor,
+                'appointmentDate': appointment_date.strftime('%Y-%m-%d %H:%M:%S'),
+                'duration': duration,
+                'type': appointment_type,
+                'status': status,
+                'notes': fake.sentence() if random.random() < 0.4 else '',
+                'followUpNeeded': follow_up
+            }
+            appointment_records.append(appointment)
+    
+    # Write to CSV
+    with open(f'{TEST_DIR}/counseling_appointments.csv', 'w', newline='', encoding='utf-8') as file:
+        fieldnames = ['studentId', 'counselorName', 'appointmentDate', 'duration', 'type', 'status', 'notes', 'followUpNeeded']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(appointment_records)
+
+def generate_wellness_challenges_csv(students):
+    """Generate wellness challenges CSV file"""
+    print("Generating wellness challenges CSV...")
+    
+    challenge_records = []
+    
+    # About 50% of students participate in wellness challenges
+    students_with_challenges = random.sample(students, int(NUM_STUDENTS * 0.5))
+    
+    challenge_titles = {
+        'Mindfulness': ['Daily Meditation', '10-Minute Mindfulness', 'Breathing Exercises', 'Gratitude Journal'],
+        'Exercise': ['30-Day Fitness', 'Daily Walk Challenge', 'Yoga Practice', 'Sports Activity'],
+        'Sleep': ['Sleep Schedule', 'Digital Detox Before Bed', '8-Hour Sleep Challenge', 'Relaxation Routine'],
+        'Social': ['Connect with Friends', 'Join Study Groups', 'Community Service', 'Social Activities'],
+        'Academic': ['Study Schedule', 'Time Management', 'Goal Setting', 'Skill Development']
+    }
+    
+    for student in students_with_challenges:
+        # Generate 1-4 challenges per student
+        num_challenges = random.choices([1, 2, 3, 4], weights=[40, 30, 20, 10])[0]
+        
+        for i in range(num_challenges):
+            challenge_type = random.choice(CHALLENGE_TYPES)
+            title = random.choice(challenge_titles[challenge_type])
+            description = f"{challenge_type} challenge: {title}"
+            
+            start_date = fake.date_between(start_date='-6m', end_date='today')
+            duration_days = random.choice([7, 14, 21, 30])
+            end_date = start_date + timedelta(days=duration_days)
+            
+            target_value = duration_days  # Target days to complete
+            current_progress = random.randint(0, target_value)
+            
+            # Determine status based on progress and dates
+            if current_progress >= target_value:
+                status = 'Completed'
+            elif datetime.now().date() > end_date:
+                status = 'Abandoned' if current_progress < target_value * 0.5 else 'Completed'
+            else:
+                status = 'Active'
+            
+            points = current_progress * 10  # 10 points per day completed
+            
+            challenge = {
+                'studentId': student['studentId'],
+                'challengeType': challenge_type,
+                'title': title,
+                'description': description,
+                'targetValue': target_value,
+                'currentProgress': current_progress,
+                'startDate': start_date.strftime('%Y-%m-%d'),
+                'endDate': end_date.strftime('%Y-%m-%d'),
+                'status': status,
+                'points': points
+            }
+            challenge_records.append(challenge)
+    
+    # Write to CSV
+    with open(f'{TEST_DIR}/wellness_challenges.csv', 'w', newline='', encoding='utf-8') as file:
+        fieldnames = ['studentId', 'challengeType', 'title', 'description', 'targetValue', 
+                     'currentProgress', 'startDate', 'endDate', 'status', 'points']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(challenge_records)
+
+def generate_support_tickets_csv(students):
+    """Generate support tickets CSV file"""
+    print("Generating support tickets CSV...")
+    
+    ticket_records = []
+    
+    # About 30% of students submit support tickets
+    students_with_tickets = random.sample(students, int(NUM_STUDENTS * 0.3))
+    
+    ticket_subjects = {
+        'Academic': ['Course Registration Issues', 'Grade Concerns', 'Assignment Help', 'Exam Anxiety'],
+        'Personal': ['Stress Management', 'Relationship Issues', 'Family Problems', 'Self-Esteem'],
+        'Financial': ['Fee Payment Issues', 'Scholarship Questions', 'Financial Aid', 'Emergency Funds'],
+        'Health': ['Medical Leave', 'Disability Support', 'Mental Health Resources', 'Health Insurance'],
+        'Other': ['Housing Issues', 'Transportation', 'Technology Problems', 'General Inquiry']
+    }
+    
+    for student in students_with_tickets:
+        # Generate 1-3 tickets per student
+        num_tickets = random.choices([1, 2, 3], weights=[60, 30, 10])[0]
+        
+        for i in range(num_tickets):
+            category = random.choice(MENTAL_HEALTH_CATEGORIES)
+            subject = random.choice(ticket_subjects[category])
+            priority = random.choice(PRIORITY_LEVELS)
+            status = random.choice(SUPPORT_STATUS)
+            is_anonymous = random.choice([True, False])
+            
+            created_date = fake.date_between(start_date='-1y', end_date='today')
+            
+            # Determine resolved date based on status
+            resolved_date = None
+            if status in ['Resolved', 'Closed']:
+                resolved_date = created_date + timedelta(days=random.randint(1, 30))
+            
+            ticket = {
+                'studentId': student['studentId'],
+                'category': category,
+                'priority': priority,
+                'subject': subject,
+                'description': fake.paragraph(),
+                'status': status,
+                'isAnonymous': is_anonymous,
+                'createdAt': created_date.strftime('%Y-%m-%d %H:%M:%S'),
+                'resolvedAt': resolved_date.strftime('%Y-%m-%d %H:%M:%S') if resolved_date else '',
+                'assignedTo': random.choice(COUNSELOR_NAMES) if status != 'Open' else '',
+                'response': fake.sentence() if status in ['Resolved', 'Closed'] else ''
+            }
+            ticket_records.append(ticket)
+    
+    # Write to CSV
+    with open(f'{TEST_DIR}/support_tickets.csv', 'w', newline='', encoding='utf-8') as file:
+        fieldnames = ['studentId', 'category', 'priority', 'subject', 'description', 'status', 
+                     'isAnonymous', 'createdAt', 'resolvedAt', 'assignedTo', 'response']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(ticket_records)
+
 def main():
     """Main function to generate all CSV files"""
     print("Starting CSV data generation...")
@@ -411,6 +641,12 @@ def main():
     generate_projects_csv(students)
     generate_phd_supervision_csv(students)
     generate_fellowships_csv(students)
+    
+    # Generate mental health CSV files
+    generate_mental_health_assessments_csv(students)
+    generate_counseling_appointments_csv(students)
+    generate_wellness_challenges_csv(students)
+    generate_support_tickets_csv(students)
     
     print("-" * 50)
     print("CSV data generation completed successfully!")

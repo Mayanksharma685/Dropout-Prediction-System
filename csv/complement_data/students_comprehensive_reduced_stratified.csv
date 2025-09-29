@@ -1,9 +1,0 @@
-studentId,name,email,dob,currentSemester,department,phone,batchId,parentName,parentEmail,parentPhone,address
-E6722,Tara Nair,e6722@university.edu,2004-07-17,7,EE,7260808144,EE2020A,Dev Yadav,parent2877@example.com,9603027399,"451, Mall Road, Mumbai-276882"
-E7045,Rahul Tiwari,e7045@university.edu,2004-02-27,8,DS,7194564593,DS2024B,Sanjay Patel,parent9751@example.com,9268164945,"247, Park Street, Mumbai-167948"
-E6364,Amit Iyer,e6364@university.edu,2002-10-22,7,ECE,8809498724,ECE2022A,Divya Pandey,parent6046@example.com,8317282637,"12, Mall Road, Bangalore-441330"
-E9593,Riya Gupta,e9593@university.edu,2002-08-12,6,CE,7864911581,CE2024A,Kiran Reddy,parent3153@example.com,7858631077,"841, Park Street, Delhi-963772"
-E6782,Arjun Patel,e6782@university.edu,2003-08-11,1,CS,9730401199,CS2022C,Vikram Gupta,parent9641@example.com,8607787926,"632, MG Road, Bangalore-853929"
-E5588,Riya Malhotra,e5588@university.edu,2004-02-12,4,DS,9209835184,DS2021B,Kavya Mehta,parent3691@example.com,7191728308,"457, Mall Road, Bangalore-308421"
-E9122,Kavya Mishra,e9122@university.edu,2004-10-18,3,DS,7112195081,DS2021C,Aryan Tiwari,parent5132@example.com,9443574102,"993, MG Road, Chennai-354390"
-E9053,Pooja Shah,e9053@university.edu,2001-04-23,2,DS,9744455857,DS2020C,Meera Malhotra,parent6383@example.com,9355286890,"901, MG Road, Mumbai-923572"

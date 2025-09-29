@@ -1,8 +1,8 @@
 studentId,type,amount,duration,startDate,status
-E10017,Full Time,27829,18,2024-07-07,Suspended
-E10008,Teaching Assistant,26858,6,2024-09-05,Active
-E10040,Teaching Assistant,25089,6,2025-01-17,Terminated
-E10036,Full Time,33389,18,2025-05-31,Active
-E10032,Teaching Assistant,23512,12,2024-01-07,Active
-E10044,Full Time,30655,12,2025-02-12,Terminated
-E10014,Research,19398,18,2024-10-13,Completed
+E10016,Part Time,12081,24,2023-10-24,Terminated
+E10011,Full Time,31553,18,2024-12-07,Completed
+E10012,Part Time,13589,24,2024-07-14,Suspended
+E10032,Teaching Assistant,22486,18,2024-08-01,Active
+E10010,Full Time,31862,12,2024-07-03,Active
+E10013,Research,22656,6,2025-02-17,Completed
+E10044,Part Time,13808,12,2025-07-21,Suspended

@@ -17,9 +17,6 @@ export default function Header(props: any) {
       <div className="px-6 md:px-8 lg:px-12 h-16 flex items-center justify-between">
         {/* Left: Welcome & Status */}
         <div className="flex flex-col justify-center">
-          <p className="text-lg font-medium text-gray-800 opacity-90 pt-2">
-            Welcome back, {displayName || 'Teacher'}! Here's your academic summary.
-          </p>
 
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
             <div className="flex items-center gap-2">

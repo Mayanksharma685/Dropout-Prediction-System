@@ -52,6 +52,12 @@ model Student {
   projects      Project[]
   phdSupervision PhdSupervision[]
   fellowships   Fellowship[]
+  
+  // Mental Health relationships
+  mentalHealthAssessments MentalHealthAssessment[]
+  counselingAppointments  CounselingAppointment[]
+  wellnessChallenges      WellnessChallenge[]
+  supportTickets          SupportTicket[]
 
   @@index([teacherId])
   @@index([batchId])
@@ -213,6 +219,86 @@ model Fellowship {
   
   @@index([studentId])
   @@index([supervisorId])
+}
+
+// Mental Health & Wellness Models
+model MentalHealthAssessment {
+  assessmentId    Int      @id @default(autoincrement())
+  studentId       String
+  assessmentDate  DateTime @default(now())
+  stressLevel     Int      // 1-10 scale
+  anxietyLevel    Int      // 1-10 scale
+  depressionLevel Int      // 1-10 scale
+  sleepQuality    Int      // 1-10 scale
+  academicPressure Int     // 1-10 scale
+  socialSupport   Int      // 1-10 scale
+  overallWellness Int      // 1-10 scale
+  notes           String?
+  riskScore       Float?   // Calculated risk score
+  
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([assessmentDate])
+}
+
+model CounselingAppointment {
+  appointmentId   Int      @id @default(autoincrement())
+  studentId       String
+  counselorName   String
+  appointmentDate DateTime
+  duration        Int      // in minutes
+  type            String   // Individual, Group, Crisis
+  status          String   @default("Scheduled") // Scheduled, Completed, Cancelled, No-Show
+  notes           String?
+  followUpNeeded  Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([appointmentDate])
+}
+
+model WellnessChallenge {
+  challengeId     Int      @id @default(autoincrement())
+  studentId       String
+  challengeType   String   // Mindfulness, Exercise, Sleep, Social, Academic
+  title           String
+  description     String
+  targetValue     Int      // Target days/sessions
+  currentProgress Int      @default(0)
+  startDate       DateTime @default(now())
+  endDate         DateTime
+  status          String   @default("Active") // Active, Completed, Abandoned
+  points          Int      @default(0)
+  
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([challengeType])
+}
+
+model SupportTicket {
+  ticketId    Int      @id @default(autoincrement())
+  studentId   String
+  category    String   // Academic, Personal, Financial, Health, Other
+  priority    String   @default("Medium") // Low, Medium, High, Critical
+  subject     String
+  description String
+  status      String   @default("Open") // Open, In Progress, Resolved, Closed
+  isAnonymous Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  resolvedAt  DateTime?
+  assignedTo  String?  // Counselor/Staff member
+  response    String?
+  
+  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  
+  @@index([studentId])
+  @@index([status])
+  @@index([priority])
 }
 
 generator client {

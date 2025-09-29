@@ -69,10 +69,10 @@ $ npx wrangler login
 $ npx wrangler d1 create edu-pulse
 
 # Apply to a local D1 (for testing)
-$ npx wrangler d1 execute edu-pulse --local --file=prisma/migrations/20250906151153_init/migration.sql
+$ npx wrangler d1 execute edu-pulse --local --file=prisma/migrations/20250925100853_add_mental_health_models/migration.sql
 
 # Apply to remote (production/staging)
-$ npx wrangler d1 execute edu-pulse --remote --file=prisma/migrations/20250906151153_init/migration.sql
+$ npx wrangler d1 execute edu-pulse --remote --file=prisma/migrations/20250925100853_add_mental_health_models/migration.sql
 ```
 
 Make sure your `wrangler.toml` has the D1 binding:
